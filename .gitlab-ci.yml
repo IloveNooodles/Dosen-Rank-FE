@@ -2,10 +2,6 @@ default:
   interruptible: false
   image: node:latest
 
-job:
-  tags:
-    - FE
-
 stages:          # List of stages for jobs, and their order of execution
   - build
   - deploy
@@ -18,8 +14,14 @@ build-app:       # This job runs in the build stage, which runs first.
     - yarn global add vercel
     - vercel pull --yes --token=$VERCEL_TOKEN
     - vercel build --token=$VERCEL_TOKEN
+  tags:
+    - FE
 
 deploy-app:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+  only:
+    - main
   script:
     - vercel deploy --prebuilt --token=$VERCEL_TOKEN
+  tags:
+    - FE

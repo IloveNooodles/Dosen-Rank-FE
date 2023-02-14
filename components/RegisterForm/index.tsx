@@ -36,7 +36,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ universities }) => {
           name: values.nama,
           email: values.email,
           password: values.password,
-          univID: parseInt(values.university)+1,
+          univID: parseInt(values.university),
         });
 
         try {

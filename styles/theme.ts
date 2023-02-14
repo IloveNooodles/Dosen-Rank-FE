@@ -59,7 +59,8 @@ const theme = extendTheme({
           border: "1px",
           _hover: {
             borderColor: "biru.900",
-            color: "biru.900"
+            color: "biru.900",
+            backgroundColor: "biru.50",
           }
         }
       },

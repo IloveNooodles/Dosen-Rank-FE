@@ -4,7 +4,8 @@ import axios from "axios";
 import { RegisterProps } from "@/interfaces";
 
 export async function getStaticProps() {
-  const response = await axios.get("http://localhost:8000/api/v1/univ");
+  const universitiesEndpoint = process.env.NEXT_PUBLIC_BASE_URL + "/univ"
+  const response = await axios.get(universitiesEndpoint);
   const universities = response.data.data
 
   return {

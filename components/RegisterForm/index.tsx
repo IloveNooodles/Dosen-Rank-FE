@@ -22,8 +22,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ universities }) => {
     university: "",
   };
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
-  const registerEndpoint = baseUrl + "/api/v1/users/register";
+  const registerEndpoint = process.env.NEXT_PUBLIC_BASE_URL + "/users/register";
 
   const universityOption: Array<SelectOption> = universities.map(
     ({ id, name }) => ({ label: name, value: id.toString() })
@@ -37,7 +36,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ universities }) => {
           name: values.nama,
           email: values.email,
           password: values.password,
-          univID: parseInt(values.university),
+          univID: parseInt(values.university)+1,
         });
 
         try {

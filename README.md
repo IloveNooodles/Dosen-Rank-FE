@@ -1,5 +1,8 @@
 # DosenRank FE
 
+## Environment
+Copy file `.env.example` dan rename menjadi `.env.local`
+
 ## Git branching
 
 Untuk setiap task, buat branch baru dengan spesifikasi berikut

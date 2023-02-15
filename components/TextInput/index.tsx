@@ -1,15 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Formik, Form, useField, FieldHookConfig } from 'formik';
-import * as Yup from 'yup';
-import { FormControl, FormErrorMessage, FormLabel, Input as ChakraInput, InputProps } from '@chakra-ui/react';
+import { useField } from 'formik';
+import { FormControl, FormErrorMessage, FormLabel, Input as ChakraInput } from '@chakra-ui/react';
+import { TextFieldProps } from '@/interfaces';
 
-export interface TextFieldProps extends InputProps {
-  name: string;
-  label?: string;
-}
-
-const MyTextInput = ({ label, name, ...props }: TextFieldProps) => {
+const TextInput: React.FC<TextFieldProps> = ({ label, name, ...props }) => {
   const [field, meta] = useField(name);
   
   return (
@@ -25,4 +18,4 @@ const MyTextInput = ({ label, name, ...props }: TextFieldProps) => {
   );
 };
 
-export default MyTextInput
+export default TextInput

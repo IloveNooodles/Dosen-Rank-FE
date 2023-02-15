@@ -17,7 +17,7 @@ const Footer: React.FC<{}> = () => {
                         <Icon as={ FiGitlab } color="biru.800" w="24px" h="24px" />
                     </Link>
                 </HStack>
-                <Text color="biru.800">
+                <Text color="biru.800" fontSize={{ base: "11px", md: "14px"}}>
                     made with love by FGFGF
                 </Text>
             </VStack>

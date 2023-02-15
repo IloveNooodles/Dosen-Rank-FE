@@ -9,10 +9,10 @@ import { motion, isValidMotionProp } from 'framer-motion';
 const Index: React.FC<{}> = () => (
   <Container>
     <Box position="absolute" w="100%" h="100%" overflow="clip">
-      <Image src="/graduation-cap-2.png" position="absolute" marginLeft="12%" marginTop="9%" w="11%" />
-      <Image src="/graduation-cap-1.png" position="absolute" marginLeft="50%" marginTop="15%" w="45%"/>
-      <Image src="/halftone-dots.svg" position="absolute" marginLeft="30%" marginTop="-14%" w="24%" />
-      <Image src="/halftone-dots.svg" position="absolute" marginLeft="24%" marginTop="39%" w="16%" />
+      <Image src="/graduation-cap-2.png" position="absolute" marginLeft="12%" marginTop="9%" w="11%" pointerEvents="none"/>
+      <Image src="/graduation-cap-1.png" position="absolute" marginLeft="50%" marginTop="15%" w="45%" pointerEvents="none"/>
+      <Image src="/halftone-dots.svg" position="absolute" marginLeft="30%" marginTop="-14%" w="24%" pointerEvents="none"/>
+      <Image src="/halftone-dots.svg" position="absolute" marginLeft="24%" marginTop="39%" w="16%" pointerEvents="none"/>
     </Box>
     <Flex direction="column">
       <NavigationBar/>

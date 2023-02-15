@@ -7,7 +7,7 @@ import Link from "next/link";
 const Footer: React.FC<{}> = () => {
     const router = useRouter()
     return (
-        <Container py="24px" px="40px" h="auto">
+        <Container py="24px" px={{ base: "12px", md: "40px"}} h="auto">
             <VStack alignItems="start">
                 <HStack gap="24px">
                     <Link href="https://github.com/IloveNooodles" target="_blank">

@@ -5,13 +5,13 @@ import { Box, Container, Text, Flex, Button, HStack, Spacer } from "@chakra-ui/r
 const NavigationBar: React.FC<{}> = () => {
     const router = useRouter()
     return (
-        <Container py="24px" px={{ base: "12px", md: "40px"}} h="auto">
+        <Container py="1.5rem" px={{ base: "0.75rem", md: "2.5rem"}} h="auto">
             <Flex align="center">
                 <Text fontFamily="heading" fontSize="lg" color="biru.900" fontWeight="bold">
                     CariDosen
                 </Text>
                 <Spacer/>
-                <HStack spacing="16px">
+                <HStack spacing="1rem">
                     <Button variant="secondary" onClick={() => router.push('/login')}>
                         Masuk
                     </Button>

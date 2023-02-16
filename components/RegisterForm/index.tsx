@@ -1,43 +1,74 @@
-import { Account } from "@/interfaces";
+import { Account, RegisterFormProps, SelectOption } from "@/interfaces";
 import { VStack, Button, Text } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import Link from "next/link";
-import MyTextInput from "../TextInput";
+import TextInput from "../TextInput";
 import * as Yup from "yup";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import dynamic from "next/dynamic";
 
-const RegisterForm: React.FC<{}> = () => {
-  const initialValues: Account = { nama: "", email: "", password: "" };
+const SelectInput = dynamic(() => import("../SelectInput"), { ssr: false });
+
+const RegisterForm: React.FC<RegisterFormProps> = ({ universities }) => {
+  const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const initialValues: Account = {
+    nama: "",
+    email: "",
+    password: "",
+    university: "",
+  };
+
+  const registerEndpoint = process.env.NEXT_PUBLIC_BASE_URL + "/users/register";
+
+  const universityOption: Array<SelectOption> = universities.map(
+    ({ id, name }) => ({ label: name, value: id.toString() })
+  );
 
   return (
     <Formik
       initialValues={initialValues}
-      onSubmit={(values, actions) => {
-        console.log({ values, actions });
-        alert(JSON.stringify(values, null, 2));
-        actions.setSubmitting(false);
+      onSubmit={async (values) => {
+        const data = JSON.stringify({
+          name: values.nama,
+          email: values.email,
+          password: values.password,
+          univID: parseInt(values.university),
+        });
+
+        try {
+          const response = await axios.post(registerEndpoint, data);
+
+          if (response.status === 201) {
+            router.push("/")
+          }
+        } catch (error) {
+          if (axios.isAxiosError(error)) {
+            setErrorMessage(error.response?.data.error);
+          }
+        }
       }}
       validationSchema={Yup.object({
-        nama: Yup.string()
-          .max(20, "Must be 20 characters or less")
-          .required("Required"),
-        email: Yup.string()
-          .max(20, "Must be 20 characters or less")
-          .required("Required"),
-        password: Yup.string()
-          .email("Invalid email address")
-          .required("Required"),
+        nama: Yup.string().required("Required"),
+        email: Yup.string().email("Invalid email address").required("Required"),
+        password: Yup.string().required("Required"),
+        university: Yup.string().required("Required")
       })}
     >
       <Form>
         <VStack px={12} spacing={6}>
-          <MyTextInput id="nama" name="nama" type="text" placeholder="Nama" />
-          <MyTextInput
-            id="email"
-            name="email"
-            type="text"
-            placeholder="Email"
+          <TextInput id="nama" name="nama" type="text" placeholder="Nama" />
+          <SelectInput
+            id="university"
+            name="university"
+            placeholder="Universitas"
+            options={universityOption}
           />
-          <MyTextInput
+          <TextInput id="email" name="email" type="email" placeholder="Email" />
+          <TextInput
             id="password"
             name="password"
             type="password"
@@ -46,7 +77,14 @@ const RegisterForm: React.FC<{}> = () => {
           <Button type="submit" colorScheme="biru" w="full">
             Daftar
           </Button>
-          <Text fontSize="sm" align="center">
+        </VStack>
+        {errorMessage ? (
+          <Text marginX={12} paddingTop={2} fontSize="xs">
+            {errorMessage}
+          </Text>
+        ) : null}
+        <VStack spacing={6}>
+          <Text paddingTop={4} fontSize="sm" align="center">
             Dengan mengklik daftar, kamu menyetujui Persyaratan dan Ketentuan
             Penggunaan CariDosen.
           </Text>

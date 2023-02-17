@@ -4,22 +4,19 @@ import { Form, Formik } from "formik";
 import Link from "next/link";
 import * as Yup from "yup";
 import {useRouter} from "next/router";
-import {useState} from "react";
+import React, {useState} from "react";
 import axios from "axios";
 import TextInput from "../TextInput";
+import {apiInstance} from "@/utils/apiInstance";
 
-const LoginForm: React.FC<{}> = () => {
+const LoginForm: React.FC = () => {
     const router = useRouter();
     const [errorMessage, setErrorMessage] = useState("");
 
     const initialValues: Account = {
-        nama: "",
         email: "",
         password: "",
-        university: "",
     };
-
-    const loginEndpoint = process.env.NEXT_PUBLIC_API_URL + "/users/login";
 
     return (
         <Formik
@@ -31,10 +28,10 @@ const LoginForm: React.FC<{}> = () => {
                 });
 
                 try {
-                    const response = await axios.post(loginEndpoint, data);
+                    const response = await apiInstance({}).post("/users/login", data)
                     console.log(response)
                     if (response.status === 201) {
-                        router.push("/")
+                        await router.push("/")
                     }
                 } catch (error) {
                     if (axios.isAxiosError(error)) {
@@ -61,12 +58,12 @@ const LoginForm: React.FC<{}> = () => {
                     </Button>
                 </VStack>
                 {errorMessage ? (
-                    <Text marginX={12} paddingTop={2} fontSize="xs">
-                        {errorMessage}
+                    <Text marginX={12} paddingTop={2} fontSize="xs" textAlign="center" textColor="red">
+                        email atau password salah
                     </Text>
                 ) : null}
                 <VStack spacing={6}>
-                    <Text>
+                    <Text marginTop={2}>
                         Belum punya akun?{" "}
                         <Link href="/register">
                             <Text as="span" color="biru.600" fontWeight="bold">

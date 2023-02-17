@@ -1,11 +1,10 @@
 import { Container, VStack, Text } from "@chakra-ui/react";
 import RegisterForm from "@/components/RegisterForm";
-import axios from "axios";
 import { RegisterProps } from "@/interfaces";
+import { apiInstance } from "@/utils/apiInstance";
 
 export async function getStaticProps() {
-  const universitiesEndpoint = process.env.NEXT_PUBLIC_BASE_URL + "/univ"
-  const response = await axios.get(universitiesEndpoint);
+  const response = await apiInstance({}).get('/univ')
   const universities = response.data.data
 
   return {

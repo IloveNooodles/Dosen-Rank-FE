@@ -8,6 +8,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import dynamic from "next/dynamic";
+import { apiInstance } from "@/utils/apiInstance";
 
 const SelectInput = dynamic(() => import("../SelectInput"), { ssr: false });
 
@@ -21,8 +22,6 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ universities }) => {
     password: "",
     university: "",
   };
-
-  const registerEndpoint = process.env.NEXT_PUBLIC_BASE_URL + "/users/register";
 
   const universityOption: Array<SelectOption> = universities.map(
     ({ id, name }) => ({ label: name, value: id.toString() })
@@ -40,7 +39,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ universities }) => {
         });
 
         try {
-          const response = await axios.post(registerEndpoint, data);
+          const response = await apiInstance({}).post("/users/register", data)
 
           if (response.status === 201) {
             router.push("/")

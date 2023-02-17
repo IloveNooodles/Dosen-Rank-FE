@@ -19,7 +19,7 @@ const LoginForm: React.FC<{}> = () => {
         university: "",
     };
 
-    const loginEndpoint = process.env.NEXT_PUBLIC_BASE_URL + "/users/login";
+    const loginEndpoint = process.env.NEXT_PUBLIC_API_URL + "/users/login";
 
     return (
         <Formik

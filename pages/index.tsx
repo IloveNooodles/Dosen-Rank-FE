@@ -1,5 +1,6 @@
 import NavigationBar from "@/components/NavigationBar";
 import Footer from "@/components/Footer";
+import Wrapper from "@/components/Wrapper";
 import { inter } from "@/fonts";
 import styles from "@/styles/Home.module.scss";
 import { Box, Center, Container, Flex, HStack, VStack, Text, Input, InputGroup, InputRightElement, Image, Icon, keyframes } from "@chakra-ui/react";
@@ -18,43 +19,38 @@ const Index: React.FC<{}> = () => {
   }, [counter])
   return (
     <Container>
-      {/* <Wrapper /> */}
-      <Box position="absolute" w="100%" h="100%" overflow="clip">
-        <Image src="/graduation-cap-2.png" alt="Decoration" position="absolute" marginLeft="12%" marginTop="9%" w="11%" pointerEvents="none" userSelect="none" />
-        <Image src="/graduation-cap-1.png" alt="Decoration" position="absolute" marginLeft="50%" marginTop="15%" w="45%" pointerEvents="none" userSelect="none" />
-        <Image src="/halftone-dots.svg" alt="Decoration" position="absolute" marginLeft="30%" marginTop="-14%" w="24%" pointerEvents="none" userSelect="none" />
-        <Image src="/halftone-dots.svg" alt="Decoration" position="absolute" marginLeft="24%" marginTop="39%" w="16%" pointerEvents="none" userSelect="none" />
-      </Box>
-      <Flex position="relative" direction="column">
-        <NavigationBar/>
-        <Center minH="fit-content" h="calc(100vh - 5.5rem - 6.9rem)">
-          <VStack>
-            <HStack>
-              <Text fontSize={{ base: "2rem", md:"3.5rem"}} fontWeight="bold">
-                Cari ulasan
-              </Text>
-              <Text fontSize={{ base: "2rem", md: "3.5rem"}} fontWeight="bold" color="biru.800">
-                { dynamicText[counter] }
-              </Text>
-            </HStack>
-            <InputGroup w={{ base: "20rem", md: "31rem"}}>
-              <Input
-                placeholder="Cari universitas, mata kuliah, atau dosen..."
-                _placeholder={{ color: 'netral.400', fontWeight: 'light' }}
-                borderColor="netral.300"
-                fontSize={{ base: "0.7rem", md: "1rem"}}
-                focusBorderColor="biru.800"
-                borderRadius="1.5rem"
-                backgroundColor={"whiteAlpha.700"}
-                backgroundBlendMode="overlay" />
-              <InputRightElement>
-                <Search2Icon color="netral.400" />
-              </InputRightElement>
-            </InputGroup>
-          </VStack>
-        </Center>
-        <Footer/>
-      </Flex>
+      <Wrapper>
+        <Flex position="relative" direction="column">
+          <NavigationBar/>
+          <Center minH="fit-content" h="calc(100vh - 5.5rem - 6.9rem)">
+            <VStack>
+              <HStack>
+                <Text fontSize={{ base: "2rem", md:"3.5rem"}} fontWeight="bold">
+                  Cari ulasan
+                </Text>
+                <Text fontSize={{ base: "2rem", md: "3.5rem"}} fontWeight="bold" color="biru.800">
+                  { dynamicText[counter] }
+                </Text>
+              </HStack>
+              <InputGroup w={{ base: "20rem", md: "31rem"}}>
+                <Input
+                  placeholder="Cari universitas, mata kuliah, atau dosen..."
+                  _placeholder={{ color: 'netral.400', fontWeight: 'light' }}
+                  borderColor="netral.300"
+                  fontSize={{ base: "0.7rem", md: "1rem"}}
+                  focusBorderColor="biru.800"
+                  borderRadius="1.5rem"
+                  backgroundColor={"whiteAlpha.700"}
+                  backgroundBlendMode="overlay" />
+                <InputRightElement>
+                  <Search2Icon color="netral.400" />
+                </InputRightElement>
+              </InputGroup>
+            </VStack>
+          </Center>
+          <Footer/>
+        </Flex>
+      </Wrapper>
     </Container>
   );
 }

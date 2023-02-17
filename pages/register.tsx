@@ -2,6 +2,7 @@ import { Container, VStack, Text } from "@chakra-ui/react";
 import RegisterForm from "@/components/RegisterForm";
 import { RegisterProps } from "@/interfaces";
 import { apiInstance } from "@/utils/apiInstance";
+import Wrapper from "@/components/Wrapper";
 
 export async function getStaticProps() {
   const response = await apiInstance({}).get('/univ')
@@ -16,12 +17,14 @@ export async function getStaticProps() {
 
 const Register: React.FC<RegisterProps> = ({universities}) => (
   <Container centerContent>
-    <VStack h="full" justify="center" maxW="sm">
-      <Text fontWeight="semibold" pb={6} align="center" fontSize="2xl">
-        Buat akun sebagai mahasiswa
-      </Text>
-      <RegisterForm universities={universities}/>
-    </VStack>
+    <Wrapper>
+      <VStack position="relative" h="full" justify="center" maxW="sm">
+        <Text fontWeight="semibold" pb={6} align="center" fontSize="2xl">
+          Buat akun sebagai mahasiswa
+        </Text>
+        <RegisterForm universities={universities}/>
+      </VStack>
+    </Wrapper>
   </Container>
 );
 

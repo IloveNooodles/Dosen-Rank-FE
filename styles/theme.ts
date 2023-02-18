@@ -62,6 +62,9 @@ const theme = extendTheme({
             color: "biru.900",
             backgroundColor: "biru.50",
           }
+        },
+        text: {
+          px: "24px",
         }
       },
     },

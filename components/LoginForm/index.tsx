@@ -29,8 +29,9 @@ const LoginForm: React.FC = () => {
 
                 try {
                     const response = await apiInstance({}).post("/users/login", data)
-                    console.log(response)
-                    if (response.status === 201) {
+                    const accessToken = response.data.token
+                    localStorage.setItem("token", accessToken)
+                    if (response.status === 200) {
                         await router.push("/")
                     }
                 } catch (error) {

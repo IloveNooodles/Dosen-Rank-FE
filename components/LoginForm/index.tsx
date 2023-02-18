@@ -8,10 +8,12 @@ import React, {useState} from "react";
 import axios from "axios";
 import TextInput from "../TextInput";
 import {apiInstance} from "@/utils/apiInstance";
+import { useAuth } from "@/contexts/AuthContext";
 
 const LoginForm: React.FC = () => {
     const router = useRouter();
     const [errorMessage, setErrorMessage] = useState("");
+    const {signIn} = useAuth()
 
     const initialValues: Account = {
         email: "",
@@ -29,9 +31,10 @@ const LoginForm: React.FC = () => {
 
                 try {
                     const response = await apiInstance({}).post("/users/login", data)
-                    const accessToken = response.data.token
-                    localStorage.setItem("token", accessToken)
+                    
                     if (response.status === 200) {
+                        const accessToken = response.data.data.token
+                        signIn(accessToken)
                         await router.push("/")
                     }
                 } catch (error) {

@@ -10,7 +10,7 @@ const TextInput: React.FC<TextFieldProps> = ({ label, name, ...props }) => {
       {label ? <FormLabel htmlFor={props.id}>
         {label}
       </FormLabel> : null}
-      <ChakraInput {...field} {...props} />
+      <ChakraInput {...field} {...props} bgColor="white" />
       {meta.touched && meta.error ? (
          <FormErrorMessage>{meta.error}</FormErrorMessage>
       ) : null}

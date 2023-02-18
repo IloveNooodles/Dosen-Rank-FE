@@ -1,5 +1,5 @@
-import { Account, RegisterFormProps, SelectOption } from "@/interfaces";
-import { VStack, Button, Text } from "@chakra-ui/react";
+import { Account, RegisterProps, SelectOption } from "@/interfaces";
+import { VStack, Button, Text, useToast } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import Link from "next/link";
 import TextInput from "../TextInput";
@@ -12,12 +12,13 @@ import { apiInstance } from "@/utils/apiInstance";
 
 const SelectInput = dynamic(() => import("../SelectInput"), { ssr: false });
 
-const RegisterForm: React.FC<RegisterFormProps> = ({ universities }) => {
+const RegisterForm: React.FC<RegisterProps> = ({ universities }) => {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState("");
+  const toast = useToast()
 
   const initialValues: Account = {
-    nama: "",
+    name: "",
     email: "",
     password: "",
     university: "",
@@ -32,7 +33,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ universities }) => {
       initialValues={initialValues}
       onSubmit={async (values) => {
         const data = JSON.stringify({
-          name: values.nama,
+          name: values.name,
           email: values.email,
           password: values.password,
           univID: parseInt(values.university!!),
@@ -42,7 +43,13 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ universities }) => {
           const response = await apiInstance({}).post("/users/register", data)
 
           if (response.status === 201) {
-            router.push("/")
+            toast({
+              title: 'Akun berhasil dibuat',
+              description: 'Silahkan login untuk melanjutkan',
+              status: 'success',
+              duration: 3000
+            })
+            router.push("/login")
           }
         } catch (error) {
           if (axios.isAxiosError(error)) {
@@ -50,16 +57,10 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ universities }) => {
           }
         }
       }}
-      validationSchema={Yup.object({
-        nama: Yup.string().required("Required"),
-        email: Yup.string().email("Invalid email address").required("Required"),
-        password: Yup.string().required("Required"),
-        university: Yup.string().required("Required")
-      })}
     >
       <Form>
         <VStack px={12} spacing={6}>
-          <TextInput id="nama" name="nama" type="text" placeholder="Nama" />
+          <TextInput id="name" name="name" type="text" placeholder="Nama" />
           <SelectInput
             id="university"
             name="university"

@@ -31,6 +31,12 @@ const RegisterForm: React.FC<RegisterProps> = ({ universities }) => {
   return (
     <Formik
       initialValues={initialValues}
+      validationSchema={Yup.object({
+        name: Yup.string().required("Required"),
+        email: Yup.string().email("Invalid email address").required("Required"),
+        password: Yup.string().required("Required"),
+        university: Yup.string().required("Required")
+      })}
       onSubmit={async (values) => {
         const data = JSON.stringify({
           name: values.name,

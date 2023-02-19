@@ -1,5 +1,5 @@
 import {Account} from "@/interfaces";
-import { VStack, Button, Text } from "@chakra-ui/react";
+import { VStack, Button, Text, useToast } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import Link from "next/link";
 import * as Yup from "yup";
@@ -14,6 +14,7 @@ const LoginForm: React.FC = () => {
     const router = useRouter();
     const [errorMessage, setErrorMessage] = useState("");
     const {signIn} = useAuth()
+    const toast = useToast();
 
     const initialValues: Account = {
         email: "",
@@ -35,6 +36,12 @@ const LoginForm: React.FC = () => {
                     if (response.status === 200) {
                         const accessToken = response.data.data.token
                         signIn(accessToken)
+                        toast({
+                            title: 'Login berhasil',
+                            status: 'success',
+                            duration: 3000,
+                            position: 'top',
+                          })
                         await router.push("/")
                     }
                 } catch (error) {

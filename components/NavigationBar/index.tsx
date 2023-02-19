@@ -1,29 +1,38 @@
 import { dm_sans } from "@/fonts";
 import { useRouter } from 'next/router';
-import { Box, Container, Text, Flex, Button, HStack, Spacer } from "@chakra-ui/react"
+import { Box, Container, Text, Flex, Button, HStack, Spacer, useToast } from "@chakra-ui/react"
+import { FiLogOut } from 'react-icons/fi';
 import { useAuth } from "@/contexts/AuthContext";
 
 const NavigationBar: React.FC<{}> = () => {
     const router = useRouter()
     const {getUser, isAuthenticated, signOut} = useAuth()
     const user = getUser()
+    const toast = useToast()
 
     return (
         <Container py="1.5rem" px={{ base: "0.75rem", md: "2.5rem"}} h="auto">
             <Flex align="center">
-                <Text fontFamily="heading" fontSize="lg" color="biru.900" fontWeight="bold">
+                <Button color="biru.900" fontSize="lg" fontFamily="heading" variant="text" onClick={() => router.push('/')}>
                     CariDosen
-                </Text>
+                </Button>
                 <Spacer/>
                 <HStack spacing="1rem">
-                    {isAuthenticated() ? <Text>Halo {user.name}</Text> : null}
-                    {router.pathname === '/login' || isAuthenticated() ? null : <Button variant="secondary" onClick={() => router.push('/login')}>
+                    {isAuthenticated() ? <Text fontWeight="regular" fontSize="16px">Halo, {user.name}!</Text> : null}
+                    {router.pathname === '/' && !isAuthenticated() ? <Button variant="secondary" onClick={() => router.push('/login')}>
                         Masuk
-                    </Button>}
-                    {router.pathname === '/register' || isAuthenticated() ? null : <Button variant="primary" onClick={() => router.push('/register')}>
+                    </Button> : null }
+                    {router.pathname === '/' && !isAuthenticated() ? <Button variant="primary" onClick={() => router.push('/register')}>
                         Daftar
-                    </Button>}
-                    {isAuthenticated() ? <Button variant="secondary" onClick={() => signOut()}>
+                    </Button> : null }
+                    {isAuthenticated() ? <Button leftIcon={<FiLogOut />} variant="text" fontWeight="normal" fontSize="16px" color={"red.500"} _hover={{color: "red.700"}} onClick={() =>
+                        {signOut()
+                        toast({
+                            title: 'Logout berhasil',
+                            status: 'success',
+                            duration: 3000,
+                            position: 'top',
+                          })}}>
                         Keluar
                     </Button> : null}
                 </HStack>

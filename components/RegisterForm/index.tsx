@@ -47,13 +47,21 @@ const RegisterForm: React.FC<RegisterProps> = ({ universities }) => {
               title: 'Akun berhasil dibuat',
               description: 'Silahkan login untuk melanjutkan',
               status: 'success',
-              duration: 3000
+              duration: 3000,
+              position: 'top',
             })
             router.push("/login")
           }
         } catch (error) {
           if (axios.isAxiosError(error)) {
             setErrorMessage(error.response?.data.error);
+            toast({
+              title: 'Akun gagal dibuat',
+              description: 'Silahkan ulangi registrasi',
+              status: 'error',
+              duration: 3000,
+              position: 'top'
+            })
           }
         }
       }}

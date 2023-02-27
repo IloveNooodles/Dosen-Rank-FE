@@ -3,7 +3,9 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
 import {Card, CardBody, CardFooter, CardHeader} from "@chakra-ui/card";
-import {Box, Button, HStack, Text, VStack} from "@chakra-ui/react";
+import {Box, Button, Flex, HStack, Text, VStack} from "@chakra-ui/react";
+import Rating from '@mui/material/Rating';
+
 
 interface ReviewCardProps{
     reviewFor?: 'university' | 'course' | 'lecturer';
@@ -21,8 +23,9 @@ interface ReviewCardProps{
     fourthFieldRating?: number;
     reviewDate?: string;
     reviewContent?: string;
-    likeCount?: number;
-    dislikeCount?: number;
+    likeCount: number;
+    dislikeCount: number;
+    activeButton?: 'none' | 'like' | 'dislike';
 }
 
 const ReviewCard: React.FC<ReviewCardProps> = ({
@@ -42,8 +45,48 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
     reviewDate,
     reviewContent,
     likeCount,
-    dislikeCount
+    dislikeCount,
+    activeButton,
 }) => {
+    const [likeClickedState, setlikeClickedState] = useState(false);
+    const [dislikeClickedState, setDislikeClickedState] = useState(false);
+    const [likeCountState, setLikeCountState] = useState(likeCount);
+    const [dislikeCountState, setDislikeCountState] = useState(dislikeCount);
+    const [activeButtonState, setActiveButtonState] = useState('none');
+    const handleLike = () => {
+        if (activeButtonState === 'none') {
+            setLikeCountState(likeCountState + 1);
+            setActiveButtonState('like');
+        }
+        else if (activeButtonState === 'like') {
+            setLikeCountState(likeCountState - 1);
+            setActiveButtonState('none');
+        }
+        else if (activeButtonState === 'dislike') {
+            setLikeCountState(likeCountState + 1);
+            setDislikeCountState(dislikeCountState - 1);
+            setActiveButtonState('like');
+        }
+        console.log(likeClickedState)
+    };
+
+    const handleDislike = () => {
+        if (activeButtonState === 'none') {
+            setDislikeCountState(dislikeCountState + 1);
+            setActiveButtonState('dislike');
+        }
+        else if (activeButtonState === 'dislike') {
+            setDislikeCountState(dislikeCountState - 1);
+            setActiveButtonState('none');
+        }
+        else if (activeButtonState === 'like') {
+            setLikeCountState(likeCountState - 1);
+            setDislikeCountState(dislikeCountState + 1);
+            setActiveButtonState('dislike');
+        }
+        console.log(dislikeClickedState)
+    }
+
     return (
         <Card maxW="70rem" h="auto">
             <CardHeader>
@@ -55,11 +98,11 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
                         </Box>
                     </HStack>
                     <HStack>
-                        <Button borderRadius={"1.5rem"} px={"1rem"} color={"gray.500"}>
-                            <Text color={"gray.900"}>👍 69</Text>
+                        <Button onClick={handleLike} borderRadius={"1.5rem"} px={"1rem"} colorScheme={`${activeButtonState === 'like' ? "linkedin": "gray"}`}>
+                            <Text color={"gray.900"}>👍 {likeCountState}</Text>
                         </Button>
-                        <Button borderRadius={"1.5rem"} px={"1rem"} color={"gray.500"}>
-                            <Text color={"gray.900"}>👎 -9</Text>
+                        <Button onClick={handleDislike} borderRadius={"1.5rem"} px={"1rem"} colorScheme={(activeButtonState === "dislike") ? "red" : "gray"}>
+                            <Text color={"gray.900"}>👎 {dislikeCountState}</Text>
                         </Button>
                     </HStack>
                 </HStack>
@@ -69,22 +112,30 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
                     <Text fontSize={"1rem"} fontWeight={"400"}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin semper odio eu nibh placerat rutrum. Etiam non scelerisque mi. Nulla tincidunt volutpat erat in elementum. In blandit lectus et nisl tincidunt auctor vulputate imperdiet felis. Duis porta turpis vel lorem vulputate, vel posuere dolor rutrum. In sed lobortis urna. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam ut varius nunc, eu eleifend dolor.
                     </Text>
-                    <HStack gap={7}>
+                    <HStack gap={20} paddingLeft={"2rem"}>
                         <VStack>
                             <Text fontSize={"1.5rem"} fontWeight={"bold"} color={"biru.600"}>4.5</Text>
                             <Text fontSize={"1rem"} fontWeight={"400"} color={"gray.900"} mt={0}>Overall</Text>
                         </VStack>
-                        <VStack >
-                            <Text fontSize={"1rem"} fontWeight={"400"} color={"grey.900"} align={"start"}>Komunikasi</Text>
-                            <Text fontSize={"1rem"} fontWeight={"400"} color={"grey.900"}>Transparansi Penilaian</Text>
-                            <Text fontSize={"1rem"} fontWeight={"400"} color={"grey.900"}>Gaya Mengajar</Text>
-                            <Text fontSize={"1rem"} fontWeight={"400"} color={"grey.900"}>Konten Pengajar</Text>
-                        </VStack>
+                            <Flex flexDir={"column"} gap={2}>
+                                <HStack gap={7}>
+                                    <Text fontSize={"1rem"} fontWeight={"400"} color={"grey.900"} width={"11rem"} >Komunikasi</Text>
+                                    <Text>⭐️⭐️⭐️⭐️⭐️</Text>
+                                </HStack>
+                                <HStack gap={7}>
+                                    <Text fontSize={"1rem"} fontWeight={"400"} color={"grey.900"} width={"11rem"}>Transparansi Penilaian</Text>
+                                    <Text>⭐️⭐️⭐️⭐️⭐️</Text>
+                                </HStack>
+                                <HStack gap={7}>
+                                    <Text fontSize={"1rem"} fontWeight={"400"} color={"grey.900"} width={"11rem"}>Gaya Mengajar</Text>
+                                    <Text>⭐️⭐️⭐️⭐️⭐️</Text>
+                                </HStack>
+                                <HStack gap={7}>
+                                    <Text fontSize={"1rem"} fontWeight={"400"} color={"grey.900"} width={"11rem"}>Konten Pengajar</Text>
+                                    <Text>⭐️⭐️⭐️⭐️⭐️</Text>
+                                </HStack>
+                            </Flex>
                         <VStack>
-                            <Text>⭐️⭐️⭐️⭐️⭐️</Text>
-                            <Text>⭐️⭐️⭐️⭐️⭐️</Text>
-                            <Text>⭐️⭐️⭐️⭐️⭐️</Text>
-                            <Text>⭐️⭐️⭐️⭐️⭐️</Text>
                         </VStack>
                     </HStack>
                 </VStack>

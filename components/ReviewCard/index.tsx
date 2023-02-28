@@ -1,10 +1,12 @@
 'use client';
 
-import Image from 'next/image';
 import React, { useState } from 'react';
 import {Card, CardBody, CardFooter, CardHeader} from "@chakra-ui/card";
-import {Box, Button, Flex, HStack, Text, VStack} from "@chakra-ui/react";
-import Rating from '@mui/material/Rating';
+import {Box, Button, CSSReset, Flex, HStack, Link, Text, VStack} from "@chakra-ui/react";
+import StarRating from "react-svg-star-rating";
+import styles from "@/styles/ReviewCard.module.scss";
+import Image from "next/image";
+import RedWarningIcon from "@/public/ic-warning.svg";
 
 
 interface ReviewCardProps{
@@ -53,6 +55,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
     const [likeCountState, setLikeCountState] = useState(likeCount);
     const [dislikeCountState, setDislikeCountState] = useState(dislikeCount);
     const [activeButtonState, setActiveButtonState] = useState('none');
+    const [ratingState, setRatingState] = useState(3);
     const handleLike = () => {
         if (activeButtonState === 'none') {
             setLikeCountState(likeCountState + 1);
@@ -98,7 +101,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
                         </Box>
                     </HStack>
                     <HStack>
-                        <Button onClick={handleLike} borderRadius={"1.5rem"} px={"1rem"} colorScheme={`${activeButtonState === 'like' ? "linkedin": "gray"}`}>
+                        <Button onClick={handleLike} borderRadius={"1.5rem"} px={"1rem"} colorScheme={`${activeButtonState === 'like' ? "cyan": "gray"}`}>
                             <Text color={"gray.900"}>👍 {likeCountState}</Text>
                         </Button>
                         <Button onClick={handleDislike} borderRadius={"1.5rem"} px={"1rem"} colorScheme={(activeButtonState === "dislike") ? "red" : "gray"}>
@@ -120,19 +123,19 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
                             <Flex flexDir={"column"} gap={2}>
                                 <HStack gap={7}>
                                     <Text fontSize={"1rem"} fontWeight={"400"} color={"grey.900"} width={"11rem"} >Komunikasi</Text>
-                                    <Text>⭐️⭐️⭐️⭐️⭐️</Text>
+                                    <StarRating isReadOnly initialRating={3.5} unit="half" size={16} containerClassName={styles.star}/>
                                 </HStack>
-                                <HStack gap={7}>
+                                <HStack gap={7} >
                                     <Text fontSize={"1rem"} fontWeight={"400"} color={"grey.900"} width={"11rem"}>Transparansi Penilaian</Text>
-                                    <Text>⭐️⭐️⭐️⭐️⭐️</Text>
+                                    <StarRating isReadOnly initialRating={3.5} unit="half" size={16} containerClassName={styles.star}/>
                                 </HStack>
-                                <HStack gap={7}>
+                                <HStack gap={7} className={"star"}>
                                     <Text fontSize={"1rem"} fontWeight={"400"} color={"grey.900"} width={"11rem"}>Gaya Mengajar</Text>
-                                    <Text>⭐️⭐️⭐️⭐️⭐️</Text>
+                                    <StarRating isReadOnly initialRating={3.5} unit="half" size={16} containerClassName={styles.star}/>
                                 </HStack>
                                 <HStack gap={7}>
                                     <Text fontSize={"1rem"} fontWeight={"400"} color={"grey.900"} width={"11rem"}>Konten Pengajar</Text>
-                                    <Text>⭐️⭐️⭐️⭐️⭐️</Text>
+                                    <StarRating isReadOnly initialRating={3.5} unit="half" size={16} containerClassName={styles.star}/>
                                 </HStack>
                             </Flex>
                         <VStack>
@@ -141,7 +144,13 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
                 </VStack>
             </CardBody>
             <CardFooter>
-                <Text fontSize={"0.75rem"} fontWeight={"400"} color={"gray.500"} pt={0}>12 Februari 2023</Text>
+                <HStack justifyContent={"space-between"} w={"100%"}>
+                    <Text fontSize={"0.75rem"} fontWeight={"400"} color={"gray.500"} pt={0}>12 Februari 2023</Text>
+                    <Link display={"flex"} gap={"0.5rem"} href="index">
+                        <Image src={RedWarningIcon} alt={"red warning icon"} />
+                        <Text fontSize={"0.75rem"} fontWeight={"400"} color={"red.500"} pt={0}>Laporkan Ulasan</Text>
+                    </Link>
+                </HStack>
             </CardFooter>
         </Card>
     );

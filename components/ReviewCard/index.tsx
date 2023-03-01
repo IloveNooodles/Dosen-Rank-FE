@@ -8,9 +8,6 @@ import styles from "@/styles/ReviewCard.module.scss";
 import Image from "next/image";
 import RedWarningIcon from "@/public/ic-warning.svg";
 
-
-
-
 interface ReviewCardProps{
     reviewFor?: 'university' | 'course' | 'lecturer';
     idReview?: number;
@@ -129,7 +126,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
                     <Show below={"md"}>
                         {!expanded ? (
                         <Link onClick={handleExpand}>
-                            <Text mt={0} color={"biru.800"} fontWeight={"semibold"} fontSize={"0.75rem"}>see more</Text>
+                            <Text mt="-0.5rem" color={"biru.800"} fontWeight={"semibold"} fontSize={"0.75rem"}>see more</Text>
                         </Link>) : null}
                     </Show>
                     <HStack gap={{base: 2, md: 20}} paddingLeft={{base: '0.75rem', md: '2rem'}}>

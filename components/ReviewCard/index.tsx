@@ -2,11 +2,13 @@
 
 import React, { useState } from 'react';
 import {Card, CardBody, CardFooter, CardHeader} from "@chakra-ui/card";
-import {Box, Button, CSSReset, Flex, HStack, Link, Text, VStack} from "@chakra-ui/react";
+import {Box, Button, CSSReset, Flex, HStack, Link, Show, Text, VStack} from "@chakra-ui/react";
 import StarRating from "react-svg-star-rating";
 import styles from "@/styles/ReviewCard.module.scss";
 import Image from "next/image";
 import RedWarningIcon from "@/public/ic-warning.svg";
+
+
 
 
 interface ReviewCardProps{
@@ -56,6 +58,8 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
     const [dislikeCountState, setDislikeCountState] = useState(dislikeCount);
     const [activeButtonState, setActiveButtonState] = useState('none');
     const [ratingState, setRatingState] = useState(3);
+    const [expanded, setExpanded] = useState(false);
+    const [numberOfLines, setNumberOfLines] = useState(3);
     const handleLike = () => {
         if (activeButtonState === 'none') {
             setLikeCountState(likeCountState + 1);
@@ -90,15 +94,22 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
         console.log(dislikeClickedState)
     }
 
+    function handleExpand() {
+        setExpanded(true);
+        setNumberOfLines(999);
+    }
+
     return (
         <Card maxW="70rem" h="auto">
-            <CardHeader>
+            <CardHeader pb={{base: "0rem", md:"1rem"}}>
                 <HStack justifyContent={"space-between"}>
                     <HStack>
-                        <Text fontSize="1.25rem" fontWeight="bold" color={"biru.900"}>M. Fikri Ranjabi</Text>
-                        <Box w="auto" h="auto" bg="biru.900" borderRadius={"1.5rem"} px={"1rem"} py={"0.5rem"}>
-                            <Text fontSize="1rem" fontWeight="semibold" color={"biru.50"}>Matematika Diskrit</Text>
-                        </Box>
+                        <Text fontSize={{base: '1rem', md: '1.25rem'}} fontWeight="bold" color={"biru.900"}>M. Fikri Ranjabi</Text>
+                        <Show above={"md"}>
+                            <Box w="auto" h="auto" bg="biru.900" borderRadius={"1.5rem"} px={"1rem"} py={"0.5rem"} >
+                                <Text fontSize="1rem" fontWeight="semibold" color={"biru.50"}>Matematika Diskrit</Text>
+                            </Box>
+                        </Show>
                     </HStack>
                     <HStack>
                         <Button onClick={handleLike} borderRadius={"1.5rem"} px={"1rem"} colorScheme={`${activeButtonState === 'like' ? "cyan": "gray"}`}>
@@ -112,29 +123,35 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
             </CardHeader>
             <CardBody pt={0} pb={0}>
                 <VStack alignItems={"start"}>
-                    <Text fontSize={"1rem"} fontWeight={"400"}>
+                    <Text fontSize={{ base: '0.75rem', md: '1rem'}} fontWeight={"400"} noOfLines={{base: numberOfLines, md: 999}}>
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin semper odio eu nibh placerat rutrum. Etiam non scelerisque mi. Nulla tincidunt volutpat erat in elementum. In blandit lectus et nisl tincidunt auctor vulputate imperdiet felis. Duis porta turpis vel lorem vulputate, vel posuere dolor rutrum. In sed lobortis urna. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam ut varius nunc, eu eleifend dolor.
                     </Text>
-                    <HStack gap={20} paddingLeft={"2rem"}>
+                    <Show below={"md"}>
+                        {!expanded ? (
+                        <Link onClick={handleExpand}>
+                            <Text mt={0} color={"biru.800"} fontWeight={"semibold"} fontSize={"0.75rem"}>see more</Text>
+                        </Link>) : null}
+                    </Show>
+                    <HStack gap={{base: 2, md: 20}} paddingLeft={{base: '0.75rem', md: '2rem'}}>
                         <VStack>
                             <Text fontSize={"1.5rem"} fontWeight={"bold"} color={"biru.600"}>4.5</Text>
-                            <Text fontSize={"1rem"} fontWeight={"400"} color={"gray.900"} mt={0}>Overall</Text>
+                            <Text fontSize={{base: '0.75rem', md: '1rem'}} fontWeight={"400"} color={"gray.900"} mt={0} pt={0}>Overall</Text>
                         </VStack>
-                            <Flex flexDir={"column"} gap={2}>
-                                <HStack gap={7}>
-                                    <Text fontSize={"1rem"} fontWeight={"400"} color={"grey.900"} width={"11rem"} >Komunikasi</Text>
+                            <Flex flexDir={"column"} gap={{base: 1.5, md: 2}}>
+                                <HStack gap={{base: 16, md: 7}}>
+                                    <Text fontSize={{base: '0.75rem', md: '1rem'}} fontWeight={"400"} color={"grey.900"} width={{base: '8rem', md: '11rem'}} >Komunikasi</Text>
                                     <StarRating isReadOnly initialRating={3.5} unit="half" size={16} containerClassName={styles.star}/>
                                 </HStack>
-                                <HStack gap={7} >
-                                    <Text fontSize={"1rem"} fontWeight={"400"} color={"grey.900"} width={"11rem"}>Transparansi Penilaian</Text>
+                                <HStack gap={{base: 16, md: 7}} >
+                                    <Text fontSize={{base: '0.75rem', md: '1rem'}} fontWeight={"400"} color={"grey.900"} width={{base: '8rem', md: '11rem'}}>Transparansi Penilaian</Text>
                                     <StarRating isReadOnly initialRating={3.5} unit="half" size={16} containerClassName={styles.star}/>
                                 </HStack>
-                                <HStack gap={7} className={"star"}>
-                                    <Text fontSize={"1rem"} fontWeight={"400"} color={"grey.900"} width={"11rem"}>Gaya Mengajar</Text>
+                                <HStack gap={{base: 16, md: 7}} >
+                                    <Text fontSize={{base: '0.75rem', md: '1rem'}} fontWeight={"400"} color={"grey.900"} width={{base: '8rem', md: '11rem'}}>Gaya Mengajar</Text>
                                     <StarRating isReadOnly initialRating={3.5} unit="half" size={16} containerClassName={styles.star}/>
                                 </HStack>
-                                <HStack gap={7}>
-                                    <Text fontSize={"1rem"} fontWeight={"400"} color={"grey.900"} width={"11rem"}>Konten Pengajar</Text>
+                                <HStack gap={{base: 16, md: 7}}>
+                                    <Text fontSize={{base: '0.75rem', md: '1rem'}} fontWeight={"400"} color={"grey.900"} width={{base: '8rem', md: '11rem'}}>Konten Pengajar</Text>
                                     <StarRating isReadOnly initialRating={3.5} unit="half" size={16} containerClassName={styles.star}/>
                                 </HStack>
                             </Flex>

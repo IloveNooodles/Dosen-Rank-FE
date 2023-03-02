@@ -36,7 +36,6 @@ const theme = extendTheme({
     Container: {
       baseStyle: {
         maxW: "container.xl",
-        height: "100vh",
       },
     },
     Button: {

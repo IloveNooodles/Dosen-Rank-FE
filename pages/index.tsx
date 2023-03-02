@@ -19,9 +19,6 @@ const Index: React.FC<{}> = () => {
   }, [counter])
   return (
     <Container>
-      <Wrapper>
-        <Flex position="relative" direction="column">
-          <NavigationBar/>
           <Center minH="fit-content" h="calc(100vh - 5.5rem - 6.9rem)">
             <VStack>
               <HStack>
@@ -48,9 +45,6 @@ const Index: React.FC<{}> = () => {
               </InputGroup>
             </VStack>
           </Center>
-          <Footer/>
-        </Flex>
-      </Wrapper>
     </Container>
   );
 }

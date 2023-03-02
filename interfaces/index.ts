@@ -10,8 +10,8 @@ export interface Account {
   email: string;
   password?: string;
   university?: string;
-  isAdmin?: boolean,
-  univId?: number
+  isAdmin?: boolean;
+  univId?: number;
 }
 
 export interface University {
@@ -43,4 +43,13 @@ export interface SelectFieldProps extends ReactSelectProps<SelectOption> {
   name: string;
   label?: string;
   options: Array<SelectOption>;
+}
+
+export interface SummaryRatingProps {
+  name: string;
+  value: number;
+}
+
+export interface SummaryRatingContainerProps {
+  summaryRatings: SummaryRatingProps[];
 }

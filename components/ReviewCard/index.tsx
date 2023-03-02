@@ -8,7 +8,7 @@ import styles from "@/styles/ReviewCard.module.scss";
 import Image from "next/image";
 import RedWarningIcon from "@/public/ic-warning.svg";
 
-interface ReviewCardProps{
+export interface ReviewCardProps{
     reviewFor?: 'university' | 'course' | 'lecturer';
     idReview?: number;
     reviewerName?: string;

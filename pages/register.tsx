@@ -17,16 +17,13 @@ export async function getStaticProps() {
 }
 
 const Register: React.FC<RegisterProps> = ({universities}) => (
-  <Container centerContent>
-    <Wrapper>
-    <NavigationBar/>
+  <Container centerContent h="calc(100vh - 5.5rem - 6.9rem)">
       <VStack position="relative" h="full" justify="center" maxW="sm">
         <Text fontWeight="semibold" pb={6} align="center" fontSize="2xl">
           Buat akun sebagai mahasiswa
         </Text>
         <RegisterForm universities={universities}/>
       </VStack>
-    </Wrapper>
   </Container>
 );
 

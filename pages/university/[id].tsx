@@ -50,11 +50,11 @@ const University: React.FC<UniversityPageProps> = ({
           {/* placeholder */}
           <Divider/>
           <Text my={6}>82828 Ulasan</Text>
-          <ReviewCard likeCount={999} dislikeCount={0}/>
-          <ReviewCard likeCount={0} dislikeCount={0}/>
-          <ReviewCard likeCount={0} dislikeCount={0}/>
-          <ReviewCard likeCount={0} dislikeCount={0}/>
-          <ReviewCard likeCount={0} dislikeCount={0}/>
+          <ReviewCard reviewFor={"university"} likeCount={999} dislikeCount={0}/>
+          <ReviewCard reviewFor={"university"} likeCount={999} dislikeCount={0}/>
+          <ReviewCard reviewFor={"university"} likeCount={999} dislikeCount={0}/>
+          <ReviewCard reviewFor={"university"} likeCount={999} dislikeCount={0}/>
+          <ReviewCard reviewFor={"university"} likeCount={999} dislikeCount={0}/>
         </Flex>
       </MainCard>
     </Container>

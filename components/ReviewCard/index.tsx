@@ -9,7 +9,7 @@ import Image from "next/image";
 import RedWarningIcon from "@/public/ic-warning.svg";
 
 export interface ReviewCardProps{
-    reviewFor?: 'university' | 'course' | 'lecturer';
+    reviewFor: 'university' | 'course' | 'courses';
     idReview?: number;
     reviewerName?: string;
     courseName?: string;
@@ -49,12 +49,10 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
     dislikeCount,
     activeButton,
 }) => {
-    const [likeClickedState, setlikeClickedState] = useState(false);
-    const [dislikeClickedState, setDislikeClickedState] = useState(false);
+
     const [likeCountState, setLikeCountState] = useState(likeCount);
     const [dislikeCountState, setDislikeCountState] = useState(dislikeCount);
     const [activeButtonState, setActiveButtonState] = useState('none');
-    const [ratingState, setRatingState] = useState(3);
     const [expanded, setExpanded] = useState(false);
     const [numberOfLines, setNumberOfLines] = useState(3);
     const handleLike = () => {
@@ -71,7 +69,6 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
             setDislikeCountState(dislikeCountState - 1);
             setActiveButtonState('like');
         }
-        console.log(likeClickedState)
     };
 
     const handleDislike = () => {
@@ -88,7 +85,6 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
             setDislikeCountState(dislikeCountState + 1);
             setActiveButtonState('dislike');
         }
-        console.log(dislikeClickedState)
     }
 
     function handleExpand() {
@@ -97,16 +93,16 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
     }
 
     return (
-        <Card maxW="70rem" h="auto">
+        <Card my={{base: 2}} maxW="70rem" h="auto">
             <CardHeader pb={{base: "0rem", md:"1rem"}}>
                 <HStack justifyContent={"space-between"}>
                     <HStack>
                         <Text fontSize={{base: '1rem', md: '1.25rem'}} fontWeight="bold" color={"biru.900"}>M. Fikri Ranjabi</Text>
-                        <Show above={"md"}>
+                        {reviewFor === "courses" && <Show above={"md"}>
                             <Box w="auto" h="auto" bg="biru.900" borderRadius={"1.5rem"} px={"1rem"} py={"0.5rem"} >
                                 <Text fontSize="1rem" fontWeight="semibold" color={"biru.50"}>Matematika Diskrit</Text>
                             </Box>
-                        </Show>
+                        </Show>}
                     </HStack>
                     <HStack>
                         <Button onClick={handleLike} borderRadius={"1.5rem"} px={"1rem"} colorScheme={`${activeButtonState === 'like' ? "cyan": "gray"}`}>

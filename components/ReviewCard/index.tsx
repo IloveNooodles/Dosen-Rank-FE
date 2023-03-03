@@ -135,19 +135,19 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
                             <Text fontSize={{base: '0.75rem', md: '1rem'}} fontWeight={"400"} color={"gray.900"} mt={0} pt={0}>Overall</Text>
                         </VStack>
                             <Flex flexDir={"column"} gap={{base: 1.5, md: 2}}>
-                                <HStack gap={{base: 16, md: 7}}>
+                                <HStack gap={{base: 0, md: 7}}>
                                     <Text fontSize={{base: '0.75rem', md: '1rem'}} fontWeight={"400"} color={"grey.900"} width={{base: '8rem', md: '11rem'}} >Komunikasi</Text>
                                     <StarRating isReadOnly initialRating={3.5} unit="half" size={16} containerClassName={styles.star}/>
                                 </HStack>
-                                <HStack gap={{base: 16, md: 7}} >
+                                <HStack gap={{base: 0, md: 7}} >
                                     <Text fontSize={{base: '0.75rem', md: '1rem'}} fontWeight={"400"} color={"grey.900"} width={{base: '8rem', md: '11rem'}}>Transparansi Penilaian</Text>
                                     <StarRating isReadOnly initialRating={3.5} unit="half" size={16} containerClassName={styles.star}/>
                                 </HStack>
-                                <HStack gap={{base: 16, md: 7}} >
+                                <HStack gap={{base: 0, md: 7}} >
                                     <Text fontSize={{base: '0.75rem', md: '1rem'}} fontWeight={"400"} color={"grey.900"} width={{base: '8rem', md: '11rem'}}>Gaya Mengajar</Text>
                                     <StarRating isReadOnly initialRating={3.5} unit="half" size={16} containerClassName={styles.star}/>
                                 </HStack>
-                                <HStack gap={{base: 16, md: 7}}>
+                                <HStack gap={{base: 0, md: 7}}>
                                     <Text fontSize={{base: '0.75rem', md: '1rem'}} fontWeight={"400"} color={"grey.900"} width={{base: '8rem', md: '11rem'}}>Konten Pengajar</Text>
                                     <StarRating isReadOnly initialRating={3.5} unit="half" size={16} containerClassName={styles.star}/>
                                 </HStack>

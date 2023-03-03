@@ -2,7 +2,7 @@ import { Container, VStack, Text, CheckboxGroup, Checkbox, Input, HStack, Button
 import React, { MouseEventHandler } from "react";
 
 const ReportModal: React.FC<{
-    onClose: MouseEventHandler<HTMLButtonElement> | undefined;show: boolean
+    onClose: MouseEventHandler<HTMLButtonElement> | undefined; show: boolean
 }> = (props) => {
     const [count, setCount] = React.useState(0);
     const [data, setData] = React.useState({
@@ -27,13 +27,14 @@ const ReportModal: React.FC<{
             bottom={0} >
             <VStack
                 backgroundColor={"white"}
-                width={{ base: "70%", md: "50%", lg: "40%" }}
+                width={{ base: "70%", md: "50%", lg: "32%" }}
                 borderRadius={14}
                 padding={10}>
                 <Text
                     fontSize={{ base: '1rem', md: '1.3rem'}}
+                    fontFamily="heading"
                     fontWeight="bold"
-                    color="biru.800">
+                    color="biru.900">
                         Laporkan
                 </Text>
                 <VStack
@@ -41,7 +42,7 @@ const ReportModal: React.FC<{
                     <VStack align="left"
                         width="full">
                         <Text
-                            fontSize={{ base: '0.85rem', md: '1.1rem'}}
+                            fontSize={{ base: '0.8rem', md: '1rem'}}
                             fontWeight="bold">
                                 Ada isu apa?
                             </Text>
@@ -94,7 +95,7 @@ const ReportModal: React.FC<{
                         <Text
                             width="full"
                             align="left"
-                            fontSize={{ base: '0.85rem', md: '1.1rem'}}
+                            fontSize={{ base: '0.8rem', md: '1rem'}}
                             fontWeight="bold">
                                 Silakan berikan informasi lebih detail dan hal yang dapat kami perbaiki!
                             </Text>
@@ -103,7 +104,7 @@ const ReportModal: React.FC<{
                             placeholder="Halaman ini memiliki..."
                             resize="none"
                             maxLength={300}
-                            fontSize={{ base: '0.75rem', md: '1rem'}}
+                            fontSize={{ base: '0.75rem', md: '0.9rem'}}
                             onChange={e => {
                                 setCount(e.target.value.length)
                                 setData(
@@ -113,7 +114,7 @@ const ReportModal: React.FC<{
                                     )}} />
                         <Text
                             width="full"
-                            fontSize={{ base: '0.6rem', md: '0.7rem'}}
+                            fontSize={{ base: '0.6rem', md: '0.8rem'}}
                             align="right">
                             { count }/300
                         </Text>

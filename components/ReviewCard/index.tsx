@@ -9,7 +9,7 @@ import Image from "next/image";
 import RedWarningIcon from "@/public/ic-warning.svg";
 
 export interface ReviewCardProps{
-    reviewFor: 'university' | 'course' | 'courses';
+    reviewFor: 'university' | 'course' | 'courses' | 'dosen';
     idReview?: number;
     reviewerName?: string;
     courseName?: string;

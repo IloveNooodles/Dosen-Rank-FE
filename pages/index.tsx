@@ -1,13 +1,8 @@
-import NavigationBar from "@/components/NavigationBar";
-import Footer from "@/components/Footer";
-import Wrapper from "@/components/Wrapper";
-import { inter } from "@/fonts";
-import styles from "@/styles/Home.module.scss";
 import { Box, Center, Container, Flex, HStack, VStack, Text, Input, InputGroup, InputRightElement, Image, Icon, keyframes } from "@chakra-ui/react";
 import { Search2Icon } from "@chakra-ui/icons";
 import React from 'react';
 
-const dynamicText = ["dosen", "mata kuliah", "kampus"];
+const dynamicText = ["dosen", "matkul", "kampus"];
 
 const Index: React.FC<{}> = () => {
   const [counter, setCounter] = React.useState<number>(0)
@@ -20,16 +15,16 @@ const Index: React.FC<{}> = () => {
   return (
     <Container>
           <Center minH="fit-content" h="calc(100vh - 5.5rem - 6.9rem)">
-            <VStack>
-              <HStack>
-                <Text fontSize={{ base: "2rem", md:"3.5rem"}} fontWeight="bold">
+            <VStack width={{ base: "20rem", md: "33rem"}}>
+              <HStack width="full" align="left">
+                <Text fontSize={{ base: "2.1rem", md:"3.5rem"}} fontWeight="bold">
                   Cari ulasan
                 </Text>
-                <Text fontSize={{ base: "2rem", md: "3.5rem"}} fontWeight="bold" color="biru.800">
+                <Text fontSize={{ base: "2.1rem", md: "3.5rem"}} fontWeight="bold" color="biru.800">
                   { dynamicText[counter] }
                 </Text>
               </HStack>
-              <InputGroup w={{ base: "20rem", md: "31rem"}}>
+              <InputGroup w={{ base: "20rem", md: "33rem"}}>
                 <Input
                   placeholder="Cari universitas, mata kuliah, atau dosen..."
                   _placeholder={{ color: 'netral.400', fontWeight: 'light' }}

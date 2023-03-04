@@ -2,11 +2,12 @@
 
 import React, { useState } from 'react';
 import {Card, CardBody, CardFooter, CardHeader} from "@chakra-ui/card";
-import {Box, Button, CSSReset, Flex, HStack, Link, Show, Text, VStack} from "@chakra-ui/react";
+import {Box, Button, CSSReset, Flex, HStack, Link, Show, Text, useDisclosure, VStack} from "@chakra-ui/react";
 import StarRating from "react-svg-star-rating";
 import styles from "@/styles/ReviewCard.module.scss";
 import Image from "next/image";
 import RedWarningIcon from "@/public/ic-warning.svg";
+import ReportModal from '../ReportModal';
 
 export interface ReviewCardProps{
     reviewFor: 'university' | 'course' | 'courses';
@@ -50,6 +51,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
     activeButton,
 }) => {
 
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const [likeCountState, setLikeCountState] = useState(likeCount);
     const [dislikeCountState, setDislikeCountState] = useState(dislikeCount);
     const [activeButtonState, setActiveButtonState] = useState('none');
@@ -94,6 +96,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
 
     return (
         <Card my={{base: 2}} maxW="70rem" h="auto">
+            <ReportModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
             <CardHeader pb={{base: "0rem", md:"1rem"}}>
                 <HStack justifyContent={"space-between"}>
                     <HStack>
@@ -156,7 +159,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
             <CardFooter>
                 <HStack justifyContent={"space-between"} w={"100%"}>
                     <Text fontSize={"0.75rem"} fontWeight={"400"} color={"gray.500"} pt={0}>12 Februari 2023</Text>
-                    <Link display={"flex"} gap={"0.5rem"} href="index">
+                    <Link display={"flex"} gap={"0.5rem"} onClick={onOpen}>
                         <Image src={RedWarningIcon} alt={"red warning icon"} />
                         <Text fontSize={"0.75rem"} fontWeight={"400"} color={"red.500"} pt={0}>Laporkan Ulasan</Text>
                     </Link>

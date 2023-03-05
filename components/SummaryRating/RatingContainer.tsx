@@ -6,7 +6,6 @@ const SummaryRatingContainer: React.FC<SummaryRatingContainerProps> = ({
   overallRating, summaryRatings,
 }) => {
   // for rating grid and overall rating
-  console.log("SummaryRatingContainer:", { summaryRatings });
   return (
     <Flex
       my={{ base: 4, sm: 8, md: 16, lg: 20 }}
@@ -19,7 +18,7 @@ const SummaryRatingContainer: React.FC<SummaryRatingContainerProps> = ({
           color="biru.800"
           fontWeight="semibold"
         >
-          {overallRating.toFixed(1)}
+          {overallRating?.toFixed(1)}
         </Text>
         <Text fontSize={{ base: "md", sm: "lg", md: "3xl" }}>Overall</Text>
       </VStack>

@@ -3,7 +3,7 @@ import { Flex, VStack, SimpleGrid, Text } from "@chakra-ui/react";
 import RatingItem from "./RatingItem";
 
 const SummaryRatingContainer: React.FC<SummaryRatingContainerProps> = ({
-  summaryRatings,
+  overallRating, summaryRatings,
 }) => {
   // for rating grid and overall rating
   console.log("SummaryRatingContainer:", { summaryRatings });
@@ -19,7 +19,7 @@ const SummaryRatingContainer: React.FC<SummaryRatingContainerProps> = ({
           color="biru.800"
           fontWeight="semibold"
         >
-          4.5
+          {overallRating.toFixed(1)}
         </Text>
         <Text fontSize={{ base: "md", sm: "lg", md: "3xl" }}>Overall</Text>
       </VStack>

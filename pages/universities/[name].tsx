@@ -10,13 +10,13 @@ export async function getServerSideProps(context: { query: { name: string; }; })
 
   try {
     const univRes = await apiInstance({}).get(`/univ/${name}`);
-    const {id: univId, name: univName} = univRes.data.data
+    const {id: univId, name: univName} = await univRes.data.data
   
     const reviewRes = await apiInstance({}).get(`/reviews/univ/?id=${univId}`);
-    const reviews = reviewRes.data.data
+    const reviews = await reviewRes.data.data
 
     const overallRatingRes = await apiInstance({}).get(`/reviews/univ/overall/${univId}`);
-    const {ratings, averageRating} = overallRatingRes.data.data
+    const {ratings, averageRating} = await overallRatingRes.data.data
 
     return { props: { title: univName, reviews, summaryRatings: ratings, summaryAverageRating: averageRating } };
   } catch (e) {

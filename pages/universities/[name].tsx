@@ -16,7 +16,7 @@ export async function getServerSideProps(context: { query: { name: string; }; })
     const reviews = await reviewRes.data.data
 
     const overallRatingRes = await apiInstance({}).get(`/reviews/univ/overall/${univId}`);
-    const {ratings, averageRating} = await overallRatingRes.data.data
+    const {ratings, average_rating: averageRating} = await overallRatingRes.data.data
 
     return { props: { title: univName, reviews, summaryRatings: ratings, summaryAverageRating: averageRating } };
   } catch (e) {
@@ -31,7 +31,7 @@ export async function getServerSideProps(context: { query: { name: string; }; })
 }
 
 export interface UniversityRating {
-  reputasiAkademik: number,
+  reputasi_akademik: number,
   lingkungan: number,
   kemahasiswaan: number,
   fasilitas: number
@@ -39,16 +39,16 @@ export interface UniversityRating {
 
 export interface UniversityReview {
   id: number,
-  creatorId: number,
-  univId: number,
+  creator_id: number,
+  univ_id: number,
   upvote: number,
   downvote: number,
   content: string,
   name: string,
-  createdAt: string,
-  updatedAt: string,
+  created_at: string,
+  updated_at: string,
   rating: UniversityRating,
-  averageRating: number
+  average_rating: number
 }
 
 export interface UniversityPageProps {
@@ -66,7 +66,7 @@ const University: React.FC<UniversityPageProps> = ({
 }) => {
   const ratings = [
     {name: 'Reputasi Akademik',
-    value: summaryRatings.reputasiAkademik},
+    value: summaryRatings.reputasi_akademik},
     {name: 'Lingkungan',
     value: summaryRatings.lingkungan},
     {name: 'Kemahasiswaan',
@@ -85,16 +85,16 @@ const University: React.FC<UniversityPageProps> = ({
           {reviews.map((review) => {
             const {
               id,
-              creatorId,
-              univId,
+              creator_id,
+              univ_id,
               upvote,
               downvote,
               content,
               name,
-              createdAt,
-              updatedAt,
+              created_at,
+              updated_at,
               rating,
-              averageRating
+              average_rating
             } = review;
             return (
               <ReviewCard
@@ -102,16 +102,16 @@ const University: React.FC<UniversityPageProps> = ({
                 reviewFor={"university"}
                 idReview={id}
                 reviewerName={name}
-                overallRating={averageRating}
+                overallRating={average_rating}
                 firstFieldName='Reputasi Akademik'
                 secondFieldName='Lingkungan'
                 thirdFieldName='Kemahasiswaan'
                 fourthFieldName='Fasilitas'
-                firstFieldRating={rating.reputasiAkademik}
+                firstFieldRating={rating.reputasi_akademik}
                 secondFieldRating={rating.lingkungan}
                 thirdFieldRating={rating.kemahasiswaan}
                 fourthFieldRating={rating.fasilitas}
-                reviewDate={createdAt}
+                reviewDate={created_at}
                 reviewContent={content}
                 likeCount={upvote}
                 dislikeCount={downvote}

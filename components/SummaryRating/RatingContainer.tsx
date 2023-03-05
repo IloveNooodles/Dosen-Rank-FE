@@ -18,7 +18,7 @@ const SummaryRatingContainer: React.FC<SummaryRatingContainerProps> = ({
           color="biru.800"
           fontWeight="semibold"
         >
-          {overallRating.toFixed(1)}
+          {overallRating?.toFixed(1)}
         </Text>
         <Text fontSize={{ base: "md", sm: "lg", md: "3xl" }}>Overall</Text>
       </VStack>

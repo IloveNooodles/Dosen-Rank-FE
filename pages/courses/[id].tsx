@@ -1,21 +1,16 @@
 import { Container, Divider, Flex, Text } from "@chakra-ui/react";
 import React from "react";
 import MainCard from "@/components/MainCard";
-import { useRouter } from "next/router";
-import { loadCourseDetail } from "@/lib/load-course-detail";
-import { SummaryRatingProps } from "@/interfaces";
 import SummaryRating from "@/components/SummaryRating";
-import ReviewCard, { ReviewCardProps } from "@/components/ReviewCard";
+import ReviewCard from "@/components/ReviewCard";
 import {apiInstance} from "@/utils/apiInstance";
 
 export async function getServerSideProps(context: { query: { id: string; }; }) {
     const { id } = context.query;
-
     try {
         // const courseRes = await apiInstance({}).get(`/course/${id}`);
         // const courseId = courseRes.data.data.id;
         const courseId = 2;
-
         const reviewRes = await apiInstance({}).get(`/reviews/course/?id=${courseId}`);
         // const courseName = courseRes.data.data.name;
         const courseName = "Bahasa Arab"
@@ -116,6 +111,7 @@ const Courses: React.FC<CoursePageProps> = ({
                                 reviewFor={"course"}
                                 idReview={id}
                                 reviewerName={creatorName}
+                                overallRating={averageRating}
                                 firstFieldName='Kesesuaian Dengan SKS'
                                 secondFieldName='Kompetensi yang diperoleh'
                                 thirdFieldName='Kesulitan'

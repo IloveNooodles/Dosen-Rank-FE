@@ -49,6 +49,16 @@ const theme = extendTheme({
             backgroundColor: "biru.900",
           }
         },
+        angry: {
+          color: "white",
+          backgroundColor: "red.500",
+          borderRadius: "24px",
+          px: "24px",
+          _hover: {
+            backgroundColor: "red.600",
+            color: "gray.100"
+          }
+        },
         secondary: {
           color: "biru.800",
           backgroundColor: "white",

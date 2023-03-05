@@ -6,13 +6,14 @@ import SummaryTitle from "./Title";
 
 const SummaryRating: React.FC<{
   title: string;
+  overallRating: number,
   summaryRatings: SummaryRatingProps[];
-}> = ({ title, summaryRatings }) => {
+}> = ({ title, overallRating, summaryRatings }) => {
   return (
     <>
       <SummaryTitle univTitle={title} />
       <SummaryActionButton pagePath="university" />
-      <SummaryRatingContainer summaryRatings={summaryRatings} />
+      <SummaryRatingContainer overallRating={overallRating} summaryRatings={summaryRatings} />
     </>
   );
 };

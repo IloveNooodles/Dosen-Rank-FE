@@ -1,4 +1,4 @@
-import { UniversityPageProps } from "@/pages/university/[id]";
+import { UniversityPageProps } from "@/pages/universities/[id]";
 
 export const loadUnivDetail = () => {
   let data: UniversityPageProps = {

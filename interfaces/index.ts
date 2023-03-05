@@ -51,5 +51,6 @@ export interface SummaryRatingProps {
 }
 
 export interface SummaryRatingContainerProps {
+  overallRating: number,
   summaryRatings: SummaryRatingProps[];
 }

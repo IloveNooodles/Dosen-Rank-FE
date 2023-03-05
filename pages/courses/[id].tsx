@@ -46,7 +46,8 @@ const Courses: React.FC<CoursePageProps> = ({
             <MainCard>
                 <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
                     <Divider />
-                    <SummaryRating title={title} summaryRatings={summaryRatings} />
+                    {/* TO DO: update summary rating below!! */}
+                    {/* <SummaryRating title={title} summaryRatings={summaryRatings} /> */}
                     {/* placeholder */}
                     <Divider/>
                     <Text my={6}>82828 Ulasan</Text>

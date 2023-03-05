@@ -6,7 +6,7 @@ const RatingItem: React.FC<SummaryRatingProps> = ({ name, value }) => {
     <Flex justifyContent={{ base: "space-around", sm: "space-between" }}>
       <Text fontSize={{ sm: "xl", md: "2xl" }}>{name}</Text>
       <Text fontSize={{ sm: "xl", md: "2xl" }} fontWeight="bold">
-        {value}
+        {value.toFixed(1)}
       </Text>
     </Flex>
   );

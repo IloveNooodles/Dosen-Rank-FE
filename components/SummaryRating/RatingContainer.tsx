@@ -6,7 +6,6 @@ const SummaryRatingContainer: React.FC<SummaryRatingContainerProps> = ({
   overallRating, summaryRatings,
 }) => {
   // for rating grid and overall rating
-  console.log("SummaryRatingContainer:", { summaryRatings });
   return (
     <Flex
       my={{ base: 4, sm: 8, md: 16, lg: 20 }}

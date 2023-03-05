@@ -132,7 +132,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
                     </Show>
                     <HStack gap={{base: 2, md: 20}} paddingLeft={{base: '0.75rem', md: '2rem'}}>
                         <VStack>
-                            <Text fontSize={"1.5rem"} fontWeight={"bold"} color={"biru.600"}>4.5</Text>
+                            <Text fontSize={"1.5rem"} fontWeight={"bold"} color={"biru.600"}>{overallRating?.toFixed(1)}</Text>
                             <Text fontSize={{base: '0.75rem', md: '1rem'}} fontWeight={"400"} color={"gray.900"} mt={0} pt={0}>Overall</Text>
                         </VStack>
                             <Flex flexDir={"column"} gap={{base: 1.5, md: 2}}>

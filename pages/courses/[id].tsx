@@ -1,4 +1,4 @@
-import { Container, Divider, Flex, Text } from "@chakra-ui/react";
+import {Box, Container, Divider, Flex, Text} from "@chakra-ui/react";
 import React from "react";
 import MainCard from "@/components/MainCard";
 import SummaryRating from "@/components/SummaryRating";
@@ -6,20 +6,21 @@ import ReviewCard from "@/components/ReviewCard";
 import {apiInstance} from "@/utils/apiInstance";
 
 export async function getServerSideProps(context: { query: { id: string; }; }) {
-    const { id } = context.query;
+    // const { id } = context.query;
     try {
-        // const courseRes = await apiInstance({}).get(`/course/${id}`);
-        // const courseId = courseRes.data.data.id;
-        const courseId = 2;
-        const reviewRes = await apiInstance({}).get(`/reviews/course/?id=${courseId}`);
-        // const courseName = courseRes.data.data.name;
+        // const courseRes = await apiInstance({}).get(`/courses/${id}`);
+        // const {id: courseId, name: courseName} = await courseRes.data.data
         const courseName = "Bahasa Arab"
+        const courseId = 2;
 
-        const reviews = reviewRes.data.data.reviews;
-        const summaryRatings = reviewRes.data.data.ratings
-        const summaryAverageRating = reviewRes.data.data.averageRating
+        const reviewRes = await apiInstance({}).get(`/reviews/course?id=2`);
+        const reviews = reviewRes.data.data;
+        // const courseName = courseRes.data.data.name;
 
-        return { props: { title: courseName, reviews, summaryRatings, summaryAverageRating } };
+        const overallRatingRes = await apiInstance({}).get(`/reviews/course/overall/${courseId}`);
+        const {review_count: reviewCount, overall_rating: overallRating, overall_kesesuaian_sks: overalKesesuaianSKS, overall_kompetensi: overallKompetensi, overall_kesulitan: overallKesulitan, overall_sumber_belajar: overalSumberBelajar} = await overallRatingRes.data.data
+
+        return { props: { title: courseName, reviews, reviewCount, overallRating, overalKesesuaianSKS, overallKompetensi, overallKesulitan, overalSumberBelajar } };
     } catch (e) {
         console.error(e)
         console.log("error getServerSideProps")
@@ -33,10 +34,10 @@ export async function getServerSideProps(context: { query: { id: string; }; }) {
 }
 
 export interface CourseRating {
-    kesesuaianDenganSKS: number;
+    kesesuaian: number;
     kompetensi: number;
     kesulitan: number;
-    ketersediaanSumber: number;
+    ketersediaan: number;
 }
 
 export interface CourseReview {
@@ -60,31 +61,42 @@ export interface CourseReview {
 export interface CoursePageProps {
     title: string,
     reviews: CourseReview[],
-    summaryRatings: CourseRating,
+    overallRating: number,
+    reviewCount: number,
+    overalKesesuaianSKS: number,
+    overallKompetensi: number,
+    overallKesulitan: number,
+    overalSumberBelajar: number,
     summaryAverageRating: number
 }
+
 const Courses: React.FC<CoursePageProps> = ({
-                                                       title,
-                                                       reviews,
-                                                       summaryRatings,
-                                                       summaryAverageRating,
-                                                   }) => {
+    title,
+    reviews,
+    overallRating,
+    reviewCount,
+    overalKesesuaianSKS,
+    overallKompetensi,
+    overallKesulitan,
+    overalSumberBelajar,
+    summaryAverageRating,
+}) => {
     const ratings = [
         {name: 'Kesesuaian Dengan SKS',
-            value: summaryRatings.kesesuaianDenganSKS},
+            value: overalKesesuaianSKS},
         {name: 'Kompetensi yang diperoleh',
-            value: summaryRatings.kompetensi},
+            value: overallKompetensi},
         {name: 'Kesulitan',
-            value: summaryRatings.kesulitan},
+            value: overallKesulitan},
         {name: 'Ketersediaan Sumber Belajar',
-            value: summaryRatings.ketersediaanSumber},
+            value: overalSumberBelajar},
     ]
 
     return (
         <Container>
             <MainCard>
                 <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
-                    <SummaryRating title={title} overallRating={summaryAverageRating} summaryRatings={ratings} />
+                    <SummaryRating title={title} overallRating={overallRating} summaryRatings={ratings} />
                     <Divider/>
                     <Text my={6}>{reviews.length} Ulasan</Text>
                     {reviews.map((review) => {
@@ -110,16 +122,17 @@ const Courses: React.FC<CoursePageProps> = ({
                                 key={reviews.indexOf(review)}
                                 reviewFor={"course"}
                                 idReview={id}
-                                reviewerName={creatorName}
+                                reviewerName = {creatorName}
+                                courseName={courseName}
                                 overallRating={averageRating}
-                                firstFieldName='Kesesuaian Dengan SKS'
-                                secondFieldName='Kompetensi yang diperoleh'
-                                thirdFieldName='Kesulitan'
-                                fourthFieldName='Ketersediaan Sumber Belajar'
-                                firstFieldRating={rating.kesesuaianDenganSKS}
+                                firstFieldName={"Kesesuaian Dengan SKS"}
+                                secondFieldName={"Kompetensi yang diperoleh"}
+                                thirdFieldName={"Kesulitan"}
+                                fourthFieldName={"Ketersediaan Sumber Belajar"}
+                                firstFieldRating={rating.kesesuaian}
                                 secondFieldRating={rating.kompetensi}
                                 thirdFieldRating={rating.kesulitan}
-                                fourthFieldRating={rating.ketersediaanSumber}
+                                fourthFieldRating={rating.ketersediaan}
                                 reviewDate={createdAt}
                                 reviewContent={content}
                                 likeCount={upvote}

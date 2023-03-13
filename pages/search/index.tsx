@@ -85,9 +85,9 @@ const Search: React.FC<CoursePageProps> = ({ title, summaryRatings }) => {
             Dosen
           </Text>
           <SearchCard
-            searchResult={"Rinaldi Munir"}
+            searchResult={"Garebalding, S.T., M.T."}
             searchFor="professor"
-            slug="1"
+            slug="bapak-garebalding"
           />
         </Flex>
       </MainCard>

@@ -141,7 +141,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
                                     <StarRating isReadOnly initialRating={firstFieldRating} unit="half" size={16} containerClassName={styles.star}/>
                                 </HStack>
                                 <HStack gap={{base: 0, md: 7}} >
-                                    <Text fontSize={{base: '0.75rem', md: '1rem'}} fontWeight={"400"} color={"grey.900"} width={{base: '8rem', md: '11rem'}}>{secondFieldName} Penilaian</Text>
+                                    <Text fontSize={{base: '0.75rem', md: '1rem'}} fontWeight={"400"} color={"grey.900"} width={{base: '8rem', md: '11rem'}}>{secondFieldName}</Text>
                                     <StarRating isReadOnly initialRating={secondFieldRating} unit="half" size={16} containerClassName={styles.star}/>
                                 </HStack>
                                 <HStack gap={{base: 0, md: 7}} >

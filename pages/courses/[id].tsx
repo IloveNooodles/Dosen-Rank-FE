@@ -34,28 +34,28 @@ export async function getServerSideProps(context: { query: { id: string; }; }) {
 }
 
 export interface CourseRating {
-    kesesuaian: number;
+    "kesesuaian_sks": number;
     kompetensi: number;
     kesulitan: number;
-    ketersediaan: number;
+    "sumber_belajar": number;
 }
 
 export interface CourseReview {
     id: number;
-    creatorId: number;
-    creatorName: string;
-    professorId: number;
-    professorName: string;
-    courseId: number;
-    courseName: string;
-    institutionName: string;
+    creator_id: number;
+    creator_name:  string;
+    professor_id: number;
+    professor_name: string;
+    course_id: number;
+    course_name: string;
+    institution_name: string;
     content: string;
     upvote: number;
     downvote: number;
-    createdAt: string;
-    updatedAt: string;
+    created_at: string;
+    updated_at: string;
     rating: CourseRating;
-    averageRating: number;
+    average_rating: number;
 }
 
 export interface CoursePageProps {
@@ -102,21 +102,22 @@ const Courses: React.FC<CoursePageProps> = ({
                     {reviews.map((review) => {
                         const {
                             id,
-                            creatorId,
-                            creatorName,
-                            professorId,
-                            professorName,
-                            courseId,
-                            courseName,
-                            institutionName,
+                            creator_id: creatorId,
+                            creator_name: creatorName,
+                            professor_id: professorId,
+                            professor_name: professorName,
+                            course_id: courseId,
+                            course_name: courseName,
+                            institution_name: institutionName,
                             content,
                             upvote,
                             downvote,
-                            createdAt,
-                            updatedAt,
+                            created_at: createdAt,
+                            updated_at: updatedAt,
                             rating,
-                            averageRating,
+                            average_rating: averageRating,
                         } = review;
+                        console.log(review)
                         return (
                             <ReviewCard
                                 key={reviews.indexOf(review)}
@@ -129,10 +130,10 @@ const Courses: React.FC<CoursePageProps> = ({
                                 secondFieldName={"Kompetensi yang diperoleh"}
                                 thirdFieldName={"Kesulitan"}
                                 fourthFieldName={"Ketersediaan Sumber Belajar"}
-                                firstFieldRating={rating.kesesuaian}
+                                firstFieldRating={rating["kesesuaian_sks"]}
                                 secondFieldRating={rating.kompetensi}
                                 thirdFieldRating={rating.kesulitan}
-                                fourthFieldRating={rating.ketersediaan}
+                                fourthFieldRating={rating["sumber_belajar"]}
                                 reviewDate={createdAt}
                                 reviewContent={content}
                                 likeCount={upvote}

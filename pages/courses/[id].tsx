@@ -42,7 +42,6 @@ export interface CourseRating {
 
 export interface CourseReview {
     id: number;
-    reviewFor: string;
     creator_id: number;
     creator_name:  string;
     professor_id: number;

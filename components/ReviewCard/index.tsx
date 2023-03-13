@@ -8,6 +8,7 @@ import styles from "@/styles/ReviewCard.module.scss";
 import Image from "next/image";
 import RedWarningIcon from "@/public/ic-warning.svg";
 import ReportModal from '../ReportModal';
+import moment from "moment";
 
 export interface ReviewCardProps{
     reviewFor: 'university' | 'course' | 'courses';
@@ -160,7 +161,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
             </CardBody>
             <CardFooter>
                 <HStack justifyContent={"space-between"} w={"100%"}>
-                    <Text fontSize={"0.75rem"} fontWeight={"400"} color={"gray.500"} pt={0}>{date.toLocaleDateString()}</Text>
+                    <Text fontSize={"0.75rem"} fontWeight={"400"} color={"gray.500"} pt={0}>{moment(date).format('LLL')}</Text>
                     <Link display={"flex"} gap={"0.5rem"} onClick={onOpen}>
                         <Image src={RedWarningIcon} alt={"red warning icon"} />
                         <Text fontSize={"0.75rem"} fontWeight={"400"} color={"red.500"} pt={0}>Laporkan Ulasan</Text>

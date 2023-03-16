@@ -96,7 +96,7 @@ const Courses: React.FC<CoursePageProps> = ({
         <Container>
             <MainCard>
                 <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
-                    <SummaryRating title={title} overallRating={overallRating} summaryRatings={ratings} />
+                    <SummaryRating title={title} pagePath="courses" overallRating={overallRating} summaryRatings={ratings} />
                     <Divider/>
                     <Text my={6}>{reviews.length} Ulasan</Text>
                     {reviews.map((review) => {

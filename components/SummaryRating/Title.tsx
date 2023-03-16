@@ -2,7 +2,7 @@ import { Flex, Spacer, Icon, Text, useDisclosure } from "@chakra-ui/react";
 import { AiOutlineWarning } from "react-icons/ai";
 import ReportModal from "../ReportModal";
 
-const SummaryTitle: React.FC<{ univTitle: string }> = ({ univTitle }) => {
+const SummaryTitle: React.FC<{ title: string }> = ({ title }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Flex alignItems="center">
@@ -14,7 +14,7 @@ const SummaryTitle: React.FC<{ univTitle: string }> = ({ univTitle }) => {
         color="biru.800"
         ml={{ base: 0, sm: "4", md: "8" }}
       >
-        {univTitle?.toLocaleUpperCase()}
+        {title?.toLocaleUpperCase()}
       </Text>
       <Spacer />
       <Icon

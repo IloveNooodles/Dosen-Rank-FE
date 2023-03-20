@@ -5,39 +5,17 @@ import SummaryRating from '@/components/SummaryRating';
 import ReviewCard from '@/components/ReviewCard';
 import { apiInstance } from '@/utils/apiInstance';
 
-export async function getServerSideProps(context: { query: { name: string } }) {
-  const { name } = context.query;
+export interface UniversitySummaryResponseData {
+  reviewCount: number;
+  overall_rating: number;
+  overall_fasilitas: number;
+  overall_lingkungan: number;
+  overall_kemahasiswaan: number;
+  overall_reputasi_akademik: number;
+}
 
-  try {
-    const univRes = await apiInstance({}).get(`/univ/${name}`);
-    const { id: univId, name: univName } = await univRes.data.data;
-
-    const reviewRes = await apiInstance({}).get(`/reviews/univ/?id=${univId}`);
-    const reviews = await reviewRes.data.data;
-
-    const overallRatingRes = await apiInstance({}).get(
-      `/reviews/univ/overall/${univId}`
-    );
-    const { ratings, average_rating: averageRating } = await overallRatingRes
-      .data.data;
-
-    return {
-      props: {
-        title: univName,
-        reviews,
-        summaryRatings: ratings,
-        summaryAverageRating: averageRating,
-      },
-    };
-  } catch (e) {
-    console.error(e);
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
+export interface UniversitySummaryResponse {
+  data: UniversitySummaryResponseData;
 }
 
 export interface UniversityRating {
@@ -64,8 +42,46 @@ export interface UniversityReview {
 export interface UniversityPageProps {
   title: string;
   reviews: UniversityReview[];
-  summaryRatings: UniversityRating;
+  summaryRatings: UniversitySummaryResponseData;
   summaryAverageRating: number;
+}
+
+export async function getServerSideProps(context: { query: { name: string } }) {
+  const { name } = context.query;
+
+  try {
+    const univRes = await apiInstance({}).get(`/univ/${name}`);
+    const { id: univId, name: univName } = await univRes.data.data;
+
+    const reviewRes = await apiInstance({}).get(`/reviews/univ/?id=${univId}`);
+    const reviews = await reviewRes.data.data;
+
+    const overallRatingRes = await apiInstance({}).get(
+      `/reviews/univ/overall/${univId}`
+    );
+
+    const overallRatingResData: UniversitySummaryResponseData =
+      overallRatingRes.data.data;
+
+    // console.log('overallRatingResData', overallRatingResData.overallRating)
+
+    return {
+      props: {
+        title: univName,
+        reviews,
+        summaryRatings: overallRatingResData,
+        summaryAverageRating: overallRatingResData.overall_rating,
+      },
+    };
+  } catch (e) {
+    console.error(e);
+    return {
+      redirect: {
+        destination: '/',
+        permanent: false,
+      },
+    };
+  }
 }
 
 const University: React.FC<UniversityPageProps> = ({
@@ -75,10 +91,13 @@ const University: React.FC<UniversityPageProps> = ({
   summaryAverageRating,
 }) => {
   const ratings = [
-    { name: 'Reputasi Akademik', value: summaryRatings.reputasi_akademik },
-    { name: 'Lingkungan', value: summaryRatings.lingkungan },
-    { name: 'Kemahasiswaan', value: summaryRatings.kemahasiswaan },
-    { name: 'Fasilitas', value: summaryRatings.fasilitas },
+    {
+      name: 'Reputasi Akademik',
+      value: summaryRatings.overall_reputasi_akademik,
+    },
+    { name: 'Lingkungan', value: summaryRatings.overall_lingkungan },
+    { name: 'Kemahasiswaan', value: summaryRatings.overall_kemahasiswaan },
+    { name: 'Fasilitas', value: summaryRatings.overall_fasilitas },
   ];
 
   return (

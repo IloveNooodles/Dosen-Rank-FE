@@ -1,7 +1,7 @@
-import { FormControl, FormLabel, FormErrorMessage } from "@chakra-ui/react";
-import { Select } from "chakra-react-select";
-import { useField } from "formik";
-import { SelectFieldProps } from "@/interfaces";
+import { FormControl, FormLabel, FormErrorMessage } from '@chakra-ui/react';
+import { Select } from 'chakra-react-select';
+import { useField } from 'formik';
+import { SelectFieldProps } from '@/interfaces';
 
 const SelectInput: React.FC<SelectFieldProps> = ({
   label,
@@ -26,7 +26,7 @@ const SelectInput: React.FC<SelectFieldProps> = ({
             ? options.find((option) => option.value === field.value)
             : null
         }
-        onChange={(option) => helper.setValue(option!!.value)}
+        onChange={(option) => helper.setValue(option!.value)}
         onBlur={field.onBlur}
       />
       {meta.touched && meta.error ? (

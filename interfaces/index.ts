@@ -1,6 +1,6 @@
-import { OptionBase } from "chakra-react-select";
-import { Props as ReactSelectProps } from "chakra-react-select";
-import { InputProps as ChakraInputProps } from "@chakra-ui/react";
+import { OptionBase } from 'chakra-react-select';
+import { Props as ReactSelectProps } from 'chakra-react-select';
+import { InputProps as ChakraInputProps } from '@chakra-ui/react';
 
 /*
  * Object Interfaces
@@ -51,6 +51,6 @@ export interface SummaryRatingProps {
 }
 
 export interface SummaryRatingContainerProps {
-  overallRating: number,
+  overallRating: number;
   summaryRatings: SummaryRatingProps[];
 }

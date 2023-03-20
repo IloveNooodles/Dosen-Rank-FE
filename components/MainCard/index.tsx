@@ -1,4 +1,4 @@
-import { Flex } from "@chakra-ui/react";
+import { Flex } from '@chakra-ui/react';
 
 const MainCard: React.FC<{
   children: React.ReactNode;

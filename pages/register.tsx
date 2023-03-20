@@ -1,11 +1,11 @@
-import RegisterForm from "@/components/RegisterForm";
-import { RegisterProps } from "@/interfaces";
-import { apiInstance } from "@/utils/apiInstance";
-import { Container, Text, VStack } from "@chakra-ui/react";
+import RegisterForm from '@/components/RegisterForm';
+import { RegisterProps } from '@/interfaces';
+import { apiInstance } from '@/utils/apiInstance';
+import { Container, Text, VStack } from '@chakra-ui/react';
 
 export async function getStaticProps() {
   const response = await apiInstance({})
-    .get("/univ")
+    .get('/univ')
     .catch((err) => console.log(err));
   const universities = response!.data.data || [];
 

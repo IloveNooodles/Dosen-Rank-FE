@@ -62,8 +62,8 @@ const RegisterForm: React.FC<RegisterProps> = ({ universities }) => {
           if (axios.isAxiosError(error)) {
             setErrorMessage(error.response?.data.error);
             toast({
-              title: 'Akun gagal dibuat',
-              description: 'Silahkan ulangi registrasi',
+              title: error.response?.data.message,
+              description: error.response?.data.error,
               status: 'error',
               duration: 3000,
               position: 'top',

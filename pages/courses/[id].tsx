@@ -1,9 +1,11 @@
-import {Box, Container, Divider, Flex, Text} from "@chakra-ui/react";
+import {Box, Container, Divider, Flex, HStack, Icon, Link, Spacer, Text, useDisclosure} from "@chakra-ui/react";
 import React from "react";
 import MainCard from "@/components/MainCard";
 import SummaryRating from "@/components/SummaryRating";
 import ReviewCard from "@/components/ReviewCard";
+import ReviewModal from "@/components/ReviewModal";
 import {apiInstance} from "@/utils/apiInstance";
+import { FiEdit } from "react-icons/fi";
 
 export async function getServerSideProps(context: { query: { id: string; }; }) {
     // const { id } = context.query;
@@ -91,14 +93,25 @@ const Courses: React.FC<CoursePageProps> = ({
         {name: 'Ketersediaan Sumber Belajar',
             value: overalSumberBelajar},
     ]
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
         <Container>
+            <ReviewModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} reviewFor="courses" />
             <MainCard>
                 <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
                     <SummaryRating title={title} pagePath="courses" overallRating={overallRating} summaryRatings={ratings} />
                     <Divider/>
-                    <Text my={6}>{reviews.length} Ulasan</Text>
+                    <Flex direction="row">
+                        <Text my={6}>{reviews.length} Ulasan</Text>
+                        <Spacer/>
+                        <HStack>
+                        <Link display={"flex"} gap={"0.5rem"} alignItems="center" onClick={onOpen}>
+                            <Icon as={ FiEdit } color="biru.700" w="1.2rem" h="1.2rem" />
+                            <Text fontSize={"1rem"} fontWeight={"500"} color={"biru.700"} pt={0}>Tulis ulasan</Text>
+                        </Link>
+                        </HStack>
+                    </Flex>
                     {reviews.map((review) => {
                         const {
                             id,

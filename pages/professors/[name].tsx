@@ -4,12 +4,13 @@ import MainCard from '@/components/MainCard';
 import SummaryRating from '@/components/SummaryRating';
 import ReviewCard from '@/components/ReviewCard';
 import { apiInstance } from '@/utils/apiInstance';
+import { University, Course, Professor, Creator } from '@/interfaces';
 
 export async function getServerSideProps(context: { query: { name: string } }) {
   const { name } = context.query;
 
   try {
-    const profRes = await apiInstance({}).get(`/professor/${name}`);
+    const profRes = await apiInstance({}).get(`/professor/slug/${name}`);
     const { id: profId, name: profName } = await profRes.data.data;
 
     const reviewRes = await apiInstance({}).get(
@@ -57,14 +58,12 @@ export interface ProfessorRating {
 
 export interface ProfessorReview {
   id: number;
-  creator_id: number;
-  professor_id: number;
-  course_id: number;
+  creator: Creator;
+  professor: Professor;
+  course: Course;
   upvote: number;
   downvote: number;
   content: string;
-  creator_name: string;
-  course_name: string;
   created_at: string;
   updated_at: string;
   rating: ProfessorRating;
@@ -109,14 +108,12 @@ const Professor: React.FC<ProfessorPageProps> = ({
           {reviews.map((review) => {
             const {
               id,
-              creator_id,
-              professor_id,
-              course_id,
+              creator,
+              professor,
+              course,
               upvote,
               downvote,
               content,
-              creator_name,
-              course_name,
               created_at,
               updated_at,
               rating,
@@ -127,8 +124,8 @@ const Professor: React.FC<ProfessorPageProps> = ({
                 key={reviews.indexOf(review)}
                 reviewFor={'dosen'}
                 idReview={id}
-                reviewerName={creator_name}
-                courseName={course_name}
+                reviewerName={creator.name}
+                courseName={course.name}
                 overallRating={average_rating}
                 firstFieldName="Gaya Mengajar"
                 secondFieldName="Komunikasi"

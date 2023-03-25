@@ -19,7 +19,7 @@ const Footer: React.FC<{}> = () => {
   return (
     <Container py="1.5rem" px={{ base: '0.75rem', md: '2.5rem' }} h="auto">
       <VStack alignItems="start">
-        <HStack gap="1.5rem">
+        <HStack gap="1.5rem" zIndex={0}>
           <Link href="https://github.com/IloveNooodles" target="_blank">
             <Icon as={FiGithub} color="biru.800" w="1.5rem" h="1.5rem" />
           </Link>

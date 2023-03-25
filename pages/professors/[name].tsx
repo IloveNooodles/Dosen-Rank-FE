@@ -7,6 +7,7 @@ import ReviewModal from "@/components/ReviewModal";
 import { apiInstance } from "@/utils/apiInstance";
 import { FiEdit } from "react-icons/fi";
 import { University, Course, Professor, Creator } from '@/interfaces';
+import { useAuth } from "@/contexts/AuthContext";
 
 export async function getServerSideProps(context: { query: { name: string; }; }) {
   const { name } = context.query;
@@ -88,6 +89,8 @@ const Professor: React.FC<ProfessorPageProps> = ({
   ]
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const { isAuthenticated } = useAuth();
+
   return (
     <Container>
       <ReviewModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} reviewFor="dosen" id={id} />
@@ -98,12 +101,13 @@ const Professor: React.FC<ProfessorPageProps> = ({
           <Flex direction="row">
             <Text my={6}>{reviews.length} Ulasan</Text>
             <Spacer/>
-            <HStack>
-              <Link display={"flex"} gap={"0.5rem"} alignItems="center" onClick={onOpen}>
-                <Icon as={ FiEdit } color="biru.700" w="1.2rem" h="1.2rem" />
-                <Text fontSize={"1rem"} fontWeight={"500"} color={"biru.700"} pt={0}>Tulis ulasan</Text>
-              </Link>
-            </HStack>
+            {isAuthenticated() ? 
+              <HStack>
+                <Link display={"flex"} gap={"0.5rem"} alignItems="center" onClick={onOpen}>
+                  <Icon as={ FiEdit } color="biru.700" w="1.2rem" h="1.2rem" />
+                  <Text fontSize={"1rem"} fontWeight={"500"} color={"biru.700"} pt={0}>Tulis ulasan</Text>
+                </Link>
+              </HStack> : null}
           </Flex>
           {reviews.map((review) => {
             const {

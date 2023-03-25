@@ -6,6 +6,7 @@ import { InputProps as ChakraInputProps } from "@chakra-ui/react";
  * Object Interfaces
  */
 export interface Account {
+  id?: number;
   name?: string;
   email: string;
   password?: string;

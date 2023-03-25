@@ -8,6 +8,7 @@ import dynamic from "next/dynamic";
 import useSWR, { Fetcher } from 'swr';
 import { Form, Formik } from "formik";
 import axios from "axios";
+import { useAuth } from "@/contexts/AuthContext";
 
 
 const SelectInput = dynamic(() => import("../SelectInput"), { ssr: false });
@@ -16,7 +17,7 @@ const fetcher: Fetcher<Response<ProfessorResponse[] | CourseResponse[]>, string>
   apiInstance({}).get(url).then((res) => res.data);
 
 function useTags(id: number, reviewFor: string) {
-  const { data, isLoading, error } = useSWR((reviewFor === 'courses') ? `/professor/course?id=${id}` : `/courses/professor?id=${id}` , fetcher);
+  const { data, isLoading, error } = useSWR((reviewFor === 'course') ? `/professor/course?id=${id}` : `/courses/professor?id=${id}` , fetcher);
   
   return {
     tags: data?.data,
@@ -46,8 +47,13 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
 
     reviewFor,
 }) => {
+    const { getUser } = useAuth();
+    const user = getUser();
+    const userId = user?.id;
+
     const toast = useToast();
     const [count, setCount] = React.useState(0);
+    const [details, setDetails] = React.useState("");
 
     const initialValues: Review = {
         tag: "",
@@ -93,9 +99,9 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                         try {
                             if (reviewFor === "university") {
                                 const data = JSON.stringify({
-                                    creator_id: 1,
+                                    creator_id: userId,
                                     univ_id: id,
-                                    content: values.details,
+                                    content: details,
                                     rating: {
                                         reputasi_akademik: firstFieldRating,
                                         lingkungan: secondFieldRating,
@@ -103,8 +109,8 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                         fasilitas: fourthFieldRating,
                                     },
                                 });
-                                const response = await apiInstance({}).post(`/reviews/univ`, data);
-                                if (response.status === 201) {
+                                const response = await apiInstance({}).post(`/reviews/univ/`, data);
+                                if (response.status >= 200 && response.status < 300) {
                                     toast({
                                       title: 'Review berhasil ditambahkan',
                                       status: 'success',
@@ -114,10 +120,10 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                 }
                             } else if (reviewFor === "course") {
                                 const data = JSON.stringify({
-                                    creator_id: 1,
+                                    creator_id: userId,
                                     professor_id: parseInt(values.tag),
                                     course_id: id,
-                                    content: values.details,
+                                    content: details,
                                     rating: {
                                         kesesuaian_sks: firstFieldRating,
                                         kompetensi: secondFieldRating,
@@ -125,8 +131,8 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                         sumber_belajar: fourthFieldRating,
                                     },
                                 });
-                                const response = await apiInstance({}).post(`/reviews/course`, data);
-                                if (response.status === 201) {
+                                const response = await apiInstance({}).post(`/reviews/course/`, data);
+                                if (response.status >= 200 && response.status < 300) {
                                     toast({
                                       title: 'Review berhasil ditambahkan',
                                       status: 'success',
@@ -136,10 +142,10 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                 }
                             } else if (reviewFor === "dosen") {
                                 const data = JSON.stringify({
-                                    creator_id: 1,
+                                    creator_id: userId,
                                     professor_id: id,
                                     course_id: parseInt(values.tag),
-                                    content: values.details,
+                                    content: details,
                                     rating: {
                                         gaya_mengajar: firstFieldRating,
                                         konten: secondFieldRating,
@@ -147,8 +153,8 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                         transparansi: fourthFieldRating,
                                     },
                                 });
-                                const response = await apiInstance({}).post(`/reviews/professor`, data);
-                                if (response.status === 201) {
+                                const response = await apiInstance({}).post(`/reviews/professor/`, data);
+                                if (response.status >= 200 && response.status < 300) {
                                     toast({
                                       title: 'Review berhasil ditambahkan',
                                       status: 'success',
@@ -317,7 +323,9 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                         height="10rem"
                                         fontSize={{ base: '0.75rem', md: '0.9rem'}}
                                         onChange={e => {
-                                            setCount(e.target.value.length) }} />
+                                            setDetails(e.target.value)
+                                            setCount(e.target.value.length) }}
+                                    />
                                     <Text
                                         width="full"
                                         fontSize={{ base: '0.6rem', md: '0.8rem'}}

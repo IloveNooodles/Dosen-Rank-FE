@@ -47,8 +47,8 @@ const AuthProvider: React.FC<ContextProps> = ({children}) => {
     }
 
     const getDecodedUser = (token: string) => {
-        const {name, email, isAdmin, univId, ...rest}: Account = jwtDecode(token)
-        return {name, email, isAdmin, univId}
+        const {id, name, email, isAdmin, univId, ...rest}: Account = jwtDecode(token)
+        return {id, name, email, isAdmin, univId}
     }
 
     const signIn = async (token: string) => {

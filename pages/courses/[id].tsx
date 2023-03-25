@@ -99,7 +99,7 @@ const Courses: React.FC<CoursePageProps> = ({
 
     return (
         <Container>
-            <ReviewModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} reviewFor="courses" id={id} />
+            <ReviewModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} reviewFor="course" id={id} />
             <MainCard>
                 <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
                     <SummaryRating title={title} pagePath="courses" overallRating={overallRating} summaryRatings={ratings} />

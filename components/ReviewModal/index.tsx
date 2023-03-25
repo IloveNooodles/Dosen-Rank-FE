@@ -31,11 +31,7 @@ export interface ReviewModalProps {
     onClose: () => void;
     id: number;
 
-    reviewFor: 'university' | 'course' | 'courses' | 'dosen';
-    firstFieldName?: string;
-    secondFieldName?: string;
-    thirdFieldName?: string;
-    fourthFieldName?: string;
+    reviewFor: 'university' | 'course' | 'dosen';
     firstFieldRating?: number;
     secondFieldRating?: number;
     thirdFieldRating?: number;
@@ -49,10 +45,6 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     id,
 
     reviewFor,
-    firstFieldName,
-    secondFieldName,
-    thirdFieldName,
-    fourthFieldName,
 }) => {
     const toast = useToast();
     const [count, setCount] = React.useState(0);
@@ -195,7 +187,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                         </VStack>
                                     </Flex>                 
                                 ) : null}
-                                {reviewFor.includes("courses") ? (
+                                {reviewFor.includes("course") ? (
                                     <Flex dir="row" width="full" alignItems="center">
                                         <Text
                                             fontSize={{ base: '0.8rem', md: '1rem'}}
@@ -210,8 +202,8 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                                 placeholder="Pilih dosen"
                                                 options={tagOption || []} />
                                             <HStack>
-                                                <Text>Tidak menemukan dosen?</Text>
-                                                <Text>Request dosen</Text>
+                                                <Text fontSize={"sm"}>Tidak menemukan dosen?</Text>
+                                                <Link href='/request' fontSize={"sm"} fontWeight="bold" color={"biru.700"}>Request dosen</Link>
                                             </HStack>
                                         </VStack>
                                     </Flex>                 
@@ -224,30 +216,66 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                         fontWeight="bold">
                                             Parameter
                                     </Text>
-                                    <HStack>
-                                        <VStack>
+                                    <HStack fontSize={"sm"}>
+                                        <VStack alignItems={"left"}>
                                             <HStack>
-                                                <Text>Param 1</Text>
+                                                {reviewFor.includes("dosen") ? (
+                                                    <Text>Gaya mengajar</Text>
+                                                ): null}
+                                                {reviewFor.includes("course") ? (
+                                                    <Text>Kesesuaian dengan SKS</Text>
+                                                ): null}
+                                                {reviewFor.includes("university") ? (
+                                                    <Text>Reputasi akademik</Text>
+                                                ): null}
+                                                <Spacer/>
                                                 <StarRating unit="half" handleOnClick={handleOnClick1} size={25} containerClassName={styles.star} />
-                                                <Text>{firstFieldRating}</Text>
+                                                <Text w="1.5rem">{firstFieldRating}</Text>
                                             </HStack>
                                             <HStack>
-                                                <Text>Param 2</Text>
+                                                {reviewFor.includes("dosen") ? (
+                                                    <Text>Konten pengajar</Text>
+                                                ): null}
+                                                {reviewFor.includes("course") ? (
+                                                    <Text>Kompetensi yang didapat</Text>
+                                                ): null}
+                                                {reviewFor.includes("university") ? (
+                                                    <Text>Lingkungan</Text>
+                                                ): null}
+                                                <Spacer/>
                                                 <StarRating unit="half" handleOnClick={handleOnClick2} size={25} containerClassName={styles.star} />
-                                                <Text>{secondFieldRating}</Text>
+                                                <Text w="1.5rem">{secondFieldRating}</Text>
                                             </HStack>
                                         </VStack>
                                         <Spacer/>
-                                        <VStack>
+                                        <VStack alignItems={"left"}>
                                             <HStack>
-                                                <Text>Param 3</Text>
+                                                {reviewFor.includes("dosen") ? (
+                                                    <Text>Komunikasi</Text>
+                                                ): null}
+                                                {reviewFor.includes("course") ? (
+                                                    <Text>Kesulitan</Text>
+                                                ): null}
+                                                {reviewFor.includes("university") ? (
+                                                    <Text>Kemahasiswaan</Text>
+                                                ): null}
+                                                <Spacer/>
                                                 <StarRating unit="half" handleOnClick={handleOnClick3} size={25} containerClassName={styles.star} />
-                                                <Text>{thirdFieldRating}</Text>
+                                                <Text w="1.5rem">{thirdFieldRating}</Text>
                                             </HStack>
                                             <HStack>
-                                                <Text>Param 4</Text>
+                                                {reviewFor.includes("dosen") ? (
+                                                    <Text>Transparansi penilaian</Text>
+                                                ): null}
+                                                {reviewFor.includes("course") ? (
+                                                    <Text>Ketersediaan sumber belajar</Text>
+                                                ): null}
+                                                {reviewFor.includes("university") ? (
+                                                    <Text>Fasilitas</Text>
+                                                ): null}
+                                                <Spacer/>
                                                 <StarRating unit="half" handleOnClick={handleOnClick4} size={25} containerClassName={styles.star} />
-                                                <Text>{fourthFieldRating}</Text>
+                                                <Text w="1.5rem">{fourthFieldRating}</Text>
                                             </HStack>
                                         </VStack>
                                     </HStack>

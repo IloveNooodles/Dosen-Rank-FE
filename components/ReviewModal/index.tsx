@@ -16,11 +16,11 @@ const fetcher: Fetcher<Response<ProfessorResponse[] | CourseResponse[]>, string>
   apiInstance({}).get(url).then((res) => res.data);
 
 function useTags(id: number, reviewFor: string) {
-  const { data, error } = useSWR((reviewFor === 'courses') ? `/professor/course?id=${id}` : `/courses/professor?id=${id}` , fetcher);
+  const { data, isLoading, error } = useSWR((reviewFor === 'courses') ? `/professor/course?id=${id}` : `/courses/professor?id=${id}` , fetcher);
   
   return {
     tags: data?.data,
-    isLoading: !error && !data,
+    isLoading: isLoading,
     isError: error
   };
 };
@@ -92,6 +92,9 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     };
 
     const { tags, isLoading, isError } = useTags(id, reviewFor);
+    if (isLoading) {
+        return <div>Loading...</div>;
+    } 
     const tagOption: Array<SelectOption> | undefined = tags?.map(
         ({ id, name }) => ({ value: id.toString(), label: name })
     );

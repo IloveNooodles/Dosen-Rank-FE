@@ -20,11 +20,11 @@ const Index: React.FC<{}> = () => {
       <Center minH="fit-content" h="calc(100vh - 5.5rem - 6.9rem)">
         <VStack width={{ base: '20rem', md: '33rem' }}>
           <HStack width="full" align="left">
-            <Text fontSize={{ base: '2.1rem', md: '3.5rem' }} fontWeight="bold">
+            <Text fontSize={{ base: '2rem', md: '3.5rem' }} fontWeight="bold">
               Cari ulasan
             </Text>
             <Text
-              fontSize={{ base: '2.1rem', md: '3.5rem' }}
+              fontSize={{ base: '2rem', md: '3.5rem' }}
               fontWeight="bold"
               color="biru.800"
             >

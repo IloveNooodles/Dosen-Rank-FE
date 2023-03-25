@@ -1,9 +1,9 @@
-import SearchBar from '@/components/SearchBar';
-import { Center, Container, HStack, Text, VStack } from '@chakra-ui/react';
+import SearchBar from "@/components/SearchBar";
+import { Center, Container, HStack, Text, VStack } from "@chakra-ui/react";
 
-import React from 'react';
+import React from "react";
 
-const dynamicText = ['dosen', 'matkul', 'kampus'];
+const dynamicText = ["dosen", "matkul", "kampus"];
 
 const Index: React.FC<{}> = () => {
   const [counter, setCounter] = React.useState<number>(0);
@@ -18,13 +18,13 @@ const Index: React.FC<{}> = () => {
   return (
     <Container>
       <Center minH="fit-content" h="calc(100vh - 5.5rem - 6.9rem)">
-        <VStack width={{ base: '20rem', md: '33rem' }}>
+        <VStack width={{ base: "20rem", md: "33rem" }}>
           <HStack width="full" align="left">
-            <Text fontSize={{ base: '2.1rem', md: '3.5rem' }} fontWeight="bold">
+            <Text fontSize={{ base: "2.1rem", md: "3.5rem" }} fontWeight="bold">
               Cari ulasan
             </Text>
             <Text
-              fontSize={{ base: '2.1rem', md: '3.5rem' }}
+              fontSize={{ base: "2.1rem", md: "3.5rem" }}
               fontWeight="bold"
               color="biru.800"
             >

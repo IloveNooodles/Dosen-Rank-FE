@@ -1,11 +1,12 @@
-import { OptionBase } from 'chakra-react-select';
-import { Props as ReactSelectProps } from 'chakra-react-select';
-import { InputProps as ChakraInputProps } from '@chakra-ui/react';
+import { OptionBase } from "chakra-react-select";
+import { Props as ReactSelectProps } from "chakra-react-select";
+import { InputProps as ChakraInputProps } from "@chakra-ui/react";
 
 /*
  * Object Interfaces
  */
 export interface Account {
+  id?: number;
   name?: string;
   email: string;
   password?: string;
@@ -32,6 +33,45 @@ export interface Professor {
 export interface Creator {
   id: number;
   name: string;
+}
+
+export interface Tag {
+  id: number;
+  name: string;
+}
+
+
+/**
+ * Response Interfaces
+ */
+export interface Response<T> {
+  data: T;
+}
+
+export interface ProfessorResponse {
+  id: number;
+  name: string;
+  institutionId: number;
+  institutionName: string;
+  slug: string;
+}
+
+export interface CourseResponse {
+  id: number;
+  course_id: number;
+  name: string;
+  institute_id: number;
+  institution_name: string;
+  slug: string;
+}
+
+export interface Review {
+  tag: string;
+  firstFieldRating: number;
+  secondFieldRating: number;
+  thirdFieldRating: number;
+  fourthFieldRating: number;
+  details: string;
 }
 
 /*
@@ -66,6 +106,6 @@ export interface SummaryRatingProps {
 }
 
 export interface SummaryRatingContainerProps {
-  overallRating: number;
+  overallRating: number,
   summaryRatings: SummaryRatingProps[];
 }

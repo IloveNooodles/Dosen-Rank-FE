@@ -1,27 +1,27 @@
-import { Account, RegisterProps, SelectOption } from '@/interfaces';
-import { VStack, Button, Text, useToast } from '@chakra-ui/react';
-import { Form, Formik } from 'formik';
-import Link from 'next/link';
-import TextInput from '../TextInput';
-import * as Yup from 'yup';
-import axios from 'axios';
-import { useRouter } from 'next/router';
-import { useState } from 'react';
-import dynamic from 'next/dynamic';
-import { apiInstance } from '@/utils/apiInstance';
+import { Account, RegisterProps, SelectOption } from "@/interfaces";
+import { VStack, Button, Text, useToast } from "@chakra-ui/react";
+import { Form, Formik } from "formik";
+import Link from "next/link";
+import TextInput from "../TextInput";
+import * as Yup from "yup";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { useState } from "react";
+import dynamic from "next/dynamic";
+import { apiInstance } from "@/utils/apiInstance";
 
-const SelectInput = dynamic(() => import('../SelectInput'), { ssr: false });
+const SelectInput = dynamic(() => import("../SelectInput"), { ssr: false });
 
 const RegisterForm: React.FC<RegisterProps> = ({ universities }) => {
   const router = useRouter();
-  const [errorMessage, setErrorMessage] = useState('');
-  const toast = useToast();
+  const [errorMessage, setErrorMessage] = useState("");
+  const toast = useToast()
 
   const initialValues: Account = {
-    name: '',
-    email: '',
-    password: '',
-    university: '',
+    name: "",
+    email: "",
+    password: "",
+    university: "",
   };
 
   const universityOption: Array<SelectOption> = universities.map(
@@ -32,21 +32,21 @@ const RegisterForm: React.FC<RegisterProps> = ({ universities }) => {
     <Formik
       initialValues={initialValues}
       validationSchema={Yup.object({
-        name: Yup.string().required('Required'),
-        email: Yup.string().email('Invalid email address').required('Required'),
-        password: Yup.string().required('Required'),
-        university: Yup.string().required('Required'),
+        name: Yup.string().required("Required"),
+        email: Yup.string().email("Invalid email address").required("Required"),
+        password: Yup.string().required("Required"),
+        university: Yup.string().required("Required")
       })}
       onSubmit={async (values) => {
         const data = JSON.stringify({
           name: values.name,
           email: values.email,
           password: values.password,
-          univID: parseInt(values.university!),
+          univID: parseInt(values.university!!),
         });
 
         try {
-          const response = await apiInstance({}).post('/users/register', data);
+          const response = await apiInstance({}).post("/users/register", data)
 
           if (response.status === 201) {
             toast({
@@ -55,19 +55,19 @@ const RegisterForm: React.FC<RegisterProps> = ({ universities }) => {
               status: 'success',
               duration: 3000,
               position: 'top',
-            });
-            router.push('/login');
+            })
+            router.push("/login")
           }
         } catch (error) {
           if (axios.isAxiosError(error)) {
             setErrorMessage(error.response?.data.error);
             toast({
-              title: error.response?.data.message,
-              description: error.response?.data.error,
+              title: 'Akun gagal dibuat',
+              description: 'Silahkan ulangi registrasi',
               status: 'error',
               duration: 3000,
-              position: 'top',
-            });
+              position: 'top'
+            })
           }
         }
       }}
@@ -103,7 +103,7 @@ const RegisterForm: React.FC<RegisterProps> = ({ universities }) => {
             Penggunaan CariDosen.
           </Text>
           <Text>
-            Sudah punya akun?{' '}
+            Sudah punya akun?{" "}
             <Link href="/login">
               <Text as="span" color="biru.600" fontWeight="bold">
                 masuk

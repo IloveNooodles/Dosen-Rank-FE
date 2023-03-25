@@ -1,4 +1,4 @@
-import { VStack, Text, HStack, Button, Textarea, Flex, Spacer, Modal, ModalOverlay, ModalContent, useToast, useDisclosure, Link } from "@chakra-ui/react";
+import { VStack, Text, HStack, Button, Textarea, Flex, Spacer, Modal, ModalOverlay, ModalContent, useToast, Link } from "@chakra-ui/react";
 import React from "react";
 import StarRating from "react-svg-star-rating";
 import styles from "@/styles/ReviewCard.module.scss";
@@ -6,9 +6,9 @@ import { ProfessorResponse, SelectOption, Tag, Response, CourseResponse, Review 
 import { apiInstance } from "@/utils/apiInstance";
 import dynamic from "next/dynamic";
 import useSWR, { Fetcher } from 'swr';
-import router, { useRouter } from "next/router";
 import { Form, Formik } from "formik";
 import axios from "axios";
+
 
 const SelectInput = dynamic(() => import("../SelectInput"), { ssr: false });
 
@@ -48,14 +48,6 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
 }) => {
     const toast = useToast();
     const [count, setCount] = React.useState(0);
-    const [data, setData] = React.useState({
-        tagId: null,
-        firstFieldRating: 0,
-        secondFieldRating: 0,
-        thirdFieldRating: 0,
-        fourthFieldRating: 0,
-        detail: "",
-    });
 
     const initialValues: Review = {
         tag: "",
@@ -98,17 +90,19 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                 <Formik
                     initialValues={initialValues}
                     onSubmit={async (values) => {
-                        const data = JSON.stringify({
-                            tag: values.tag,
-                            firstFieldRating: values.firstFieldRating,
-                            secondFieldRating: values.secondFieldRating,
-                            thirdFieldRating: values.thirdFieldRating,
-                            fourthFieldRating: values.fourthFieldRating,
-                            details: values.details,
-                        });
-
                         try {
                             if (reviewFor === "university") {
+                                const data = JSON.stringify({
+                                    creator_id: 1,
+                                    univ_id: id,
+                                    content: values.details,
+                                    rating: {
+                                        reputasi_akademik: firstFieldRating,
+                                        lingkungan: secondFieldRating,
+                                        kemahasiswaan: thirdFieldRating,
+                                        fasilitas: fourthFieldRating,
+                                    },
+                                });
                                 const response = await apiInstance({}).post(`/reviews/univ`, data);
                                 if (response.status === 201) {
                                     toast({
@@ -119,6 +113,18 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                     })
                                 }
                             } else if (reviewFor === "course") {
+                                const data = JSON.stringify({
+                                    creator_id: 1,
+                                    professor_id: parseInt(values.tag),
+                                    course_id: id,
+                                    content: values.details,
+                                    rating: {
+                                        kesesuaian_sks: firstFieldRating,
+                                        kompetensi: secondFieldRating,
+                                        kesulitan: thirdFieldRating,
+                                        sumber_belajar: fourthFieldRating,
+                                    },
+                                });
                                 const response = await apiInstance({}).post(`/reviews/course`, data);
                                 if (response.status === 201) {
                                     toast({
@@ -129,6 +135,18 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                     })
                                 }
                             } else if (reviewFor === "dosen") {
+                                const data = JSON.stringify({
+                                    creator_id: 1,
+                                    professor_id: id,
+                                    course_id: parseInt(values.tag),
+                                    content: values.details,
+                                    rating: {
+                                        gaya_mengajar: firstFieldRating,
+                                        konten: secondFieldRating,
+                                        komunikasi: thirdFieldRating,
+                                        transparansi: fourthFieldRating,
+                                    },
+                                });
                                 const response = await apiInstance({}).post(`/reviews/professor`, data);
                                 if (response.status === 201) {
                                     toast({
@@ -176,8 +194,8 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                         <Spacer/>
                                         <VStack>
                                             <SelectInput
-                                                id="course" 
-                                                name="course" 
+                                                id="tag" 
+                                                name="tag" 
                                                 placeholder="Pilih mata kuliah"
                                                 options={tagOption || []} />
                                             <HStack>
@@ -197,8 +215,8 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                         <Spacer/>
                                         <VStack>
                                             <SelectInput
-                                                id="dosen" 
-                                                name="dosen" 
+                                                id="tag" 
+                                                name="tag" 
                                                 placeholder="Pilih dosen"
                                                 options={tagOption || []} />
                                             <HStack>
@@ -291,19 +309,15 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                             Silakan ulas lebih detail!
                                     </Text>
                                     <Textarea
-                                        id="reviewTextArea"
+                                        id="details"
+                                        name="details"
                                         placeholder="Menurut saya..."
                                         resize="none"
                                         maxLength={500}
                                         height="10rem"
                                         fontSize={{ base: '0.75rem', md: '0.9rem'}}
                                         onChange={e => {
-                                            setCount(e.target.value.length)
-                                            setData(
-                                                prevState => 
-                                                ({...prevState, 
-                                                detail: e.target.value})
-                                                )}} />
+                                            setCount(e.target.value.length) }} />
                                     <Text
                                         width="full"
                                         fontSize={{ base: '0.6rem', md: '0.8rem'}}
@@ -316,7 +330,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                     <Button onClick={onClose} variant="secondary" width="full">
                                         Batal
                                     </Button>
-                                    <Button variant="primary" width="full">
+                                    <Button onClick={onClose} type="submit" variant="primary" width="full">
                                         Publish
                                     </Button>
                                 </HStack>

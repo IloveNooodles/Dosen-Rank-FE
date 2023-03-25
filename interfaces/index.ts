@@ -19,6 +19,21 @@ export interface University {
   name: string;
 }
 
+export interface Course {
+  id: number;
+  name: string;
+}
+
+export interface Professor {
+  id: number;
+  name: string;
+}
+
+export interface Creator {
+  id: number;
+  name: string;
+}
+
 export interface Tag {
   id: number;
   name: string;

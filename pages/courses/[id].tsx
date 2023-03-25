@@ -22,7 +22,7 @@ export async function getServerSideProps(context: { query: { id: string; }; }) {
         const overallRatingRes = await apiInstance({}).get(`/reviews/course/overall/${courseId}`);
         const {review_count: reviewCount, overall_rating: overallRating, overall_kesesuaian_sks: overalKesesuaianSKS, overall_kompetensi: overallKompetensi, overall_kesulitan: overallKesulitan, overall_sumber_belajar: overalSumberBelajar} = await overallRatingRes.data.data
 
-        return { props: { title: courseName, reviews, reviewCount, overallRating, overalKesesuaianSKS, overallKompetensi, overallKesulitan, overalSumberBelajar } };
+        return { props: { title: courseName, reviews, reviewCount, overallRating, overalKesesuaianSKS, overallKompetensi, overallKesulitan, overalSumberBelajar, id: courseId } };
     } catch (e) {
         console.error(e)
         console.log("error getServerSideProps")
@@ -69,7 +69,8 @@ export interface CoursePageProps {
     overallKompetensi: number,
     overallKesulitan: number,
     overalSumberBelajar: number,
-    summaryAverageRating: number
+    summaryAverageRating: number,
+    id: number,
 }
 
 const Courses: React.FC<CoursePageProps> = ({
@@ -82,6 +83,7 @@ const Courses: React.FC<CoursePageProps> = ({
     overallKesulitan,
     overalSumberBelajar,
     summaryAverageRating,
+    id,
 }) => {
     const ratings = [
         {name: 'Kesesuaian Dengan SKS',
@@ -97,7 +99,7 @@ const Courses: React.FC<CoursePageProps> = ({
 
     return (
         <Container>
-            <ReviewModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} reviewFor="courses" />
+            <ReviewModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} reviewFor="courses" id={id} />
             <MainCard>
                 <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
                     <SummaryRating title={title} pagePath="courses" overallRating={overallRating} summaryRatings={ratings} />

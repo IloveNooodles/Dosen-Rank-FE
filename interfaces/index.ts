@@ -39,6 +39,40 @@ export interface Tag {
   name: string;
 }
 
+
+/**
+ * Response Interfaces
+ */
+export interface Response<T> {
+  data: T;
+}
+
+export interface ProfessorResponse {
+  id: number;
+  name: string;
+  institutionId: number;
+  institutionName: string;
+  slug: string;
+}
+
+export interface CourseResponse {
+  id: number;
+  course_id: number;
+  name: string;
+  institute_id: number;
+  institution_name: string;
+  slug: string;
+}
+
+export interface Review {
+  tag: string;
+  firstFieldRating: number;
+  secondFieldRating: number;
+  thirdFieldRating: number;
+  fourthFieldRating: number;
+  details: string;
+}
+
 /*
  * Page Interfaces
  */

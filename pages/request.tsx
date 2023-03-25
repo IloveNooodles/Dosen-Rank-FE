@@ -20,7 +20,7 @@ const Request: React.FC<{}> = () => {
                 </VStack>
                 <VStack align={"left"}>
                     <Text fontWeight={"bold"}>Nama</Text>
-                    <Input placeholder="Nama konten" fontSize={{ base: '0.75rem', md: '0.9rem' }}/>
+                    <Input placeholder="Nama konten" fontSize={{ base: '0.75rem', md: '0.9rem' }} backgroundColor={"white"} />
                 </VStack>
                 <VStack align={"left"}>
                     <Text fontWeight={"bold"}>Catatan</Text>
@@ -32,6 +32,7 @@ const Request: React.FC<{}> = () => {
                         maxLength={500}
                         height="6rem"
                         fontSize={{ base: '0.75rem', md: '0.9rem'}}
+                        backgroundColor={"white"}
                      />
                 </VStack>
                 <Button variant={"primary"} w="fit-content">Submit</Button>

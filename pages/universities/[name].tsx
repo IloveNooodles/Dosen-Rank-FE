@@ -20,7 +20,7 @@ export async function getServerSideProps(context: { query: { name: string; }; })
     const overallRatingRes = await apiInstance({}).get(`/reviews/univ/overall/${univId}`);
     const {ratings, average_rating: averageRating} = await overallRatingRes.data.data
 
-    return { props: { title: univName, reviews, summaryRatings: ratings, summaryAverageRating: averageRating } };
+    return { props: { title: univName, reviews, summaryRatings: ratings, summaryAverageRating: averageRating, id: univId } };
   } catch (e) {
     console.error(e)
     return {
@@ -57,7 +57,8 @@ export interface UniversityPageProps {
   title: string,
   reviews: UniversityReview[],
   summaryRatings: UniversityRating,
-  summaryAverageRating: number
+  summaryAverageRating: number,
+  id: number,
 }
 
 const University: React.FC<UniversityPageProps> = ({
@@ -65,6 +66,7 @@ const University: React.FC<UniversityPageProps> = ({
   reviews,
   summaryRatings,
   summaryAverageRating,
+  id,
 }) => {
   const ratings = [
     {name: 'Reputasi Akademik',
@@ -80,7 +82,7 @@ const University: React.FC<UniversityPageProps> = ({
 
   return (
     <Container>
-      <ReviewModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} reviewFor="university" />
+      <ReviewModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} reviewFor="university" id={id} />
       <MainCard>
         <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
           <SummaryRating title={title} pagePath="universities" overallRating={summaryAverageRating} summaryRatings={ratings} />

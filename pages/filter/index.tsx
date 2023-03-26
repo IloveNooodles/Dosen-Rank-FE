@@ -1,5 +1,4 @@
 import React from "react";
-import NavigationBar from "@/components/NavigationBar";
 import {
     Box, Button,
     Container,
@@ -15,12 +14,44 @@ import {
     VStack
 } from "@chakra-ui/react";
 import {Card} from "@chakra-ui/card";
-import Search from "@/pages/search";
 import SearchBar from "@/components/SearchBar";
 import DosenCard from "@/components/DosenCard";
 import MatkulCard from "@/components/MatkulCard";
+import { apiInstance } from "@/utils/apiInstance";
 
-const SearchAndFilter: React.FC<{}> = () => {
+export async function getServerSideProps() {
+    try {
+        const response  = await apiInstance({})
+            .get(`/search/institut-teknologi-bandung/?name=gare&page=1`)
+            .catch((e) => console.error(e));
+        const { id, name, institutionId, institutionName, slug } = await response?.data.data;
+        return { props: { id, name, institutionId, institutionName, slug } };
+    }
+    catch (e) {
+        console.log(e);
+        return {
+            redirect: {
+                destination: "/",
+                permanent: false,
+            }
+        }
+    }
+}
+
+export interface SearchAndFilterProps {
+    id: number,
+    name: string,
+    institutionId: number,
+    institutionName: string,
+    slug: string
+}
+const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
+    id,
+    name,
+    institutionId,
+    institutionName,
+    slug
+                                                         }) => {
     return (
         <Container centerContent h="calc(100vh - 5.5rem - 6.9rem)" w="calc(100vw - 10rem)">
             <Flex justifyContent="center" w="full">

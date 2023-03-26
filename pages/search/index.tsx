@@ -1,11 +1,12 @@
-import MainCard from "@/components/MainCard";
+"use strict";
+
 import { ReviewCardProps } from "@/components/ReviewCard";
 import SearchBar from "@/components/SearchBar";
 import SearchCard from "@/components/SearchCard";
-import { SummaryRatingProps } from "@/interfaces";
+import { SummaryRatingProps, University } from "@/interfaces";
+import { apiInstance } from "@/utils/apiInstance";
 import { Container, Flex, Text } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import React from "react";
+import useSWR from "swr";
 
 export interface CoursePageProps {
   title: string;
@@ -13,9 +14,39 @@ export interface CoursePageProps {
   reviews: ReviewCardProps;
 }
 
+const fetcher = (url: string) =>
+  apiInstance({})
+    .get(url)
+    .then((res) => res.data);
+
+function useSearch(name?: string) {
+  const { data, isLoading, error } = useSWR(
+    name ? `/univ/?name=${name}/` : `/univ/`,
+    fetcher
+  );
+
+  return {
+    data,
+    isLoading,
+    error,
+  };
+}
+
 const Search: React.FC<CoursePageProps> = ({ title, summaryRatings }) => {
-  const router = useRouter();
-  const { id } = router.query;
+  // const router = useRouter();
+  // const { id } = router.query;
+
+  const { data, isLoading, error } = useSearch();
+
+  if (isLoading) {
+    return <p>loading</p>;
+  }
+
+  if (error) {
+    return <p>error</p>;
+  }
+
+  const univData = data.data as Array<University>;
 
   return (
     <Container
@@ -23,6 +54,7 @@ const Search: React.FC<CoursePageProps> = ({ title, summaryRatings }) => {
       flexDirection={"column"}
       justifyContent={"center"}
       alignItems={"center"}
+      minH={"calc(92vh - 108px)"}
     >
       <Text
         fontSize={{ base: "xl", sm: "3xl", md: "5xl" }}
@@ -35,62 +67,28 @@ const Search: React.FC<CoursePageProps> = ({ title, summaryRatings }) => {
       </Text>
       <SearchBar />
       {/* each card section for university, dosen, and mata kulah */}
-      <MainCard>
-        <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
-          <Text
-            color="biru.800"
-            fontSize={{ base: "1.5rem", md: "2rem" }}
-            fontWeight="bold"
-            marginRight={"auto"}
-            marginLeft={"auto"}
-          >
-            Universitas
-          </Text>
-          <SearchCard
-            searchResult={"Institut Teknologi Bandung"}
-            slug="institut-teknologi-bandung"
-            searchFor="university"
-          />
-        </Flex>
-      </MainCard>
-      {/* each card section for university, dosen, and mata kulah */}
-      <MainCard>
-        <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
-          <Text
-            color="biru.800"
-            fontSize={{ base: "1.5rem", md: "2rem" }}
-            fontWeight="bold"
-            marginRight={"auto"}
-            marginLeft={"auto"}
-          >
-            Mata kuliah
-          </Text>
-          <SearchCard
-            searchResult={"IF3290 Aku sayng kamu"}
-            slug="if3290"
-            searchFor="courses"
-          />
-        </Flex>
-      </MainCard>
-      {/* each card section for university, dosen, and mata kulah */}
-      <MainCard>
-        <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
-          <Text
-            color="biru.800"
-            fontSize={{ base: "1.5rem", md: "2rem" }}
-            fontWeight="bold"
-            marginRight={"auto"}
-            marginLeft={"auto"}
-          >
-            Dosen
-          </Text>
-          <SearchCard
-            searchResult={"Garebalding, S.T., M.T."}
-            searchFor="professor"
-            slug="bapak-garebalding"
-          />
-        </Flex>
-      </MainCard>
+
+      <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
+        <Text
+          color="biru.800"
+          fontSize={{ base: "1.5rem", md: "2rem" }}
+          fontWeight="bold"
+          marginRight={"auto"}
+          marginLeft={"auto"}
+        >
+          Universitas
+        </Text>
+        {univData.map((univ: University) => {
+          return (
+            <SearchCard
+              key={univ.id}
+              searchResult={univ.name}
+              slug={univ.slug}
+              searchFor="university"
+            />
+          );
+        })}
+      </Flex>
     </Container>
   );
 };

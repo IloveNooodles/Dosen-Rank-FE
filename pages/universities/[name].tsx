@@ -41,8 +41,15 @@ export async function getServerSideProps(context: { query: { name: string } }) {
     props: {
       title: univName,
       reviews,
-      summaryRatings: ratings,
-      summaryAverageRating: ratings.overall_rating,
+      summaryRatings: ratings || {
+        review_count: 0,
+        overall_rating: 0,
+        overall_fasilitas: 0,
+        overall_lingkungan: 0,
+        overall_kemahasiswaan: 0,
+        overall_reputasi_akademik: 0,
+      },
+      summaryAverageRating: ratings?.overall_rating || 0,
       id: univId,
     },
   };
@@ -113,7 +120,7 @@ const University: React.FC<UniversityPageProps> = ({
           />
           <Divider />
           <Flex direction="row">
-            <Text my={6}>{reviews.length} Ulasan</Text>
+            <Text my={6}>{reviews?.length} Ulasan</Text>
             <Spacer />
             {isAuthenticated() ? (
               <HStack>
@@ -136,7 +143,7 @@ const University: React.FC<UniversityPageProps> = ({
               </HStack>
             ) : null}
           </Flex>
-          {reviews.map((review) => {
+          {reviews?.map((review) => {
             const {
               id,
               creator_id,

@@ -3,6 +3,7 @@ import ReviewCard from "@/components/ReviewCard";
 import ReviewModal from "@/components/ReviewModal";
 import SummaryRating from "@/components/SummaryRating";
 import { useAuth } from "@/contexts/AuthContext";
+import { Creator } from "@/interfaces";
 import { apiInstance } from "@/utils/apiInstance";
 import {
   Container,
@@ -64,7 +65,7 @@ export interface UniversityRating {
 
 export interface UniversityReview {
   id: number;
-  creator_id: number;
+  creator: Creator;
   univ_id: number;
   upvote: number;
   downvote: number;
@@ -146,14 +147,11 @@ const University: React.FC<UniversityPageProps> = ({
           {reviews?.map((review) => {
             const {
               id,
-              creator_id,
-              univ_id,
               upvote,
               downvote,
               content,
-              name,
+              creator,
               created_at,
-              updated_at,
               rating,
               average_rating,
             } = review;
@@ -162,7 +160,7 @@ const University: React.FC<UniversityPageProps> = ({
                 key={reviews.indexOf(review)}
                 reviewFor={"university"}
                 idReview={id}
-                reviewerName={name}
+                reviewerName={creator.name}
                 overallRating={average_rating}
                 firstFieldName="Reputasi Akademik"
                 secondFieldName="Lingkungan"

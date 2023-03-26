@@ -6,6 +6,7 @@ import SearchCard from "@/components/SearchCard";
 import { SummaryRatingProps, University } from "@/interfaces";
 import { apiInstance } from "@/utils/apiInstance";
 import { Container, Flex, Text } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import useSWR from "swr";
 
 export interface CoursePageProps {
@@ -21,7 +22,7 @@ const fetcher = (url: string) =>
 
 function useSearch(name?: string) {
   const { data, isLoading, error } = useSWR(
-    name ? `/univ/?name=${name}/` : `/univ/`,
+    name ? `/univ/?name=${name}` : `/univ/`,
     fetcher
   );
 
@@ -33,10 +34,10 @@ function useSearch(name?: string) {
 }
 
 const Search: React.FC<CoursePageProps> = ({ title, summaryRatings }) => {
-  // const router = useRouter();
-  // const { id } = router.query;
+  const router = useRouter();
+  let { name } = router.query;
 
-  const { data, isLoading, error } = useSearch();
+  const { data, isLoading, error } = useSearch(name as string);
 
   if (isLoading) {
     return <p>loading</p>;
@@ -46,7 +47,7 @@ const Search: React.FC<CoursePageProps> = ({ title, summaryRatings }) => {
     return <p>error</p>;
   }
 
-  const univData = data.data as Array<University>;
+  const univData = data?.data as Array<University>;
 
   return (
     <Container
@@ -66,7 +67,6 @@ const Search: React.FC<CoursePageProps> = ({ title, summaryRatings }) => {
         Hasil Pencarian
       </Text>
       <SearchBar />
-      {/* each card section for university, dosen, and mata kulah */}
 
       <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
         <Text
@@ -78,7 +78,7 @@ const Search: React.FC<CoursePageProps> = ({ title, summaryRatings }) => {
         >
           Universitas
         </Text>
-        {univData.map((univ: University) => {
+        {univData?.map((univ: University) => {
           return (
             <SearchCard
               key={univ.id}

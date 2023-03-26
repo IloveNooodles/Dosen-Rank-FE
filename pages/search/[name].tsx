@@ -127,7 +127,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                             <Wrap w="95%" h="95%" >
                                                 {professors.length > 0 ? professors.map((professor) => (
                                                     // eslint-disable-next-line react/jsx-key
-                                                    <DosenCard dosenName={professor.name}></DosenCard>
+                                                    <DosenCard dosenName={professor.name} urlDosen={professor.slug}></DosenCard>
                                                 )) : <ContentNotFound/>}
                                             </Wrap>
                                         </Card>
@@ -136,7 +136,8 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                         <Card w="57rem" h="35rem">
                                             <Wrap w="95%" h="95%" >
                                                 {courses.length > 0 ? courses.map((course) => (
-                                                    <MatkulCard matkulName={course.name} matkulCode={course.course_id}></MatkulCard>
+                                                    <MatkulCard
+                                                        key={courses.indexOf(course)} matkulName={course.name} matkulCode={course.course_id} urlMatkul={course.course_id}></MatkulCard>
                                                 )) : <ContentNotFound/>}
                                             </Wrap>
                                         </Card>

@@ -18,6 +18,7 @@ import SearchBar from "@/components/SearchBar";
 import DosenCard from "@/components/DosenCard";
 import MatkulCard from "@/components/MatkulCard";
 import { apiInstance } from "@/utils/apiInstance";
+import ContentNotFound from "@/components/ContentNotFound";
 
 export async function getServerSideProps(context: { query: { name: string } }) {
     const { name } = context.query;
@@ -124,21 +125,19 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                         <Card w="57rem" h="35rem">
                                             {/* eslint-disable-next-line react/jsx-no-undef */}
                                             <Wrap w="95%" h="95%" >
-                                                {professors.map((professor) => (
+                                                {professors.length > 0 ? professors.map((professor) => (
                                                     // eslint-disable-next-line react/jsx-key
-                                                        <DosenCard dosenName={professor.name}></DosenCard>
-                                                ))
-                                                }
+                                                    <DosenCard dosenName={professor.name}></DosenCard>
+                                                )) : <ContentNotFound/>}
                                             </Wrap>
                                         </Card>
                                     </TabPanel>
                                     <TabPanel h="35rem">
                                         <Card w="57rem" h="35rem">
                                             <Wrap w="95%" h="95%" >
-                                                {courses.map((course) => (
+                                                {courses.length > 0 ? courses.map((course) => (
                                                     <MatkulCard matkulName={course.name} matkulCode={course.course_id}></MatkulCard>
-                                                ))
-                                                }
+                                                )) : <ContentNotFound/>}
                                             </Wrap>
                                         </Card>
                                     </TabPanel>

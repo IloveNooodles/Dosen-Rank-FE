@@ -16,6 +16,7 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import React from "react";
 import { FiEdit } from "react-icons/fi";
 
@@ -101,6 +102,7 @@ const University: React.FC<UniversityPageProps> = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { isAuthenticated } = useAuth();
+  const {asPath} = useRouter();
 
   return (
     <Container>
@@ -115,7 +117,7 @@ const University: React.FC<UniversityPageProps> = ({
         <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
           <SummaryRating
             title={title}
-            pagePath="universities"
+            pagePath={asPath}
             overallRating={summaryAverageRating}
             summaryRatings={ratings}
           />

@@ -4,7 +4,7 @@ import Link from "next/link";
 const SummaryActionButton: React.FC<{ pagePath: string }> = ({ pagePath }) => {
   return (
     <Flex direction="row">
-      {pagePath.includes("professors") || pagePath.includes("universities") ? (
+      {pagePath.includes("professors") ? (
         <Link href="/">
           <Text
             as="u"
@@ -16,7 +16,7 @@ const SummaryActionButton: React.FC<{ pagePath: string }> = ({ pagePath }) => {
           </Text>
         </Link>
       ) : null}
-      {pagePath.includes("courses") || pagePath.includes("universities") ? (
+      {pagePath.includes("courses") ? (
         <Link href="/">
           <Text
             as="u"
@@ -28,6 +28,19 @@ const SummaryActionButton: React.FC<{ pagePath: string }> = ({ pagePath }) => {
           </Text>
         </Link>
       ) : null}
+      {pagePath.includes("universities")? (
+        <Link href={`/search/${pagePath.split('/')[2]}`}>
+          <Text
+            as="u"
+            fontSize={{ base: "sm", sm: "lg" }}
+            mr="4"
+            ml={{ sm: "4", md: "8" }}
+          >
+            Lihat dosen/mata kuliah
+          </Text>
+        </Link>
+      ) : null}
+
     </Flex>
   );
 };

@@ -28,7 +28,7 @@ export async function getServerSideProps(context: { query: { name: string } }) {
 
   const reviewRes = await apiInstance({})
     .get(`/reviews/univ/?id=${univId}`)
-    .catch((e) => console.log(e));
+    .catch((e) => console.error(e));
 
   const reviews = await reviewRes?.data.data;
 
@@ -36,8 +36,6 @@ export async function getServerSideProps(context: { query: { name: string } }) {
     .get(`/reviews/univ/overall/${univId}`)
     .catch((e) => console.error(e));
   const ratings = await overallRatingRes?.data.data;
-
-  console.log(univName, reviews, ratings, univId);
 
   return {
     props: {

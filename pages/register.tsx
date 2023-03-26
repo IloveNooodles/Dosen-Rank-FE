@@ -6,7 +6,7 @@ import { Container, Text, VStack } from "@chakra-ui/react";
 export async function getStaticProps() {
   const response = await apiInstance({})
     .get("/univ")
-    .catch((err) => console.log(err));
+    .catch((err) => console.error(err));
   const universities = response!.data.data || [];
 
   return {

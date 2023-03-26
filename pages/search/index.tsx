@@ -66,8 +66,8 @@ const Search: React.FC<CoursePageProps> = ({ title, summaryRatings }) => {
             Mata kuliah
           </Text>
           <SearchCard
-            searchResult={"IF2120 Matematika Diskrit"}
-            slug="1"
+            searchResult={"IF3290 Aku sayng kamu"}
+            slug="if3290"
             searchFor="courses"
           />
         </Flex>

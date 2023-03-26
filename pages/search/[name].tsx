@@ -11,7 +11,7 @@ import {
     TabPanels,
     Tabs,
     Text,
-    VStack
+    VStack, Wrap
 } from "@chakra-ui/react";
 import {Card} from "@chakra-ui/card";
 import SearchBar from "@/components/SearchBar";
@@ -19,13 +19,15 @@ import DosenCard from "@/components/DosenCard";
 import MatkulCard from "@/components/MatkulCard";
 import { apiInstance } from "@/utils/apiInstance";
 
-export async function getServerSideProps() {
+export async function getServerSideProps(context: { query: { name: string } }) {
+    const { name } = context.query;
+
     try {
         const response  = await apiInstance({})
-            .get(`/search/institut-teknologi-bandung/?name=gare&page=1`)
+            .get(`/search/${name}`)
             .catch((e) => console.error(e));
-        const { id, name, institutionId, institutionName, slug } = await response?.data.data;
-        return { props: { id, name, institutionId, institutionName, slug } };
+        const { courses, professors } = await response?.data.data;
+        return { props: { courses, professors } };
     }
     catch (e) {
         console.log(e);
@@ -39,18 +41,29 @@ export async function getServerSideProps() {
 }
 
 export interface SearchAndFilterProps {
+    courses: CoursesProps[],
+    professors: ProfessorProps[],
+}
+
+export interface CoursesProps {
+    id: number,
+    course_id: string,
+    name: string,
+    institute_id: number,
+    institution_name: string,
+    slug: string,
+}
+
+export interface ProfessorProps {
     id: number,
     name: string,
     institutionId: number,
     institutionName: string,
-    slug: string
+    slug: string,
 }
 const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
-    id,
-    name,
-    institutionId,
-    institutionName,
-    slug
+    courses,
+    professors,
                                                          }) => {
     return (
         <Container centerContent h="calc(100vh - 5.5rem - 6.9rem)" w="calc(100vw - 10rem)">
@@ -108,13 +121,25 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                 </Box>
                                 <TabPanels h="35rem">
                                     <TabPanel h="35rem">
-                                        <Card w="57rem">
-                                            <DosenCard dosenName={"Rinaldi Munir"}></DosenCard>
+                                        <Card w="57rem" h="35rem">
+                                            {/* eslint-disable-next-line react/jsx-no-undef */}
+                                            <Wrap w="95%" h="95%" >
+                                                {professors.map((professor) => (
+                                                    // eslint-disable-next-line react/jsx-key
+                                                        <DosenCard dosenName={professor.name}></DosenCard>
+                                                ))
+                                                }
+                                            </Wrap>
                                         </Card>
                                     </TabPanel>
                                     <TabPanel h="35rem">
-                                        <Card w="57rem">
-                                            <MatkulCard matkulName={"Matematika Diskrit"} matkulCode={"IF2211"}></MatkulCard>
+                                        <Card w="57rem" h="35rem">
+                                            <Wrap w="95%" h="95%" >
+                                                {courses.map((course) => (
+                                                    <MatkulCard matkulName={course.name} matkulCode={course.course_id}></MatkulCard>
+                                                ))
+                                                }
+                                            </Wrap>
                                         </Card>
                                     </TabPanel>
                                 </TabPanels>

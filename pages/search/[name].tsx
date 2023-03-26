@@ -136,7 +136,8 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                         <Card w="57rem" h="35rem">
                                             <Wrap w="95%" h="95%" >
                                                 {courses.map((course) => (
-                                                    <MatkulCard matkulName={course.name} matkulCode={course.course_id}></MatkulCard>
+                                                    <MatkulCard 
+                                                    key={courses.indexOf(course)} matkulName={course.name} matkulCode={course.course_id}></MatkulCard>
                                                 ))
                                                 }
                                             </Wrap>

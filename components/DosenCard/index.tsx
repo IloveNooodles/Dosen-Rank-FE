@@ -1,17 +1,21 @@
 import React from 'react';
 import {Card} from "@chakra-ui/card";
 import {Text} from "@chakra-ui/react";
+import Link from "next/link";
 
 export interface DosenCardProps {
     dosenName: string;
+    urlDosen: string;
 }
-const DosenCard: React.FC<DosenCardProps> = ({ dosenName }) => {
+const DosenCard: React.FC<DosenCardProps> = ({ dosenName, urlDosen }) => {
     return (
-        <Card width="17.5rem" height="4rem" justifyContent="center">
-            <Text fontSize="1rem" fontWeight="400" textAlign="start" ml={4}>
-                {dosenName}
-            </Text>
-        </Card>
+        <Link href={`/professors/${urlDosen}`}>
+            <Card width="17.5rem" height="4rem" justifyContent="center">
+                <Text fontSize="1rem" fontWeight="400" textAlign="start" ml={4}>
+                    {dosenName}
+                </Text>
+            </Card>
+        </Link>
     );
 };
 

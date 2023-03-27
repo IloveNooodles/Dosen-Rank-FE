@@ -3,8 +3,7 @@ import {
     Box, Button,
     Container,
     Flex, HStack, Input, InputGroup, InputRightElement,
-    Select, Spacer,
-    Stack,
+    Select, Show,
     Tab,
     TabList,
     TabPanel,
@@ -14,7 +13,6 @@ import {
     VStack, Wrap
 } from "@chakra-ui/react";
 import {Card} from "@chakra-ui/card";
-import SearchBar from "@/components/SearchBar";
 import DosenCard from "@/components/DosenCard";
 import MatkulCard from "@/components/MatkulCard";
 import { apiInstance } from "@/utils/apiInstance";
@@ -72,44 +70,47 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                                          }) => {
     const [nameSearch, setNameSearch] = useState<string>("");
     return (
-        <Container centerContent h="calc(100vh - 5.5rem - 6.9rem)" w="calc(100vw - 10rem)">
+        <Container centerContent h="calc(100vh - 5.5rem - 6.9rem)" w="calc(100vw - 10rem)" >
             <Flex justifyContent="center" w="full">
                 <Box w="19rem" mt="1.6rem">
-                    <Text fontSize="1rem" fontWeight="bold" mb="0.3rem" >Filter</Text>
-                    <Card>
-                        <VStack>
-                            <VStack justifyContent="flex-start">
-                                <Text fontSize="0.8rem" fontWeight="bold" mb="0.3rem">Fakultas:</Text>
-                                <Select placeholder='Select option'>
-                                    <option value='option1'>Option 1</option>
-                                </Select>
-                            </VStack>
+                    <Show above="md">
+                        <Text fontSize="1rem" fontWeight="bold" mb="0.3rem" >Filter</Text>
+                        <Card>
                             <VStack>
-                                <Text fontSize="0.8rem" fontWeight="bold" mb="0.3rem"  pt={4}>Jurusan:</Text>
-                                <Select placeholder='Select option'>
-                                    <option value='option1'>Option 1</option>
-                                </Select>
+                                <VStack justifyContent="flex-start">
+                                    <Text fontSize="0.8rem" fontWeight="bold" mb="0.3rem">Fakultas:</Text>
+                                    <Select placeholder='Select option'>
+                                        <option value='option1'>Option 1</option>
+                                    </Select>
+                                </VStack>
+                                <VStack>
+                                    <Text fontSize="0.8rem" fontWeight="bold" mb="0.3rem"  pt={4}>Jurusan:</Text>
+                                    <Select placeholder='Select option'>
+                                        <option value='option1'>Option 1</option>
+                                    </Select>
+                                </VStack>
+                                <Box>
+                                    <Button colorScheme="teal" fontSize="sm" size="sm" fontWeight="bold" variant="solid" borderRadius="1rem" my={5}>
+                                        Apply
+                                    </Button>
+                                </Box>
                             </VStack>
-                            <Box>
-                                <Button colorScheme="teal" fontSize="sm" size="sm" fontWeight="bold" variant="solid" borderRadius="1rem" my={5}>
-                                    Apply
-                                </Button>
-                            </Box>
-                        </VStack>
-
-                    </Card>
+                        </Card>
+                    </Show>
                 </Box>
                 <Box w="97rem">
                     <VStack>
                         <Tabs pt="1rem">
                             <VStack>
-                                <Flex justifyContent="start" w="95%" pb="1.5rem">
-                                    <TabList>
-                                        <Tab>Dosen</Tab>
-                                        <Tab>Matkul</Tab>
-                                    </TabList>
-                                </Flex>
-                                <Box my={8}>
+                                <Show above="md">
+                                    <Flex justifyContent="start" w="95%" pb="1.5rem">
+                                        <TabList>
+                                            <Tab>Dosen</Tab>
+                                            <Tab>Matkul</Tab>
+                                        </TabList>
+                                    </Flex>
+                                </Show>
+                                <Box my={{ sm:"0" ,md:"8rem"}}>
                                     <InputGroup w={{ base: "20rem", md: "33rem" }}>
                                         <Input
                                             placeholder="Cari mata kuliah, atau dosen..."
@@ -131,7 +132,9 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                 </Box>
                                 <Box pt="1.5rem">
                                     <HStack gap="38rem">
-                                        <Text></Text>
+                                        <Show above="md">
+                                            <Text></Text>
+                                        </Show>
                                         <HStack>
                                             <Text fontWeight="bold">Urutkan:</Text>
                                             <Select placeholder='Select option'>
@@ -142,11 +145,19 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                         </HStack>
                                     </HStack>
                                 </Box>
-                                <TabPanels h="35rem">
-                                    <TabPanel h="35rem">
-                                        <Card w="57rem" h="35rem">
+                                <Show below="md">
+                                    <Flex justify="center" w="18rem">
+                                        <TabList>
+                                            <Tab>Dosen</Tab>
+                                            <Tab>Matkul</Tab>
+                                        </TabList>
+                                    </Flex>
+                                </Show>
+                                <TabPanels>
+                                    <TabPanel h="35rem" w="100%" justifyContent="center" alignItems="center">
+                                        <Card w={{ base:"22rem", md:"57rem"}} h={{ base:"27rem", md:"35rem"}} justify="center" align="center">
                                             {/* eslint-disable-next-line react/jsx-no-undef */}
-                                            <Wrap w="95%" h="95%" >
+                                            <Wrap w={{sm: "10%" , md:"95%"}} h="95%" justify="center" align="center" overflowY={"scroll"}>
                                                 {(professors !== null) ? professors.map((professor) => (
                                                     // eslint-disable-next-line react/jsx-key
                                                     <DosenCard dosenName={professor.name} urlDosen={professor.slug}></DosenCard>
@@ -158,8 +169,8 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                         </Card>
                                     </TabPanel>
                                     <TabPanel h="35rem">
-                                        <Card w="57rem" h="35rem">
-                                            <Wrap w="95%" h="95%" >
+                                        <Card w={{ base:"22rem", md:"57rem"}} h={{ base:"27rem", md:"35rem"}} justify="center" align="center" >
+                                            <Wrap w={{sm: "10%" , md:"95%"}} h="95%" justify="center" align="center" overflowY={"scroll"}>
                                                 {courses !== null ? courses.map((course) => (
                                                     <MatkulCard
                                                         key={courses.indexOf(course)} matkulName={course.name} matkulCode={course.course_id} urlMatkul={course.course_id}></MatkulCard>

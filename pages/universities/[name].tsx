@@ -57,6 +57,13 @@ export async function getServerSideProps(context: { query: { name: string } }) {
   };
 }
 
+export interface OverallUniversityRating {
+  overall_reputasi_akademik: number;
+  overall_lingkungan: number;
+  overall_kemahasiswaan: number;
+  overall_fasilitas: number;
+}
+
 export interface UniversityRating {
   reputasi_akademik: number;
   lingkungan: number;
@@ -81,7 +88,7 @@ export interface UniversityReview {
 export interface UniversityPageProps {
   title: string;
   reviews: UniversityReview[];
-  summaryRatings: UniversityRating;
+  summaryRatings: OverallUniversityRating;
   summaryAverageRating: number;
   id: number;
 }
@@ -94,10 +101,10 @@ const University: React.FC<UniversityPageProps> = ({
   id,
 }) => {
   const ratings = [
-    { name: "Reputasi Akademik", value: summaryRatings.reputasi_akademik },
-    { name: "Lingkungan", value: summaryRatings.lingkungan },
-    { name: "Kemahasiswaan", value: summaryRatings.kemahasiswaan },
-    { name: "Fasilitas", value: summaryRatings.fasilitas },
+    { name: "Reputasi Akademik", value: summaryRatings.overall_reputasi_akademik },
+    { name: "Lingkungan", value: summaryRatings.overall_lingkungan },
+    { name: "Kemahasiswaan", value: summaryRatings.overall_kemahasiswaan },
+    { name: "Fasilitas", value: summaryRatings.overall_fasilitas },
   ];
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -106,13 +113,13 @@ const University: React.FC<UniversityPageProps> = ({
 
   return (
     <Container>
-      <ReviewModal
+      {isAuthenticated() ? <ReviewModal
         isOpen={isOpen}
         onOpen={onOpen}
         onClose={onClose}
         reviewFor="university"
         id={id}
-      />
+      /> : null}
       <MainCard>
         <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
           <SummaryRating

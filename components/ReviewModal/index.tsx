@@ -14,7 +14,7 @@ import { useAuth } from "@/contexts/AuthContext";
 const SelectInput = dynamic(() => import("../SelectInput"), { ssr: false });
 
 const fetcher: Fetcher<Response<ProfessorResponse[] | CourseResponse[]>, string> = (url) =>
-  apiInstance({}).get(url).then((res) => res.data);
+  apiInstance({isAuthorized: true}).get(url).then((res) => res.data);
 
 function useTags(id: number, reviewFor: string) {
   const { data, isLoading, error } = useSWR((reviewFor === 'course') ? `/professor/course?id=${id}` : `/courses/professor?id=${id}` , fetcher);
@@ -109,7 +109,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                         fasilitas: fourthFieldRating,
                                     },
                                 });
-                                const response = await apiInstance({}).post(`/reviews/univ/`, data);
+                                const response = await apiInstance({isAuthorized: true}).post(`/reviews/univ/`, data);
                                 if (response.status >= 200 && response.status < 300) {
                                     toast({
                                       title: 'Review berhasil ditambahkan',
@@ -131,7 +131,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                         sumber_belajar: fourthFieldRating,
                                     },
                                 });
-                                const response = await apiInstance({}).post(`/reviews/course/`, data);
+                                const response = await apiInstance({isAuthorized: true}).post(`/reviews/course/`, data);
                                 if (response.status >= 200 && response.status < 300) {
                                     toast({
                                       title: 'Review berhasil ditambahkan',
@@ -153,7 +153,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                         transparansi: fourthFieldRating,
                                     },
                                 });
-                                const response = await apiInstance({}).post(`/reviews/professor/`, data);
+                                const response = await apiInstance({isAuthorized: true}).post(`/reviews/professor/`, data);
                                 if (response.status >= 200 && response.status < 300) {
                                     toast({
                                       title: 'Review berhasil ditambahkan',

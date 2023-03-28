@@ -72,6 +72,10 @@ export interface CourseRating {
   sumber_belajar: number;
 }
 
+export interface Creator {
+  name: string
+}
+
 export interface CourseReview {
   id: number;
   creator_id: number;
@@ -88,6 +92,7 @@ export interface CourseReview {
   updated_at: string;
   rating: CourseRating;
   average_rating: number;
+  creator: Creator;
 }
 
 export interface CoursePageProps {
@@ -127,13 +132,13 @@ const Courses: React.FC<CoursePageProps> = ({
 
   return (
     <Container>
-      <ReviewModal
+      {isAuthenticated() ? <ReviewModal
         isOpen={isOpen}
         onOpen={onOpen}
         onClose={onClose}
         reviewFor="course"
         id={id}
-      />
+      /> : null}
       <MainCard>
         <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
           <SummaryRating
@@ -171,7 +176,7 @@ const Courses: React.FC<CoursePageProps> = ({
             const {
               id,
               creator_id: creatorId,
-              creator_name: creatorName,
+              creator,
               professor_id: professorId,
               professor_name: professorName,
               course_id: courseId,
@@ -190,7 +195,7 @@ const Courses: React.FC<CoursePageProps> = ({
                 key={reviews.indexOf(review)}
                 reviewFor={"course"}
                 idReview={id}
-                reviewerName={creatorName}
+                reviewerName={review.creator.name}
                 courseName={courseName}
                 overallRating={averageRating}
                 firstFieldName={"Kesesuaian Dengan SKS"}

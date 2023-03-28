@@ -93,7 +93,7 @@ const Professor: React.FC<ProfessorPageProps> = ({
 
   return (
     <Container>
-      <ReviewModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} reviewFor="dosen" id={id} />
+      {isAuthenticated() ? <ReviewModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} reviewFor="dosen" id={id} /> : null}
       <MainCard>
         <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
           <SummaryRating title={title} pagePath="professors" overallRating={summaryAverageRating} summaryRatings={ratings} />

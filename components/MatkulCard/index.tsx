@@ -12,7 +12,10 @@ export interface MatkulCardProps {
 const MatkulCard: React.FC<MatkulCardProps> = ({ matkulName, matkulCode ,urlMatkul}) => {
     return (
         <Link href={`/courses/${matkulCode}`}>
-            <Card width="17.5rem" height="4rem" justifyContent="center">
+            <Card width="17.5rem" height="4rem" justifyContent="center" _hover={{
+                background: "white",
+                color: "teal.500",
+            }}>
                 <Text fontSize="0.75rem" fontWeight="700" textAlign="start" ml={4} color="#237495">
                     {matkulCode}
                 </Text>

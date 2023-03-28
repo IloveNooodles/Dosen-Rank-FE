@@ -10,7 +10,10 @@ export interface DosenCardProps {
 const DosenCard: React.FC<DosenCardProps> = ({ dosenName, urlDosen }) => {
     return (
         <Link href={`/professors/${urlDosen}`}>
-            <Card width="17.5rem" height="4rem" justifyContent="center">
+            <Card width="17.5rem" height="4rem" justifyContent="center" _hover={{
+                background: "natural.100",
+                color: "teal.500",
+            }}>
                 <Text fontSize="1rem" fontWeight="400" textAlign="start" ml={4}>
                     {dosenName}
                 </Text>

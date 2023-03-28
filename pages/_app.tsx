@@ -4,9 +4,11 @@ import Wrapper from "@/components/Wrapper";
 import { AuthProvider } from "@/contexts/AuthContext";
 import "@/styles/globals.scss";
 import theme from "@/styles/theme";
-import { ChakraProvider, Container, Flex } from "@chakra-ui/react";
+import { ChakraProvider, Container, createStandaloneToast, Flex } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
 import Head from "next/head";
+
+const { ToastContainer, toast } = createStandaloneToast()
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -23,6 +25,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <AuthProvider>
         <Container>
           <Wrapper>
+          <ToastContainer />
             <NavigationBar />
             <Flex position="relative" direction="column" alignItems="center">
               <Component {...pageProps} />

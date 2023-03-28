@@ -31,7 +31,6 @@ export async function getServerSideProps(context: { query: { univName: string, n
         return { props: { univName, courses, professors } };
     }
     catch (e) {
-        console.log(e);
         return {
             redirect: {
                 destination: "/",

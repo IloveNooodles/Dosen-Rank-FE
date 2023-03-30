@@ -17,6 +17,7 @@ import DosenCard from "@/components/DosenCard";
 import MatkulCard from "@/components/MatkulCard";
 import { apiInstance } from "@/utils/apiInstance";
 import ContentNotFound from "@/components/ContentNotFound";
+import ReactPaginate from "react-paginate";
 import Link from "next/link";
 import {Search2Icon} from "@chakra-ui/icons";
 
@@ -137,9 +138,8 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                         <HStack>
                                             <Text fontWeight="bold">Urutkan:</Text>
                                             <Select placeholder='Select option'>
-                                                <option value='option1'>Option 1</option>
-                                                <option value='option2'>Option 2</option>
-                                                <option value='option3'>Option 3</option>
+                                                <option value='option1'>A - Z</option>
+                                                <option value='option2'>Z - A</option>
                                             </Select>
                                         </HStack>
                                     </HStack>
@@ -154,27 +154,27 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                 </Show>
                                 <TabPanels>
                                     <TabPanel h="35rem" w="100%" justifyContent="center" alignItems="center">
-                                        <Card w={{ base:"22rem", md:"57rem"}} h={{ base:"27rem", md:"35rem"}} justify="center" align="center">
+                                        <Card w={{ base:"22rem", md:"57rem"}} h={{ base:"27rem", md:"21rem"}} justify="center" align="center">
                                             {/* eslint-disable-next-line react/jsx-no-undef */}
                                             <Wrap w={{sm: "10%" , md:"95%"}} h="95%" justify="center" align="center" overflowY={"scroll"}>
                                                 {(professors !== null) ? professors.map((professor) => (
                                                     // eslint-disable-next-line react/jsx-key
                                                     <DosenCard dosenName={professor.name} urlDosen={professor.slug}></DosenCard>
                                                 )) :
-                                                    <Box w="100%" h="100%">
+                                                    <Box w="100%" h="100%" pt={"2rem"}>
                                                         <ContentNotFound/>
                                                     </Box>}
                                             </Wrap>
                                         </Card>
                                     </TabPanel>
                                     <TabPanel h="35rem">
-                                        <Card w={{ base:"22rem", md:"57rem"}} h={{ base:"27rem", md:"35rem"}} justify="center" align="center" >
+                                        <Card w={{ base:"22rem", md:"57rem"}} h={{ base:"27rem", md:"21rem"}} justify="center" align="center" >
                                             <Wrap w={{sm: "10%" , md:"95%"}} h="95%" justify="center" align="center" overflowY={"scroll"}>
                                                 {courses !== null ? courses.map((course) => (
                                                     <MatkulCard
                                                         key={courses.indexOf(course)} matkulName={course.name} matkulCode={course.course_id} urlMatkul={course.course_id}></MatkulCard>
                                                 )) :
-                                                    <Box w="100%" h="100%">
+                                                    <Box w="100%" h="100%" pt={{sm:"2rem", md:"2rem"}}>
                                                         <ContentNotFound/>
                                                     </Box>
 

@@ -2,6 +2,7 @@ import React from 'react';
 import {Box, VStack, Text, Button, HStack, Spacer, Flex, Container, Center, Show} from "@chakra-ui/react";
 import Image from "next/image";
 import successIcon from "../../public/ic-success.svg";
+import Link from "next/link";
 
 const Confirmation: React.FC<{}> = () => {
     return (
@@ -23,9 +24,11 @@ const Confirmation: React.FC<{}> = () => {
                                 Ayo lihat review mata kuliah yang kamu ambil!
                             </Text>
                         </Box>
-                        <Button borderRadius={"2rem"} colorScheme={"biru"}>
-                            Lanjutkan ke Halaman Login
-                        </Button>
+                        <Link href={"/login"}>
+                            <Button borderRadius={"2rem"} colorScheme={"biru"}>
+                                Lanjutkan ke Halaman Login
+                            </Button>
+                        </Link>
                     </VStack>
                     <Show above="md">
                         <Box>

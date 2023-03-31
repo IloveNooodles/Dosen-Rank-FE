@@ -2,6 +2,7 @@ import RegisterForm from "@/components/RegisterForm";
 import { RegisterProps } from "@/interfaces";
 import { apiInstance } from "@/utils/apiInstance";
 import { Container, Text, VStack } from "@chakra-ui/react";
+import ConfirmRegisterModal from "@/components/ConfirmRegisterModal";
 
 export async function getStaticProps() {
   const response = await apiInstance({})
@@ -23,6 +24,7 @@ const Register: React.FC<RegisterProps> = ({ universities }) => (
         Buat akun sebagai mahasiswa
       </Text>
       <RegisterForm universities={universities} />
+      <ConfirmRegisterModal />
     </VStack>
   </Container>
 );

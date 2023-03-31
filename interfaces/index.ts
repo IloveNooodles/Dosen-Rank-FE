@@ -77,7 +77,7 @@ export interface Report {
   reportType: string;
   reportedId: number;
   content?: string;
-  tags: number;
+  tag: number;
 }
 
 /*

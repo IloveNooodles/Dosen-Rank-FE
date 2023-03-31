@@ -17,13 +17,14 @@ export interface ReportModalProps {
 const ReportModal: React.FC<ReportModalProps> = ({isOpen, onOpen, onClose, reportedId, reportFor}) => {
     const [count, setCount] = React.useState(0);
     const [details, setDetails] = React.useState("");
-    const [type, setType] = React.useState(0);
+    const [value, setValue] = React.useState('0');
     const initialValues: Report = {
         reportType: "",
         reportedId: 0,
-        tags: 0,
+        tag: 0,
     };
     const toast = useToast();
+
     return (
         <Modal isOpen={isOpen} onClose={onClose} isCentered>
             <ModalOverlay />
@@ -32,13 +33,13 @@ const ReportModal: React.FC<ReportModalProps> = ({isOpen, onOpen, onClose, repor
                     initialValues={initialValues}
                     onSubmit={async () => {
                         try {
-                            const dataReport = JSON.stringify({
+                            const data = JSON.stringify({
                                 report_type: reportFor,
                                 reported_id: reportedId,
                                 content: details,
-                                tags: type,
+                                tag: parseInt(value),
                             });
-                            const response = await apiInstance({isAuthorized: true}).post(`/reports/`, dataReport);
+                            const response = await apiInstance({isAuthorized: true}).post(`/reports/`, data);
                             if (response.status >= 200 && response.status < 300) {
                                 toast({
                                   title: 'Report berhasil dikirim',
@@ -79,21 +80,21 @@ const ReportModal: React.FC<ReportModalProps> = ({isOpen, onOpen, onClose, repor
                                         fontWeight="bold">
                                             Ada isu apa?
                                         </Text>
-                                    <RadioGroup>
+                                    <RadioGroup onChange={setValue} value={value}>
                                         <VStack alignItems={"start"}>
-                                            <Radio value='1' onClick={() => setType(0)}>
+                                            <Radio value='1'>
                                                 <Text fontSize={{ base: '0.8rem', md: '1rem'}}>Konten tidak sesuai</Text>
                                             </Radio>
-                                            <Radio value='2' onClick={() => setType(2)}>
+                                            <Radio value='2'>
                                                 <Text fontSize={{ base: '0.8rem', md: '1rem'}}>Konten mengandung kekerasan atau perundungan</Text>
                                             </Radio>
-                                            <Radio value='3' onClick={() => setType(3)}>
+                                            <Radio value='3'>
                                                 <Text fontSize={{ base: '0.8rem', md: '1rem'}}>Konten melanggar hak cipta</Text>
                                             </Radio>
-                                            <Radio value='4' onClick={() => setType(4)}>
+                                            <Radio value='4'>
                                                 <Text fontSize={{ base: '0.8rem', md: '1rem'}}>Konten mengandung kata kasar</Text>
                                             </Radio>
-                                            <Radio value='5' onClick={() => setType(5)}>
+                                            <Radio value='5'>
                                                 <Text fontSize={{ base: '0.8rem', md: '1rem'}}>Lainnya</Text>
                                             </Radio>
                                         </VStack>

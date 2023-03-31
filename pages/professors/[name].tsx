@@ -96,7 +96,7 @@ const Professor: React.FC<ProfessorPageProps> = ({
       {isAuthenticated() ? <ReviewModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} reviewFor="dosen" id={id} /> : null}
       <MainCard>
         <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
-          <SummaryRating title={title} pagePath="professors" overallRating={summaryAverageRating} summaryRatings={ratings} reportFor="professor_review" reportedId={id} />
+          <SummaryRating title={title} pagePath="professors" overallRating={summaryAverageRating} summaryRatings={ratings} reportFor="PROFESSOR" reportedId={id} />
           <Divider/>
           <Flex direction="row">
             <Text my={6}>{reviews.length} Ulasan</Text>
@@ -143,7 +143,7 @@ const Professor: React.FC<ProfessorPageProps> = ({
                 reviewContent={content}
                 likeCount={upvote}
                 dislikeCount={downvote}
-                reportFor="professor_review"
+                reportFor="PROFESSOR_REVIEW"
                 reportedId={id}
               />
             );

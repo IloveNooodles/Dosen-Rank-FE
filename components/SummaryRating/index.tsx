@@ -12,10 +12,12 @@ const SummaryRating: React.FC<{
   pagePath: string;
   overallRating: number,
   summaryRatings: SummaryRatingProps[];
-}> = ({ title, pagePath, overallRating, summaryRatings }) => {
+  reportFor: string;
+  reportedId: number;
+}> = ({ title, pagePath, overallRating, summaryRatings, reportFor, reportedId }) => {
   return (
     <>
-      <SummaryTitle title={title} />
+      <SummaryTitle title={title} reportFor={reportFor} reportedId={reportedId} />
       <SummaryActionButton pagePath={pagePath} />
       <SummaryRatingContainer overallRating={overallRating} summaryRatings={summaryRatings} />
     </>

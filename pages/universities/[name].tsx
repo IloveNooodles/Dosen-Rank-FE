@@ -127,6 +127,8 @@ const University: React.FC<UniversityPageProps> = ({
             pagePath={asPath}
             overallRating={summaryAverageRating}
             summaryRatings={ratings}
+            reportFor="university"
+            reportedId={id}
           />
           <Divider />
           <Flex direction="row">
@@ -183,6 +185,8 @@ const University: React.FC<UniversityPageProps> = ({
                 reviewContent={content}
                 likeCount={upvote}
                 dislikeCount={downvote}
+                reportFor="university_review"
+                reportedId={id}
               />
             );
           })}

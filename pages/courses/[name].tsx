@@ -146,6 +146,8 @@ const Courses: React.FC<CoursePageProps> = ({
             pagePath="courses"
             overallRating={overallRating}
             summaryRatings={ratings}
+            reportFor="course"
+            reportedId={id}
           />
           <Divider />
           <Flex direction="row">
@@ -210,6 +212,8 @@ const Courses: React.FC<CoursePageProps> = ({
                 reviewContent={content}
                 likeCount={upvote}
                 dislikeCount={downvote}
+                reportFor="course_review"
+                reportedId={id}
               />
             );
           })}

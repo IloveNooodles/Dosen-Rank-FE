@@ -73,6 +73,13 @@ export interface Review {
   details: string;
 }
 
+export interface Report {
+  reportType: string;
+  reportedId: number;
+  content?: string;
+  tags: number;
+}
+
 /*
  * Page Interfaces
  */

@@ -3,7 +3,7 @@ import router from "next/router";
 
 import React from "react";
 
-const Error: React.FC<{}> = () => {
+const Custom404: React.FC<{}> = () => {
   return (
     <Container>
       <Center minH="fit-content" h="calc(100vh - 5.5rem - 6.9rem)">
@@ -23,4 +23,4 @@ const Error: React.FC<{}> = () => {
   );
 };
 
-export default Error;
+export default Custom404;

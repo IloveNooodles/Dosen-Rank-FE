@@ -78,6 +78,7 @@ export interface Review {
  */
 export interface RegisterProps {
   universities: Array<University>;
+  onClick: void;
 }
 
 /*

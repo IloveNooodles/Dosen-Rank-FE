@@ -15,23 +15,40 @@ import {
 import {Card} from "@chakra-ui/card";
 import DosenCard from "@/components/DosenCard";
 import MatkulCard from "@/components/MatkulCard";
-import { apiInstance } from "@/utils/apiInstance";
+import {apiInstance} from "@/utils/apiInstance";
 import ContentNotFound from "@/components/ContentNotFound";
-import ReactPaginate from "react-paginate";
 import Link from "next/link";
 import {Search2Icon} from "@chakra-ui/icons";
 
-export async function getServerSideProps(context: { query: { univName: string, name?: string, page?: number } }) {
-    const { univName, name, page } = context.query;
 
+export async function getServerSideProps(context: { query: { univName: string, name?: string, page?: number } }) {
+    const {univName, name, page} = context.query;
+
+    let totalCoursesPages;
+    let totalProfessorsPages;
     try {
-        const response  = await apiInstance({})
-            .get(name? `/search/${univName}/?name=${name}&page=${page}` : `/search/${univName}`)
+        const response = await apiInstance({})
+            .get(name ? `/search/${univName}/?name=${name}&page=${page}` : `/search/${univName}`)
             .catch((e) => console.error(e));
-        const { courses, professors } = await response?.data.data;
-        return { props: { univName, courses, professors } };
-    }
-    catch (e) {
+        const {courses, professors} = await response?.data.data;
+
+        if (!courses) {
+            totalCoursesPages = 0;
+        } else {
+            totalCoursesPages = Math.ceil(courses.length / 12);
+        }
+
+        if (!professors) {
+            totalProfessorsPages = 0;
+        } else {
+            totalProfessorsPages = Math.ceil(professors.length / 12);
+        }
+
+        if (!name || !page)  {
+            return {props: {univName, courses, professors, totalCoursesPages, totalProfessorsPages}}
+        }
+        return {props: {univName, courses, professors, totalCoursesPages, totalProfessorsPages}}
+    } catch (e) {
         return {
             redirect: {
                 destination: "/",
@@ -45,6 +62,10 @@ export interface SearchAndFilterProps {
     courses: CoursesProps[],
     professors: ProfessorProps[],
     univName: string,
+    page: number,
+    totalCoursesPages: number,
+    totalProfessorsPages: number,
+    name: string,
 }
 
 export interface CoursesProps {
@@ -63,18 +84,20 @@ export interface ProfessorProps {
     institutionName: string,
     slug: string,
 }
+
 const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
-    courses,
-    professors,
-    univName,
+                                                             courses,
+                                                             professors,
+                                                             univName,
+                                                             page, totalCoursesPages, totalProfessorsPages, name
                                                          }) => {
     const [nameSearch, setNameSearch] = useState<string>("");
     return (
-        <Container centerContent h="calc(100vh - 5.5rem - 6.9rem)" w="calc(100vw - 10rem)" >
+        <Container centerContent h="calc(100vh - 5.5rem - 6.9rem)" w="calc(100vw - 10rem)">
             <Flex justifyContent="center" w="full">
                 <Box w="19rem" mt="1.6rem">
                     <Show above="md">
-                        <Text fontSize="1rem" fontWeight="bold" mb="0.3rem" >Filter</Text>
+                        <Text fontSize="1rem" fontWeight="bold" mb="0.3rem">Filter</Text>
                         <Card>
                             <VStack>
                                 <VStack justifyContent="flex-start">
@@ -84,13 +107,14 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                     </Select>
                                 </VStack>
                                 <VStack>
-                                    <Text fontSize="0.8rem" fontWeight="bold" mb="0.3rem"  pt={4}>Jurusan:</Text>
+                                    <Text fontSize="0.8rem" fontWeight="bold" mb="0.3rem" pt={4}>Jurusan:</Text>
                                     <Select placeholder='Select option'>
                                         <option value='option1'>Option 1</option>
                                     </Select>
                                 </VStack>
                                 <Box>
-                                    <Button colorScheme="teal" fontSize="sm" size="sm" fontWeight="bold" variant="solid" borderRadius="1rem" my={5}>
+                                    <Button colorScheme="teal" fontSize="sm" size="sm" fontWeight="bold" variant="solid"
+                                            borderRadius="1rem" my={5}>
                                         Apply
                                     </Button>
                                 </Box>
@@ -110,13 +134,13 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                         </TabList>
                                     </Flex>
                                 </Show>
-                                <Box my={{ sm:"0" ,md:"8rem"}}>
-                                    <InputGroup w={{ base: "20rem", md: "33rem" }}>
+                                <Box my={{sm: "0", md: "8rem"}}>
+                                    <InputGroup w={{base: "20rem", md: "33rem"}}>
                                         <Input
                                             placeholder="Cari mata kuliah, atau dosen..."
-                                            _placeholder={{ color: "netral.400", fontWeight: "light" }}
+                                            _placeholder={{color: "netral.400", fontWeight: "light"}}
                                             borderColor="netral.300"
-                                            fontSize={{ base: "0.7rem", md: "1rem" }}
+                                            fontSize={{base: "0.7rem", md: "1rem"}}
                                             focusBorderColor="biru.800"
                                             borderRadius="1.5rem"
                                             backgroundColor={"whiteAlpha.700"}
@@ -125,7 +149,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                         />
                                         <Link href={`/search/${univName}/?name=${nameSearch}&page=1`}>
                                             <InputRightElement>
-                                                <Search2Icon color="netral.400" />
+                                                <Search2Icon color="netral.400"/>
                                             </InputRightElement>
                                         </Link>
                                     </InputGroup>
@@ -154,27 +178,57 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                 </Show>
                                 <TabPanels>
                                     <TabPanel h="35rem" w="100%" justifyContent="center" alignItems="center">
-                                        <Card w={{ base:"22rem", md:"57rem"}} h={{ base:"27rem", md:"21rem"}} justify="center" align="center">
+                                        <Card w={{base: "22rem", md: "57rem"}} h={{base: "27rem", md: "21rem"}}
+                                              justify="center" align="center">
                                             {/* eslint-disable-next-line react/jsx-no-undef */}
-                                            <Wrap w={{sm: "10%" , md:"95%"}} h="95%" justify="center" align="center" overflowY={"scroll"}>
+                                            <Wrap w={{sm: "10%", md: "95%"}} h="95%" justify="center" align="center"
+                                                  overflowY={"scroll"}>
                                                 {(professors !== null) ? professors.map((professor) => (
-                                                    // eslint-disable-next-line react/jsx-key
-                                                    <DosenCard dosenName={professor.name} urlDosen={professor.slug}></DosenCard>
-                                                )) :
+                                                        // eslint-disable-next-line react/jsx-key
+                                                        <DosenCard dosenName={professor.name}
+                                                                   urlDosen={professor.slug}></DosenCard>
+                                                    )) :
                                                     <Box w="100%" h="100%" pt={"2rem"}>
                                                         <ContentNotFound/>
                                                     </Box>}
                                             </Wrap>
                                         </Card>
+                                        <Box pt={4}>
+                                            <nav aria-label="...">
+                                                <ul className="pagination justify-content-center">
+                                                    <li className="page-item">
+                                                        <span className="page-link">Previous</span>
+                                                    </li>
+                                                    <li className="page-item">
+                                                        <a className="page-link" href="#">1</a>
+                                                    </li>
+                                                    <li className="page-item ">
+                                                      <span className="page-link">
+                                                        2
+                                                      </span>
+                                                    </li>
+                                                    <li className="page-item">
+                                                        <a className="page-link" href="#">3</a>
+                                                    </li>
+                                                    <li className="page-item">
+                                                        <a className="page-link" href="#">Next</a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </Box>
                                     </TabPanel>
                                     <TabPanel h="35rem">
-                                        <Card w={{ base:"22rem", md:"57rem"}} h={{ base:"27rem", md:"21rem"}} justify="center" align="center" >
-                                            <Wrap w={{sm: "10%" , md:"95%"}} h="95%" justify="center" align="center" overflowY={"scroll"}>
+                                        <Card w={{base: "22rem", md: "57rem"}} h={{base: "27rem", md: "21rem"}}
+                                              justify="center" align="center">
+                                            <Wrap w={{sm: "10%", md: "95%"}} h="95%" justify="center" align="center"
+                                                  overflowY={"scroll"}>
                                                 {courses !== null ? courses.map((course) => (
-                                                    <MatkulCard
-                                                        key={courses.indexOf(course)} matkulName={course.name} matkulCode={course.course_id} urlMatkul={course.course_id}></MatkulCard>
-                                                )) :
-                                                    <Box w="100%" h="100%" pt={{sm:"2rem", md:"2rem"}}>
+                                                        <MatkulCard
+                                                            key={courses.indexOf(course)} matkulName={course.name}
+                                                            matkulCode={course.course_id}
+                                                            urlMatkul={course.course_id}></MatkulCard>
+                                                    )) :
+                                                    <Box w="100%" h="100%" pt={{sm: "2rem", md: "2rem"}}>
                                                         <ContentNotFound/>
                                                     </Box>
 

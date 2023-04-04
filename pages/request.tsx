@@ -6,6 +6,8 @@ import dynamic from "next/dynamic";
 import React from "react";
 import useSWR, { Fetcher } from "swr";
 import { Response, SelectOption, University } from "@/interfaces";
+import TextInput from "../components/TextInput";
+import { useRouter } from "next/router";
 
 const SelectInput = dynamic(() => import("../components/SelectInput"), { ssr: false });
 
@@ -24,14 +26,16 @@ function useUniversities() {
 
 const Request: React.FC<{}> = () => {
   const toast = useToast();
+  const router = useRouter();
 
   const [value, setValue] = React.useState('');
+  const [description, setDescription] = React.useState('');
   const initialValues = {
-    name: "",
-    note: "",
-    university: "",
+    requestType: "",
+    title: "",
     code: "",
-  };
+    institution: "",
+  }
 
   const { universities, isLoading, isError } = useUniversities();
   if (isLoading) return <div>Loading...</div>;
@@ -47,54 +51,24 @@ const Request: React.FC<{}> = () => {
           initialValues={initialValues}
           onSubmit={async (values) => {
             try {
-              if (value === 'course') {
-                const data = JSON.stringify({
-                  type: value,
-                  name: values.name,
-                  note: values.note,
-                  university: parseInt(values.university!!),
+              const data = JSON.stringify({
+                request_type: value,
+                title: values.title,
+                content: {
+                  description: description,
                   code: values.code,
-                });
-                // const response = await apiInstance({isAuthorized: true}).post("/request", data);
-                // if (response.status >= 200 && response.status < 300) {
-                //   toast({
-                //     title: 'Request berhasil dikirimkan',
-                //     status: 'success',
-                //     duration: 3000,
-                //     position: 'top',
-                //   })
-                // }
-              } else if (value === 'professor') {
-                const data = JSON.stringify({
-                  type: value,
-                  name: values.name,
-                  note: values.note,
-                  university: parseInt(values.university!!),
-                });
-                // const response = await apiInstance({isAuthorized: true}).post("/request", data);
-                // if (response.status >= 200 && response.status < 300) {
-                //   toast({
-                //     title: 'Request berhasil dikirimkan',
-                //     status: 'success',
-                //     duration: 3000,
-                //     position: 'top',
-                //   })
-                // }
-              } else if (value === 'university') {
-                const data = JSON.stringify({
-                  type: value,
-                  name: values.name,
-                  note: values.note,
-                });
-                // const response = await apiInstance({isAuthorized: true}).post("/request", data);
-                // if (response.status >= 200 && response.status < 300) {
-                //   toast({
-                //     title: 'Request berhasil dikirimkan',
-                //     status: 'success',
-                //     duration: 3000,
-                //     position: 'top',
-                //   })
-                // }
+                  institution: parseInt(values.institution),
+                },
+              });
+              const response = await apiInstance({isAuthorized: true}).post("/requests/", data);
+              if (response.status >= 200 && response.status < 300) {
+                toast({
+                  title: 'Request berhasil dikirimkan',
+                  status: 'success',
+                  duration: 3000,
+                  position: 'top',
+                })
+                router.push("/");
               }
             } catch (error) {
               if (axios.isAxiosError(error)) {
@@ -105,6 +79,7 @@ const Request: React.FC<{}> = () => {
                   duration: 3000,
                   position: 'top'
                 })
+                router.push("/");
               }
             }
           }}>
@@ -115,47 +90,50 @@ const Request: React.FC<{}> = () => {
                     <VStack align={"left"}>
                         <Text fontWeight={"bold"}>Jenis</Text>
                         <RadioGroup onChange={setValue} value={value} size="sm">
-                            <Radio value='university' paddingRight={8}>Universitas</Radio>
-                            <Radio value='course' paddingRight={8}>Mata kuliah</Radio>
-                            <Radio value='professor' paddingRight={8}>Dosen</Radio>
+                            <Radio value='UNIVERSITY' paddingRight={8}>Universitas</Radio>
+                            <Radio value='COURSE' paddingRight={8}>Mata kuliah</Radio>
+                            <Radio value='PROFESSOR' paddingRight={8}>Dosen</Radio>
                         </RadioGroup>
                     </VStack>
-                    {value === 'course' || value === 'professor' ? (
+                    {value === 'COURSE' || value === 'PROFESSOR' ? (
                       <VStack align={"left"}>
                         <Text fontWeight={"bold"}>Universitas</Text>
                         <SelectInput
-                          id="university"
-                          name="university"
+                          id="institution"
+                          name="institution"
                           placeholder="Pilih universitas"
                           options={universityOption || []}
                         />
                       </VStack>
                     ) : null}
-                    {value === 'course' ? (
+                    {value === 'COURSE' ? (
                       <VStack align={"left"}>
                         <Text fontWeight={"bold"}>Kode Mata Kuliah</Text>
-                        <Input id="code" name="code" placeholder="Kode konten" fontSize={{ base: '0.75rem', md: '0.9rem' }} backgroundColor={"white"} />
+                        <TextInput id="code" name="code" placeholder="Kode konten" fontSize={{ base: '0.75rem', md: '0.9rem' }} backgroundColor={"white"} />
                       </VStack>
                     ) : null}
                     <VStack align={"left"}>
                         <Text fontWeight={"bold"}>Nama</Text>
-                        <Input id="name" name="name" placeholder="Nama konten" fontSize={{ base: '0.75rem', md: '0.9rem' }} backgroundColor={"white"} />
+                        <TextInput id="title" name="title" placeholder="Nama konten" fontSize={{ base: '0.75rem', md: '0.9rem' }} backgroundColor={"white"} />
                     </VStack>
                     <VStack align={"left"}>
                         <Text fontWeight={"bold"}>Catatan</Text>
                         <Text fontSize={"sm"}>Tambahkan tautan atau informasi yang kamu ketahui agar admin dapat lebih cepat memproses request kamu!</Text>
                         <Textarea
-                            id="note"
-                            name="note"
+                            id="description"
+                            name="description"
                             placeholder="Tulis catatan di sini..."
                             resize="none"
                             maxLength={500}
                             height="6rem"
                             fontSize={{ base: '0.75rem', md: '0.9rem'}}
                             backgroundColor={"white"}
+                            onChange={(e) => {
+                              setDescription(e.target.value);
+                            }}
                         />
                     </VStack>
-                    <Button variant={"primary"} w="fit-content">Submit</Button>
+                    <Button type="submit" variant={"primary"} w="fit-content">Submit</Button>
                 </VStack>
                 <Spacer w={{base: '0vh', md: "20vh"}} />
                 <Image src="/puzzle.svg" alt="Decoration" w={{base: "0rem", md: "16rem"}} pointerEvents="none" userSelect="none" />

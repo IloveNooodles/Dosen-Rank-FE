@@ -15,9 +15,11 @@ import {useRouter} from "next/router";
 import axios from "axios";
 import TextInput from "@/components/TextInput";
 
+interface EnterEmailFormProps {
+    onSubmit: () => void;
+}
 
-
-const EnterEmailForm: React.FC = () => {
+const EnterEmailForm: React.FC<EnterEmailFormProps> = (onSubmit) => {
     const initialValues: Account = {
         email: "",
     };
@@ -74,6 +76,7 @@ const EnterEmailForm: React.FC = () => {
                     colorScheme='teal'
                     type='submit'
                     width="24rem"
+                    onClick={() => onSubmit}
                 >
                     Submit
                 </Button>

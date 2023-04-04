@@ -28,7 +28,7 @@ export async function getServerSideProps(context: { query: { univName: string, n
     let totalProfessorsPages;
     try {
         const response = await apiInstance({})
-            .get(name ? `/search/${univName}/?name=${name}&page=${page}` : `/search/${univName}`)
+            .get(name ? `/search/${univName}/?name=${name}&page=${page}` : `/search/${univName}/?page=${page? page : 1}`)
             .catch((e) => console.error(e));
         const {courses, professors} = await response?.data.data;
 
@@ -62,10 +62,10 @@ export interface SearchAndFilterProps {
     courses: CoursesProps[],
     professors: ProfessorProps[],
     univName: string,
-    page: number,
+    page?: number,
     totalCoursesPages: number,
     totalProfessorsPages: number,
-    name: string,
+    name?: string,
 }
 
 export interface CoursesProps {
@@ -91,7 +91,8 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                                              univName,
                                                              page, totalCoursesPages, totalProfessorsPages, name
                                                          }) => {
-    const [nameSearch, setNameSearch] = useState<string>("");
+    const [nameSearch, setNameSearch] = useState<string>(name ? name : '');
+    const [currentPage, setCurrentPage] = useState<number>(page ? page : 1);
     return (
         <Container centerContent h="calc(100vh - 5.5rem - 6.9rem)" w="calc(100vw - 10rem)">
             <Flex justifyContent="center" w="full">
@@ -145,7 +146,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                             borderRadius="1.5rem"
                                             backgroundColor={"whiteAlpha.700"}
                                             backgroundBlendMode="overlay"
-                                            onChange={(e) => setNameSearch(e.target.value)}
+                                            onKeyUp={(e) => setNameSearch(e.target.value)}
                                         />
                                         <Link href={`/search/${univName}/?name=${nameSearch}&page=1`}>
                                             <InputRightElement>
@@ -202,10 +203,8 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                                     <li className="page-item">
                                                         <a className="page-link" href="#">1</a>
                                                     </li>
-                                                    <li className="page-item ">
-                                                      <span className="page-link">
-                                                        2
-                                                      </span>
+                                                    <li className="page-item">
+                                                        <a className="page-link" onClick={() => setCurrentPage(2)} href={`/search/${univName}/?name=${nameSearch}&page=2`}>2</a>
                                                     </li>
                                                     <li className="page-item">
                                                         <a className="page-link" href="#">3</a>

@@ -1,4 +1,6 @@
 import React, {useState} from "react";
+import Pagination from "react-bootstrap/Pagination";
+
 import {
     Box, Button,
     Container,
@@ -19,35 +21,23 @@ import {apiInstance} from "@/utils/apiInstance";
 import ContentNotFound from "@/components/ContentNotFound";
 import Link from "next/link";
 import {Search2Icon} from "@chakra-ui/icons";
+import {useRouter} from "next/router";
 
 
 export async function getServerSideProps(context: { query: { univName: string, name?: string, page?: number } }) {
     const {univName, name, page} = context.query;
 
-    let totalCoursesPages;
-    let totalProfessorsPages;
+
     try {
         const response = await apiInstance({})
-            .get(name ? `/search/${univName}/?name=${name}&page=${page}` : `/search/${univName}`)
+            .get(name ? `/search/${univName}/?name=${name}&page=${page}` : `/search/${univName}/?page=${page? page : 1}`)
             .catch((e) => console.error(e));
         const {courses, professors} = await response?.data.data;
 
-        if (!courses) {
-            totalCoursesPages = 0;
-        } else {
-            totalCoursesPages = Math.ceil(courses.length / 12);
-        }
-
-        if (!professors) {
-            totalProfessorsPages = 0;
-        } else {
-            totalProfessorsPages = Math.ceil(professors.length / 12);
-        }
-
         if (!name || !page)  {
-            return {props: {univName, courses, professors, totalCoursesPages, totalProfessorsPages}}
+            return {props: {univName, courses, professors}}
         }
-        return {props: {univName, courses, professors, totalCoursesPages, totalProfessorsPages}}
+        return {props: {univName, courses, professors}}
     } catch (e) {
         return {
             redirect: {
@@ -62,10 +52,8 @@ export interface SearchAndFilterProps {
     courses: CoursesProps[],
     professors: ProfessorProps[],
     univName: string,
-    page: number,
-    totalCoursesPages: number,
-    totalProfessorsPages: number,
-    name: string,
+    page?: number,
+    name?: string,
 }
 
 export interface CoursesProps {
@@ -89,9 +77,22 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                                              courses,
                                                              professors,
                                                              univName,
-                                                             page, totalCoursesPages, totalProfessorsPages, name
+                                                             page,  name
                                                          }) => {
-    const [nameSearch, setNameSearch] = useState<string>("");
+    const [nameSearch, setNameSearch] = useState<string>(name ? name : '');
+    const [currentPage, setCurrentPage] = useState<number>(page ? page : 1);
+    const router = useRouter();
+
+    const handleClickNext = async () => {
+        await setCurrentPage(currentPage + 1);
+        await router.push(`/search/${univName}/?name=${nameSearch}&page=${currentPage}`);
+    }
+
+    const handleClickPrev = async () => {
+        await setCurrentPage(currentPage - 1);
+        await router.push(`/search/${univName}/?name=${nameSearch}&page=${currentPage}`);
+    }
+
     return (
         <Container centerContent h="calc(100vh - 5.5rem - 6.9rem)" w="calc(100vw - 10rem)">
             <Flex justifyContent="center" w="full">
@@ -145,7 +146,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                             borderRadius="1.5rem"
                                             backgroundColor={"whiteAlpha.700"}
                                             backgroundBlendMode="overlay"
-                                            onChange={(e) => setNameSearch(e.target.value)}
+                                            onKeyUp={(e) => setNameSearch((e.target as HTMLInputElement).value)}
                                         />
                                         <Link href={`/search/${univName}/?name=${nameSearch}&page=1`}>
                                             <InputRightElement>
@@ -194,27 +195,10 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                             </Wrap>
                                         </Card>
                                         <Box pt={4}>
-                                            <nav aria-label="...">
-                                                <ul className="pagination justify-content-center">
-                                                    <li className="page-item">
-                                                        <span className="page-link">Previous</span>
-                                                    </li>
-                                                    <li className="page-item">
-                                                        <a className="page-link" href="#">1</a>
-                                                    </li>
-                                                    <li className="page-item ">
-                                                      <span className="page-link">
-                                                        2
-                                                      </span>
-                                                    </li>
-                                                    <li className="page-item">
-                                                        <a className="page-link" href="#">3</a>
-                                                    </li>
-                                                    <li className="page-item">
-                                                        <a className="page-link" href="#">Next</a>
-                                                    </li>
-                                                </ul>
-                                            </nav>
+                                            <Pagination>
+                                                <Pagination.Prev onClick={handleClickPrev}/>
+                                                <Pagination.Next onClick={handleClickNext}/>
+                                            </Pagination>
                                         </Box>
                                     </TabPanel>
                                     <TabPanel h="35rem">
@@ -235,6 +219,12 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                                 }
                                             </Wrap>
                                         </Card>
+                                        <Box pt={4}>
+                                            <Pagination>
+                                                <Pagination.Prev onClick={handleClickPrev}/>
+                                                <Pagination.Next onClick={handleClickNext}/>
+                                            </Pagination>
+                                        </Box>
                                     </TabPanel>
                                 </TabPanels>
                             </VStack>

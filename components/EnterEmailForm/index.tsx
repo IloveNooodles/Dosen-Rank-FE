@@ -2,20 +2,66 @@ import {
     VStack,
     Button,
     Text,
-    Box,
     FormControl,
     FormLabel,
+    useToast,
     Input
 } from "@chakra-ui/react";
-import React, {useState} from "react";
+import React from "react";
 import Link from "next/link";
+import {Formik} from "formik";
+import {Account} from "@/interfaces";
+import * as Yup from "yup";
+import {apiInstance} from "@/utils/apiInstance";
+import {useRouter} from "next/router";
+import axios from "axios";
+
 
 
 const EnterEmailForm: React.FC = () => {
+    const initialValues: Account = {
+        email: "",
+    };
+    const toast = useToast()
+    const router = useRouter();
+
     return (
-        <Box>
+        <Formik
+            initialValues={initialValues}
+            validationSchema={Yup.object({
+                email: Yup.string().email("Invalid email address").required("Required"),}
+            )}
+            onSubmit={async (values) => {
+                const data = JSON.stringify({
+                    email: values.email,
+                });
+            try {
+                const response = await apiInstance({}).post("/users/forgot-password", data)
+                if (response.status === 201) {
+                    toast({
+                        title: 'Email berhasil dikirim',
+                        description: 'Silahkan cek email kamu untuk mereset password',
+                        status: 'success',
+                        duration: 3000,
+                        position: 'top',
+                    })
+                    await router.push("/login")
+                }
+            } catch (error){
+                if (axios.isAxiosError(error)){
+                    toast({
+                        title: 'Email tidak terdaftar',
+                        description: 'Silahkan cek kembali email kamu',
+                        status: 'error',
+                        duration: 3000,
+                        position: 'top',
+                    })
+                }
+            }
+            }}
+        >
             <VStack>
-                <Text fontWeight="semibold"  align="center" fontSize="2xl">
+                <Text fontWeight="semibold" align="center" fontSize="2xl">
                     Lupa Password?
                 </Text>
                 <Text fontSize={"sm"} color="biru.900">
@@ -24,7 +70,7 @@ const EnterEmailForm: React.FC = () => {
                 {/* eslint-disable-next-line react/jsx-no-undef */}
                 <FormControl>
                     <FormLabel>Email address</FormLabel>
-                    <Input type='email' />
+                    <Input type='email'/>
                     <Button
                         mt={4}
                         colorScheme='teal'
@@ -43,7 +89,7 @@ const EnterEmailForm: React.FC = () => {
                     </Link>
                 </Text>
             </VStack>
-        </Box>
+        </Formik>
     );
 };
 

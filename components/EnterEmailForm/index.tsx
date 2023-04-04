@@ -16,15 +16,16 @@ import axios from "axios";
 import TextInput from "@/components/TextInput";
 
 interface EnterEmailFormProps {
-    onSubmit: () => void;
+    handleNextStep: (step: number) => void;
 }
 
-const EnterEmailForm: React.FC<EnterEmailFormProps> = (onSubmit) => {
+const EnterEmailForm: React.FC<EnterEmailFormProps> = ({handleNextStep}) => {
     const initialValues: Account = {
         email: "",
     };
     const toast = useToast()
     const router = useRouter();
+
 
     return (
         <Formik
@@ -37,6 +38,7 @@ const EnterEmailForm: React.FC<EnterEmailFormProps> = (onSubmit) => {
                     email: values.email,
                 });
             try {
+                handleNextStep(2)
                 const response = await apiInstance({}).post("/users/forgot-password", data)
                 if (response.status === 201) {
                     toast({
@@ -46,7 +48,6 @@ const EnterEmailForm: React.FC<EnterEmailFormProps> = (onSubmit) => {
                         duration: 3000,
                         position: 'top',
                     })
-                    await router.push("/login")
                 }
             } catch (error){
                 if (axios.isAxiosError(error)){
@@ -76,7 +77,6 @@ const EnterEmailForm: React.FC<EnterEmailFormProps> = (onSubmit) => {
                     colorScheme='teal'
                     type='submit'
                     width="24rem"
-                    onClick={() => onSubmit}
                 >
                     Submit
                 </Button>

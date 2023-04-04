@@ -7,6 +7,8 @@ import theme from "@/styles/theme";
 import { ChakraProvider, Container, createStandaloneToast, Flex } from "@chakra-ui/react";
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import 'bootstrap/dist/css/bootstrap.css';
+
 
 const { ToastContainer, toast } = createStandaloneToast()
 

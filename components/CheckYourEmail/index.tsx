@@ -11,10 +11,9 @@ import React, {useState} from "react";
 import Link from "next/link";
 
 interface CheckYourEmailProps {
-    email: string;
 }
 
-const CheckYourEmail: React.FC<CheckYourEmailProps> = (props) => {
+const CheckYourEmail: React.FC<CheckYourEmailProps> = () => {
     return (
         <Box>
             <VStack>
@@ -22,21 +21,9 @@ const CheckYourEmail: React.FC<CheckYourEmailProps> = (props) => {
                     Cek email kamu
                 </Text>
                 <Text fontSize={"sm"} color="biru.900">
-                    Kami telah mengirim link untuk reset password ke {props.email}.
+                    Kami telah mengirim link untuk reset password ke email kamu.
                 </Text>
                 {/* eslint-disable-next-line react/jsx-no-undef */}
-                <FormControl>
-                    <FormLabel>Email address</FormLabel>
-                    <Input type='email' />
-                    <Button
-                        mt={4}
-                        colorScheme='teal'
-                        type='submit'
-                        width="24rem"
-                    >
-                        Submit
-                    </Button>
-                </FormControl>
                 <Text fontSize={"xs"} fontWeight={"400"}>
                     ⬅︎ Kembali ke {" "}
                     <Link href="/login">

@@ -7,7 +7,7 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import Link from "next/link";
-import {Formik} from "formik";
+import {Form, Formik} from "formik";
 import {Account} from "@/interfaces";
 import * as Yup from "yup";
 import {apiInstance} from "@/utils/apiInstance";
@@ -62,6 +62,7 @@ const EnterEmailForm: React.FC<EnterEmailFormProps> = ({handleNextStep}) => {
             }
             }}
         >
+        <Form>
             <VStack>
                 <Text fontWeight="semibold" align="center" fontSize="2xl">
                     Lupa Password?
@@ -89,6 +90,7 @@ const EnterEmailForm: React.FC<EnterEmailFormProps> = ({handleNextStep}) => {
                     </Link>
                 </Text>
             </VStack>
+        </Form>
         </Formik>
     );
 };

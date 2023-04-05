@@ -85,6 +85,7 @@ export interface SearchAndFilterProps {
     sort?: string,
     majors?: string,
     faculty?: string,
+    url?: string,
 }
 
 export interface CoursesProps {
@@ -112,7 +113,8 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                                              name,
                                                              sort,
                                                              majors,
-                                                             faculty
+                                                             faculty,
+                                                             url
                                                          }) => {
     const [nameSearch, setNameSearch] = useState<string>(name ? name : '');
     const [currentPage, setCurrentPage] = useState<number>(page ? page : 1);
@@ -121,18 +123,91 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
 
     const handleClickNext = async () => {
         await setCurrentPage(currentPage + 1);
-        await router.push(`/search/${univName}/?name=${nameSearch}&page=${currentPage}`);
+        const { univName, name, page, majors, faculty } = router.query;
+        const searchParams = new URLSearchParams();
+
+        // add existing query params to searchParams
+        if (name) {
+            searchParams.set('name', name as string);
+        }
+        if (sort) {
+            searchParams.set('sort', sort as string);
+        }
+        if (majors) {
+            searchParams.set('majors', majors as string);
+        }
+        if (faculty) {
+            searchParams.set('faculty', faculty as string);
+        }
+
+        // add new sort query param to searchParams
+        searchParams.set('page', String(currentPage) as string);
+
+        // push new route with updated search params
+        await router.push({
+            pathname: `/search/${univName}`,
+            search: searchParams.toString(),
+        });
     }
 
     const handleClickPrev = async () => {
         await setCurrentPage(currentPage - 1);
-        await router.push(`/search/${univName}/?name=${nameSearch}&page=${currentPage}`);
+        const { univName, name, page, majors, faculty } = router.query;
+        const searchParams = new URLSearchParams();
+
+        // add existing query params to searchParams
+        if (name) {
+            searchParams.set('name', name as string);
+        }
+        if (sort) {
+            searchParams.set('sort', sort as string);
+        }
+        if (majors) {
+            searchParams.set('majors', majors as string);
+        }
+        if (faculty) {
+            searchParams.set('faculty', faculty as string);
+        }
+
+        // add new sort query param to searchParams
+        searchParams.set('page', String(currentPage) as string);
+
+        // push new route with updated search params
+        await router.push({
+            pathname: `/search/${univName}`,
+            search: searchParams.toString(),
+        });
     }
 
     const handleSortChange = (event: { target: { value: any; }; }) => {
         const newSortBy = event.target.value;
         setSortBy(newSortBy);
         console.log(newSortBy);
+        const { univName, name, page, majors, faculty } = router.query;
+        const searchParams = new URLSearchParams();
+
+        // add existing query params to searchParams
+        if (name) {
+            searchParams.set('name', name as string);
+        }
+        if (page) {
+            searchParams.set('page', page as string);
+        }
+        if (majors) {
+            searchParams.set('majors', majors as string);
+        }
+        if (faculty) {
+            searchParams.set('faculty', faculty as string);
+        }
+
+        // add new sort query param to searchParams
+        searchParams.set('sort', newSortBy);
+
+        // push new route with updated search params
+        router.push({
+            pathname: `/search/${univName}`,
+            search: searchParams.toString(),
+        });
     };
 
     return (
@@ -204,8 +279,9 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                         </Show>
                                         <HStack>
                                             <Text fontWeight="bold">Urutkan:</Text>
-                                            <Select value={sortBy} onChange={handleSortChange} placeholder='Select option'>
-                                                <option value='asc' >A - Z</option>
+                                            <Select value={sortBy} onChange={handleSortChange}
+                                                    placeholder='Select option'>
+                                                <option value='asc'>A - Z</option>
                                                 <option value='desc'>Z - A</option>
                                             </Select>
                                         </HStack>

@@ -12,7 +12,7 @@ import { useRouter } from "next/router";
 const SelectInput = dynamic(() => import("../components/SelectInput"), { ssr: false });
 
 const fetcher: Fetcher<Response<University[]>, string> = (url) =>
-  apiInstance({isAuthorized: true}).get(url).then((res) => res.data);
+  apiInstance({}).get(url).then((res) => res.data);
 
 function useUniversities() {
   const { data, isLoading, error } = useSWR(`/univ/`, fetcher);
@@ -60,7 +60,7 @@ const Request: React.FC<{}> = () => {
                   institution: parseInt(values.institution),
                 },
               });
-              const response = await apiInstance({isAuthorized: true}).post("/requests/", data);
+              const response = await apiInstance({}).post("/requests/", data);
               if (response.status >= 200 && response.status < 300) {
                 toast({
                   title: 'Request berhasil dikirimkan',

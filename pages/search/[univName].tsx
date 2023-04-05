@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import Pagination from "react-bootstrap/Pagination";
+import Pagination from 'react-bootstrap/Pagination';
 
 import {
     Box, Button,
@@ -24,20 +24,47 @@ import {Search2Icon} from "@chakra-ui/icons";
 import {useRouter} from "next/router";
 
 
-export async function getServerSideProps(context: { query: { univName: string, name?: string, page?: number } }) {
-    const {univName, name, page} = context.query;
-
+export async function getServerSideProps(context: { query: { univName: string, name?: string, page?: number, sort?: string, majors?: string, faculty?: string } }) {
+    const {univName, name, page, sort, majors, faculty} = context.query;
 
     try {
-        const response = await apiInstance({})
-            .get(name ? `/search/${univName}/?name=${name}&page=${page}` : `/search/${univName}/?page=${page? page : 1}`)
-            .catch((e) => console.error(e));
+        let url = `/search/${univName}/?page=${page ? page : 1}`;
+        if (name) {
+            url += `&name=${name}`;
+        }
+        if (sort) {
+            url += `&sort=${sort}`;
+        }
+        if (majors) {
+            url += `&majors=${majors}`;
+        }
+        if (faculty) {
+            url += `&faculty=${faculty}`;
+        }
+        const response = await apiInstance({}).get(url).catch((e) => console.error(e));
         const {courses, professors} = await response?.data.data;
 
-        if (!name || !page)  {
-            return {props: {univName, courses, professors}}
+        const props: Record<string, unknown> = {
+            univName,
+            courses,
+            professors,
+            page: page ? parseInt(page.toString(), 10) : 1
+        };
+
+        if (name) {
+            props.name = name;
         }
-        return {props: {univName, courses, professors}}
+        if (sort) {
+            props.sort = sort;
+        }
+        if (majors) {
+            props.majors = majors;
+        }
+        if (faculty) {
+            props.faculty = faculty;
+        }
+
+        return {props};
     } catch (e) {
         return {
             redirect: {

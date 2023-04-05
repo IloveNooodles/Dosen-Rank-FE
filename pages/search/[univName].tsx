@@ -122,7 +122,6 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
     const router = useRouter();
 
     const handleClickNext = async () => {
-        await setCurrentPage(currentPage + 1);
         const { univName, name, page, majors, faculty } = router.query;
         const searchParams = new URLSearchParams();
 
@@ -140,8 +139,15 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
             searchParams.set('faculty', faculty as string);
         }
 
-        // add new sort query param to searchParams
-        searchParams.set('page', String(currentPage) as string);
+        if (page){
+            searchParams.set('page', String((parseInt(page.toString(), 10) + 1)) as string);
+        }
+        else {
+            let tempPage = 1;
+            searchParams.set('page', String((parseInt(tempPage.toString(), 10))) as string);
+        }
+
+
 
         // push new route with updated search params
         await router.push({
@@ -151,7 +157,6 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
     }
 
     const handleClickPrev = async () => {
-        await setCurrentPage(currentPage - 1);
         const { univName, name, page, majors, faculty } = router.query;
         const searchParams = new URLSearchParams();
 
@@ -170,7 +175,13 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
         }
 
         // add new sort query param to searchParams
-        searchParams.set('page', String(currentPage) as string);
+        if (page){
+            searchParams.set('page', String((parseInt(page.toString(), 10) - 1)) as string);
+        }
+        else {
+            let tempPage = 1;
+            searchParams.set('page', String((parseInt(tempPage.toString(), 10))) as string);
+        }
 
         // push new route with updated search params
         await router.push({

@@ -48,7 +48,8 @@ export async function getServerSideProps(context: { query: { univName: string, n
             univName,
             courses,
             professors,
-            page: page ? parseInt(page.toString(), 10) : 1
+            page: page ? parseInt(page.toString(), 10) : 1,
+            url,
         };
 
         if (name) {
@@ -81,6 +82,9 @@ export interface SearchAndFilterProps {
     univName: string,
     page?: number,
     name?: string,
+    sort?: string,
+    majors?: string,
+    faculty?: string,
 }
 
 export interface CoursesProps {
@@ -104,10 +108,15 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                                              courses,
                                                              professors,
                                                              univName,
-                                                             page,  name
+                                                             page,
+                                                             name,
+                                                             sort,
+                                                             majors,
+                                                             faculty
                                                          }) => {
     const [nameSearch, setNameSearch] = useState<string>(name ? name : '');
     const [currentPage, setCurrentPage] = useState<number>(page ? page : 1);
+    const [sortBy, setSortBy] = useState<string>(sort ? sort : 'asc');
     const router = useRouter();
 
     const handleClickNext = async () => {
@@ -119,6 +128,12 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
         await setCurrentPage(currentPage - 1);
         await router.push(`/search/${univName}/?name=${nameSearch}&page=${currentPage}`);
     }
+
+    const handleSortChange = (event: { target: { value: any; }; }) => {
+        const newSortBy = event.target.value;
+        setSortBy(newSortBy);
+        console.log(newSortBy);
+    };
 
     return (
         <Container centerContent h="calc(100vh - 5.5rem - 6.9rem)" w="calc(100vw - 10rem)">
@@ -189,9 +204,9 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                         </Show>
                                         <HStack>
                                             <Text fontWeight="bold">Urutkan:</Text>
-                                            <Select placeholder='Select option'>
-                                                <option value='option1'>A - Z</option>
-                                                <option value='option2'>Z - A</option>
+                                            <Select value={sortBy} onChange={handleSortChange} placeholder='Select option'>
+                                                <option value='asc' >A - Z</option>
+                                                <option value='desc'>Z - A</option>
                                             </Select>
                                         </HStack>
                                     </HStack>

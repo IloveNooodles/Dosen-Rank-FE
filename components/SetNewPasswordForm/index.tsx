@@ -2,9 +2,8 @@ import {
     VStack,
     Button,
     Text,
-    FormControl,
     FormLabel,
-    Input, useToast
+    useToast
 } from "@chakra-ui/react";
 import React from "react";
 import Link from "next/link";
@@ -16,8 +15,11 @@ import * as Yup from "yup";
 import TextInput from "@/components/TextInput";
 
 
+interface SetNewPasswordFormProps {
+    handleNextStep: (step: number) => void;
+}
+const SetNewPasswordForm: React.FC<SetNewPasswordFormProps> = ({handleNextStep}) => {
 
-const SetNewPasswordForm: React.FC = () => {
     const initialValues = {
             password: "",
             passwordConfirmation: "",
@@ -38,6 +40,7 @@ const SetNewPasswordForm: React.FC = () => {
                     passwordConfirmation: values.passwordConfirmation,
                 });
                 try {
+                    handleNextStep(2)
                     const response = await apiInstance({}).post("/users/forgot-password", data)
                     if (response.status === 201) {
                         toast({

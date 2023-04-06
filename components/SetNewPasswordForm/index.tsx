@@ -32,7 +32,10 @@ const SetNewPasswordForm: React.FC<SetNewPasswordFormProps> = ({handleNextStep})
             initialValues={initialValues}
             validationSchema={Yup.object({
                 password: Yup.string().required("Required"),
-                passwordConfirmation: Yup.string().required("Required"),
+                passwordConfirmation: Yup.string()
+                    .oneOf([Yup.ref('password')], 'Passwords must match')
+                    .nullable()
+                    .required('Required'),
             })}
             onSubmit={async (values) => {
                 const data = JSON.stringify({
@@ -40,7 +43,6 @@ const SetNewPasswordForm: React.FC<SetNewPasswordFormProps> = ({handleNextStep})
                     passwordConfirmation: values.passwordConfirmation,
                 });
                 try {
-                    handleNextStep(2)
                     const response = await apiInstance({}).post("/users/forgot-password", data)
                     if (response.status === 201) {
                         toast({
@@ -50,7 +52,7 @@ const SetNewPasswordForm: React.FC<SetNewPasswordFormProps> = ({handleNextStep})
                             duration: 3000,
                             position: 'top',
                         })
-                        await router.push("/login")
+                        handleNextStep(2)
                     }
                 } catch (error){
                     if (axios.isAxiosError(error)){

@@ -8,7 +8,6 @@ import {
 import React from "react";
 import Link from "next/link";
 import {Form, Formik} from "formik";
-import {useRouter} from "next/router";
 import {apiInstance} from "@/utils/apiInstance";
 import axios from "axios";
 import * as Yup from "yup";
@@ -24,7 +23,6 @@ const SetNewPasswordForm: React.FC<SetNewPasswordFormProps> = ({handleNextStep})
             password: "",
             passwordConfirmation: "",
     }
-    const router = useRouter();
     const toast = useToast()
 
     return (
@@ -40,11 +38,11 @@ const SetNewPasswordForm: React.FC<SetNewPasswordFormProps> = ({handleNextStep})
             onSubmit={async (values) => {
                 const data = JSON.stringify({
                     password: values.password,
-                    passwordConfirmation: values.passwordConfirmation,
+                    confirmed_password: values.passwordConfirmation,
                 });
                 try {
                     const response = await apiInstance({}).post("/users/forgot-password", data)
-                    if (response.status === 201) {
+                    if (response.status === 200) {
                         toast({
                             title: 'Password berhasil diubah',
                             description: 'Silahkan login kembali',

@@ -39,7 +39,7 @@ const EnterEmailForm: React.FC<EnterEmailFormProps> = ({handleNextStep}) => {
                 });
             try {
                 const response = await apiInstance({}).post("/users/forgot-password", data)
-                if (response.status === 201) {
+                if (response.status === 200) {
                     toast({
                         title: 'Email berhasil dikirim',
                         description: 'Silahkan cek email kamu untuk mereset password',

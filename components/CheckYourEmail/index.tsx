@@ -1,14 +1,12 @@
 import {
     VStack,
-    Button,
     Text,
     Box,
-    FormControl,
-    FormLabel,
-    Input
+
 } from "@chakra-ui/react";
-import React, {useState} from "react";
+import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 interface CheckYourEmailProps {
 }
@@ -20,9 +18,13 @@ const CheckYourEmail: React.FC<CheckYourEmailProps> = () => {
                 <Text fontWeight="semibold"  align="center" fontSize="2xl">
                     Cek email kamu
                 </Text>
-                <Text fontSize={"sm"} color="biru.900">
+                <Text fontSize={"sm"} color="biru.900" textAlign={"center"}>
                     Kami telah mengirim link untuk reset password ke email kamu.
                 </Text>
+                <Box py={18}>
+                    <Image src={"/ic-paper-plane.svg"} alt={"decoration"} width={200} height={200}></Image>
+                </Box>
+
                 {/* eslint-disable-next-line react/jsx-no-undef */}
                 <Text fontSize={"xs"} fontWeight={"400"}>
                     ⬅︎ Kembali ke {" "}

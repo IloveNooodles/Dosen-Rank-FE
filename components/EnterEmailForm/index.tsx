@@ -38,7 +38,6 @@ const EnterEmailForm: React.FC<EnterEmailFormProps> = ({handleNextStep}) => {
                     email: values.email,
                 });
             try {
-                handleNextStep(2)
                 const response = await apiInstance({}).post("/users/forgot-password", data)
                 if (response.status === 201) {
                     toast({
@@ -49,6 +48,7 @@ const EnterEmailForm: React.FC<EnterEmailFormProps> = ({handleNextStep}) => {
                         position: 'top',
                     })
                 }
+                handleNextStep(2)
             } catch (error){
                 if (axios.isAxiosError(error)){
                     toast({

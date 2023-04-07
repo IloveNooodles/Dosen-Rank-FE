@@ -2,10 +2,10 @@ import { VStack, Text, HStack, Button, Textarea, Flex, Spacer, Modal, ModalOverl
 import React from "react";
 import StarRating from "react-svg-star-rating";
 import styles from "@/styles/ReviewCard.module.scss";
-import { ProfessorResponse, SelectOption, Tag, Response, CourseResponse, Review } from "@/interfaces";
+import { ProfessorResponse, SelectOption, Tag, Response, CourseResponse, NewReview } from "@/interfaces";
 import { apiInstance } from "@/utils/apiInstance";
 import dynamic from "next/dynamic";
-import useSWR, { Fetcher } from 'swr';
+import useSWR, { Fetcher, useSWRConfig } from 'swr';
 import { Form, Formik } from "formik";
 import axios from "axios";
 import { useAuth } from "@/contexts/AuthContext";
@@ -55,7 +55,9 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     const [count, setCount] = React.useState(0);
     const [details, setDetails] = React.useState("");
 
-    const initialValues: Review = {
+    const { mutate } = useSWRConfig();
+
+    const initialValues: NewReview = {
         tag: "",
         firstFieldRating: 0,
         secondFieldRating: 0,
@@ -82,9 +84,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     };
 
     const { tags, isLoading, isError } = useTags(id, reviewFor);
-    if (isLoading) {
-        return <div>Loading...</div>;
-    } 
+    
     const tagOption: Array<SelectOption> | undefined = tags?.map(
         ({ id, name }) => ({ value: id.toString(), label: name })
     );
@@ -117,6 +117,8 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                       duration: 3000,
                                       position: 'top',
                                     })
+                                    mutate(`/reviews/univ/slug?slug=institut-teknologi-bandung`);
+                                    mutate('/reviews/univ/overall/1');
                                 }
                             } else if (reviewFor === "course") {
                                 const data = JSON.stringify({

@@ -11,6 +11,7 @@ build-deploy-app:       # This job runs in the build stage, which runs first.
   script:
     - yarn
     - yarn global add vercel
+    - export PATH=$PATH:~/.yarn/bin
     - vercel pull --yes --token=$VERCEL_TOKEN
     - vercel --prod --token=$VERCEL_TOKEN
   tags:

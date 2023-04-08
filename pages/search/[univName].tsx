@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import Pagination from 'react-bootstrap/Pagination';
+import {SelectOption} from "@/interfaces";
 
 import {
     Box, Button,
@@ -22,6 +23,8 @@ import ContentNotFound from "@/components/ContentNotFound";
 import Link from "next/link";
 import {Search2Icon} from "@chakra-ui/icons";
 import {useRouter} from "next/router";
+import dynamic from "next/dynamic";
+import {array} from "yup";
 
 
 export async function getServerSideProps(context: { query: { univName: string, name?: string, page?: number, sort?: string, majors?: string, faculty?: string } }) {
@@ -41,6 +44,7 @@ export async function getServerSideProps(context: { query: { univName: string, n
         if (faculty) {
             url += `&faculty=${faculty}`;
         }
+        console.log(url);
         const response = await apiInstance({}).get(url).catch((e) => console.error(e));
         const {courses, professors} = await response?.data.data;
 
@@ -65,6 +69,13 @@ export async function getServerSideProps(context: { query: { univName: string, n
             props.faculty = faculty;
         }
 
+        // get faculties and majors
+        const filterResponse = await apiInstance({}).get(`/search/faculty-major/${univName}`).catch((e) => console.error(e));
+        const {faculties, majors: majorsResponse} = await filterResponse?.data.data;
+
+        props.facultiesArray = faculties;
+        props.majorsArray = majorsResponse;
+
         return {props};
     } catch (e) {
         return {
@@ -76,6 +87,7 @@ export async function getServerSideProps(context: { query: { univName: string, n
     }
 }
 
+
 export interface SearchAndFilterProps {
     courses: CoursesProps[],
     professors: ProfessorProps[],
@@ -86,6 +98,8 @@ export interface SearchAndFilterProps {
     majors?: string,
     faculty?: string,
     url?: string,
+    facultiesArray?: FacultyProps[],
+    majorsArray?: MajorProps[],
 }
 
 export interface CoursesProps {
@@ -105,6 +119,18 @@ export interface ProfessorProps {
     slug: string,
 }
 
+export interface FacultyProps {
+    id: number,
+    name: string,
+    code: number,
+}
+
+export interface MajorProps {
+    id: number,
+    name: string,
+    code: number,
+}
+
 const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                                              courses,
                                                              professors,
@@ -114,15 +140,24 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                                              sort,
                                                              majors,
                                                              faculty,
-                                                             url
+                                                             url,
+                                                             facultiesArray,
+                                                             majorsArray,
                                                          }) => {
     const [nameSearch, setNameSearch] = useState<string>(name ? name : '');
     const [currentPage, setCurrentPage] = useState<number>(page ? page : 1);
+    const [selectedFaculty, setSelectedFaculty] = useState("");
+    const [selectedMajor, setSelectedMajor] = useState("");
     const [sortBy, setSortBy] = useState<string>(sort ? sort : 'asc');
     const router = useRouter();
+    const SelectInput = dynamic(() => import("../../components/SelectInput"), {ssr: false});
+
+    const facultyOption: Array<SelectOption> = facultiesArray!.map(
+        ({id, name}) => ({label: name, value: id.toString()})
+    );
 
     const handleClickNext = async () => {
-        const { univName, name, page, majors, faculty } = router.query;
+        const {univName, name, page, majors, faculty} = router.query;
         const searchParams = new URLSearchParams();
 
         // add existing query params to searchParams
@@ -139,14 +174,12 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
             searchParams.set('faculty', faculty as string);
         }
 
-        if (page){
+        if (page) {
             searchParams.set('page', String((parseInt(page.toString(), 10) + 1)) as string);
-        }
-        else {
+        } else {
             let tempPage = 1;
             searchParams.set('page', String((parseInt(tempPage.toString(), 10))) as string);
         }
-
 
 
         // push new route with updated search params
@@ -157,7 +190,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
     }
 
     const handleClickPrev = async () => {
-        const { univName, name, page, majors, faculty } = router.query;
+        const {univName, name, page, majors, faculty} = router.query;
         const searchParams = new URLSearchParams();
 
         // add existing query params to searchParams
@@ -175,10 +208,9 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
         }
 
         // add new sort query param to searchParams
-        if (page){
+        if (page) {
             searchParams.set('page', String((parseInt(page.toString(), 10) - 1)) as string);
-        }
-        else {
+        } else {
             let tempPage = 1;
             searchParams.set('page', String((parseInt(tempPage.toString(), 10))) as string);
         }
@@ -194,7 +226,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
         const newSortBy = event.target.value;
         setSortBy(newSortBy);
         console.log(newSortBy);
-        const { univName, name, page, majors, faculty } = router.query;
+        const {univName, name, page, majors, faculty} = router.query;
         const searchParams = new URLSearchParams();
 
         // add existing query params to searchParams
@@ -221,29 +253,73 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
         });
     };
 
+    const handleFilterButton = () => {
+        const searchParams = new URLSearchParams();
+        searchParams.set('faculty', selectedFaculty);
+        searchParams.set('majors', selectedMajor);
+        searchParams.set('page', '1')
+
+        router.push({
+            pathname:`/search/${univName}`,
+            search: searchParams.toString(),
+        })
+    }
+
+
     return (
         <Container centerContent h="calc(100vh - 5.5rem - 6.9rem)" w="calc(100vw - 10rem)">
+            {/*<Text>*/}
+            {/*    {url}*/}
+            {/*</Text>*/}
+            {/*{facultiesArray?.map((faculty) => {*/}
+            {/*    return (*/}
+            {/*        <Text>*/}
+            {/*            {faculty.name}*/}
+            {/*        </Text>*/}
+            {/*    )*/}
+            {/*})}*/}
+            {/*{majorsArray?.map((major) => {*/}
+            {/*    return (*/}
+            {/*        <Text>*/}
+            {/*            {major.name}*/}
+            {/*        </Text>*/}
+            {/*    )*/}
+            {/*})}*/}
             <Flex justifyContent="center" w="full">
                 <Box w="19rem" mt="1.6rem">
                     <Show above="md">
                         <Text fontSize="1rem" fontWeight="bold" mb="0.3rem">Filter</Text>
-                        <Card>
+                        <Card px={3}>
                             <VStack>
                                 <VStack justifyContent="flex-start">
                                     <Text fontSize="0.8rem" fontWeight="bold" mb="0.3rem">Fakultas:</Text>
-                                    <Select placeholder='Select option'>
-                                        <option value='option1'>Option 1</option>
+                                    <Select placeholder="Pilih Fakultas"
+                                            value={selectedFaculty}
+                                            onChange={(e) => setSelectedFaculty(e.target.value)}
+                                    >
+                                        {facultiesArray!.map((faculty) => (
+                                            <option key={faculty.name} value={faculty.id}>
+                                                {faculty.name}
+                                            </option>
+                                        ))}
                                     </Select>
                                 </VStack>
                                 <VStack>
                                     <Text fontSize="0.8rem" fontWeight="bold" mb="0.3rem" pt={4}>Jurusan:</Text>
-                                    <Select placeholder='Select option'>
-                                        <option value='option1'>Option 1</option>
+                                    <Select placeholder="Pilih Jurusan"
+                                            value={selectedMajor}
+                                            onChange={(e) => setSelectedMajor(e.target.value)}
+                                    >
+                                        {majorsArray!.map((major) => (
+                                            <option key={major.name} value={major.id}>
+                                                {major.name}
+                                            </option>
+                                        ))}
                                     </Select>
                                 </VStack>
                                 <Box>
                                     <Button colorScheme="teal" fontSize="sm" size="sm" fontWeight="bold" variant="solid"
-                                            borderRadius="1rem" my={5}>
+                                            borderRadius="1rem" my={5} onClick={handleFilterButton}>
                                         Apply
                                     </Button>
                                 </Box>

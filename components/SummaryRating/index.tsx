@@ -22,11 +22,11 @@ const SummaryRating: React.FC<{
       <Flex alignItems="center">
       <ReportModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} reportFor={reportFor} reportedId={reportedId} />
       <Text
-        fontSize={{ base: "xl", sm: "3xl", md: "5xl" }}
+        fontSize={{ base: "xl", sm: "2xl", md: "5xl" }}
         fontWeight="bold"
         align={{ base: "center", sm: "left" }}
         color="biru.800"
-        ml={{ base: 0, sm: "4", md: "8" }}
+        ml={{ base: 0, sm: 2, lg: 4 }}
       >
         {title?.toLocaleUpperCase()}
       </Text>
@@ -47,7 +47,7 @@ const SummaryRating: React.FC<{
             as="u"
             fontSize={{ base: "sm", sm: "lg" }}
             mr="4"
-            ml={{ sm: "4", md: "8" }}
+            ml={{ sm: 2, lg: 4 }}
           >
             Lihat mata kuliah
           </Text>
@@ -59,7 +59,7 @@ const SummaryRating: React.FC<{
             as="u"
             fontSize={{ base: "sm", sm: "lg" }}
             mr="4"
-            ml={{ sm: "4", md: "8" }}
+            ml={{ sm: 2, lg: 4 }}
           >
             Lihat dosen
           </Text>
@@ -71,7 +71,7 @@ const SummaryRating: React.FC<{
             as="u"
             fontSize={{ base: "sm", sm: "lg" }}
             mr="4"
-            ml={{ sm: "4", md: "8" }}
+            ml={{ sm: 2, lg: 4 }}
           >
             Lihat dosen/mata kuliah
           </Text>
@@ -85,21 +85,21 @@ const SummaryRating: React.FC<{
       justifyContent={{ base: "center", md: "space-evenly" }}
       alignItems="center"
     >
-      <VStack mx={{ base: 3, sm: 4, md: 12 }}>
+      <VStack mx={{ base: 6, sm: 8, md: 8 }}>
+        <Text fontSize={{ base: "xl", sm: "lg", md: "3xl" }}>Overall</Text>
         <Text
-          fontSize={{ base: "2xl", md: "5xl" }}
+          fontSize={{ base: "4xl", md: "5xl" }}
           color="biru.800"
           fontWeight="semibold"
         >
-          {overallRating?.toFixed(1)}
+          {overallRating?.toFixed(1) || 0}
         </Text>
-        <Text fontSize={{ base: "md", sm: "lg", md: "3xl" }}>Overall</Text>
       </VStack>
       <SimpleGrid
         w="full"
-        columns={{ base: 1, sm: 2 }}
-        spacing={{ base: 2, sm: 6, md: 8 }}
-        marginX={{ base: 4, lg: 0 }}
+        columns={{ base: 1, md: 2 }}
+        spacing={{ base: 2, sm: 4, md: 8 }}
+        marginX={{ base: 4, sm: 10, md: 4, lg: 0 }}
         maxW="xl"
       >
         {summaryRatings.map((rating) => (

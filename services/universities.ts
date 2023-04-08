@@ -8,7 +8,7 @@ export const getUnivBySlug = (slug: string) => {
       .get(url)
       .then((res) => res.data);
   const { data, error, isLoading } = useSWR(
-    `/univ/slug/${slug}`,
+    slug ? `/univ/slug/${slug}` : null,
     fetcher
   );
 

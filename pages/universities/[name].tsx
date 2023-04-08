@@ -46,12 +46,12 @@ const University: React.FC<{}> = () => {
     return <div>Loading...</div>;
   }
 
-  if (errorReview || errorRating || errorUniv) {
+  if (errorReview || errorUniv) {
     return <div>Error</div>;
   }
 
   return (
-    <Container>
+    <Container px='0'>
       {isAuthenticated() ? (
         <ReviewModal
           isOpen={isOpen}
@@ -63,7 +63,7 @@ const University: React.FC<{}> = () => {
         />
       ) : null}
       <MainCard>
-        <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
+        <Flex direction="column" padding={{ base: 4, sm: 4, md: 8 }} w="full">
           <SummaryRating
             title={university?.name!!}
             pagePath={asPath}
@@ -71,14 +71,15 @@ const University: React.FC<{}> = () => {
             summaryRatings={[
               {
                 name: 'Reputasi Akademik',
-                value: univRating?.overall_reputasi_akademik!!,
+                value: univRating?.overall_reputasi_akademik || 0 ,
               },
-              { name: 'Lingkungan', value: univRating?.overall_lingkungan!! },
+              { name: 'Lingkungan',
+              value: univRating?.overall_lingkungan || 0 },
               {
                 name: 'Kemahasiswaan',
-                value: univRating?.overall_kemahasiswaan!!,
+                value: univRating?.overall_kemahasiswaan || 0 ,
               },
-              { name: 'Fasilitas', value: univRating?.overall_fasilitas!! },
+              { name: 'Fasilitas', value: univRating?.overall_fasilitas || 0 },
             ]}
             reportFor="UNIVERSITY"
             reportedId={university?.id!!}

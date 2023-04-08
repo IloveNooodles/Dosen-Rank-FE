@@ -3,9 +3,8 @@ import ReviewCard from '@/components/ReviewCard';
 import ReviewModal from '@/components/ReviewModal';
 import SummaryRating from '@/components/SummaryRating';
 import { useAuth } from '@/contexts/AuthContext';
-import { Creator } from '@/interfaces';
 import { getAllUnivReview, getOverallUnivRating } from '@/services/reviews';
-import { apiInstance } from '@/utils/apiInstance';
+import { getUnivBySlug } from '@/services/universities';
 import {
   Container,
   Divider,
@@ -22,14 +21,20 @@ import React from 'react';
 import { FiEdit } from 'react-icons/fi';
 
 const University: React.FC<{}> = () => {
-  const { univReview, isLoading: isLoadingReview, error: errorReview } = getAllUnivReview(
-    'institut-teknologi-bandung'
-  );
+  const { query } = useRouter();
+  const { name } = query;
+
+  const { university, isLoading: isLoadingUniv, error: errorUniv } = getUnivBySlug(name as string);
+  const {
+    univReview,
+    isLoading: isLoadingReview,
+    error: errorReview,
+  } = getAllUnivReview(name as string);
   const {
     univRating,
     isLoading: isLoadingRating,
     error: errorRating,
-  } = getOverallUnivRating(univReview?.[0]?.institution.id!!);
+  } = getOverallUnivRating(university?.id!!);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -37,11 +42,11 @@ const University: React.FC<{}> = () => {
   const { asPath } = useRouter();
 
   // TODO: style loading and error
-  if (isLoadingReview || isLoadingRating) {
+  if (isLoadingReview || isLoadingRating || isLoadingUniv) {
     return <div>Loading...</div>;
   }
 
-  if (errorReview || errorRating) {
+  if (errorReview || errorRating || errorUniv) {
     return <div>Error</div>;
   }
 
@@ -53,26 +58,30 @@ const University: React.FC<{}> = () => {
           onOpen={onOpen}
           onClose={onClose}
           reviewFor="university"
-          id={1}
+          id={university?.id!!}
+          slug={university?.slug!!}
         />
       ) : null}
       <MainCard>
         <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
           <SummaryRating
-            title={univReview?.[0]?.institution.name!!}
+            title={university?.name!!}
             pagePath={asPath}
             overallRating={univRating?.overall_rating!!}
-            summaryRatings={
-              [
-                {name: 'Reputasi Akademik', value: univRating?.overall_reputasi_akademik!!},
-                {name: 'Lingkungan', value: univRating?.overall_lingkungan!!},
-                {name: 'Kemahasiswaan', value: univRating?.overall_kemahasiswaan!!},
-                {name: 'Fasilitas', value: univRating?.overall_fasilitas!!},
-              ]
-            }
-            
+            summaryRatings={[
+              {
+                name: 'Reputasi Akademik',
+                value: univRating?.overall_reputasi_akademik!!,
+              },
+              { name: 'Lingkungan', value: univRating?.overall_lingkungan!! },
+              {
+                name: 'Kemahasiswaan',
+                value: univRating?.overall_kemahasiswaan!!,
+              },
+              { name: 'Fasilitas', value: univRating?.overall_fasilitas!! },
+            ]}
             reportFor="UNIVERSITY"
-            reportedId={univReview?.[0]?.institution.id!!}
+            reportedId={university?.id!!}
           />
           <Divider />
           <Flex direction="row">

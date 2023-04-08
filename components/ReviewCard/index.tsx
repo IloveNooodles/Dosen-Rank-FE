@@ -38,6 +38,8 @@ export interface ReviewCardProps {
   likeCount: number;
   dislikeCount: number;
   activeButton?: "none" | "like" | "dislike";
+  reportFor: string;
+  reportedId: number;
 }
 
 const ReviewCard: React.FC<ReviewCardProps> = ({
@@ -59,6 +61,8 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   likeCount,
   dislikeCount,
   activeButton,
+  reportFor,
+  reportedId
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [likeCountState, setLikeCountState] = useState(likeCount);
@@ -110,7 +114,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
 
   return (
     <Card my={{ base: 2 }} maxW="70rem" h="auto">
-      <ReportModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+      <ReportModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} reportFor={reportFor} reportedId={reportedId} />
       <CardHeader pb={{ base: "0rem", md: "1rem" }}>
         <HStack justifyContent={"space-between"}>
           <HStack>

@@ -40,6 +40,13 @@ export interface Tag {
   name: string;
 }
 
+export interface UniversityRating {
+  reputasi_akademik: number;
+  lingkungan: number;
+  kemahasiswaan: number;
+  fasilitas: number;
+}
+
 /**
  * Response Interfaces
  */
@@ -64,7 +71,7 @@ export interface CourseResponse {
   slug: string;
 }
 
-export interface Review {
+export interface NewReview {
   tag: string;
   firstFieldRating: number;
   secondFieldRating: number;
@@ -73,11 +80,52 @@ export interface Review {
   details: string;
 }
 
+export interface Report {
+  reportType: string;
+  reportedId: number;
+  content?: string;
+  tag: number;
+}
+
+export interface Review {
+  id: number;
+  creator: {
+    id: number;
+    name: string;
+  };
+  institution: {
+    id: number;
+    name: string;
+  };
+  upvote: number;
+  downvote: number;
+  tags: [];
+  content: string;
+  created_at: string;
+  updated_at: string;
+  average_rating: number;
+}
+
+export interface UnivReview extends Review {
+  rating: UniversityRating;
+}
+
+export interface OverallUnivRating {
+  review_count: number;
+  overall_rating: number;
+  overall_fasilitas: number;
+  overall_lingkungan: number;
+  overall_kemahasiswaan: number;
+  overall_reputasi_akademik: number;
+}
+
 /*
  * Page Interfaces
  */
 export interface RegisterProps {
   universities: Array<University>;
+  setSuccess: (value: boolean) => void;
+  onClick: () => void;
 }
 
 /*

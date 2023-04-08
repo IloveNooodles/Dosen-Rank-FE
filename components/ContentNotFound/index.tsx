@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const ContentNotFound: React.FC = () => {
     return (
-        <VStack pt="6rem">
+        <VStack pt="0rem">
             <Image src={iconKacaPembesar} alt={"icon kaca pembesar"}/>
             <Text pt="1rem">Hasil Pencarian Tidak ditemukan</Text>
             <Box pt="1rem">

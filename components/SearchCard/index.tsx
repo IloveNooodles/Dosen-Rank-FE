@@ -4,7 +4,6 @@ import { Card, CardBody } from "@chakra-ui/card";
 import { Text, VStack, useDisclosure } from "@chakra-ui/react";
 import Link from "next/link";
 import React, { useState } from "react";
-import ReportModal from "../ReportModal";
 
 export interface SearchCardProps {
   searchResult?: string;
@@ -13,7 +12,6 @@ export interface SearchCardProps {
 }
 
 const SearchCard: React.FC<SearchCardProps> = (props) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const [numberOfLines, setNumberOfLines] = useState(3);
 
   const { searchResult, slug, searchFor } = props;
@@ -44,7 +42,6 @@ const SearchCard: React.FC<SearchCardProps> = (props) => {
         _hover={{ backgroundColor: "gray.200" }}
         transition={"all 0.3s ease-in-out"}
       >
-        <ReportModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
         <CardBody pt={0} pb={0}>
           <VStack alignItems={"start"}>
             <Text

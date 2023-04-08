@@ -12,7 +12,7 @@ import { apiInstance } from "@/utils/apiInstance";
 
 const SelectInput = dynamic(() => import("../SelectInput"), { ssr: false });
 
-const RegisterForm: React.FC<RegisterProps> = ({ universities }) => {
+const RegisterForm: React.FC<RegisterProps> = ({ universities, setSuccess, onClick }) => {
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState("");
   const toast = useToast()
@@ -56,7 +56,7 @@ const RegisterForm: React.FC<RegisterProps> = ({ universities }) => {
               duration: 3000,
               position: 'top',
             })
-            router.push("/login")
+            setSuccess(true)
           }
         } catch (error) {
           if (axios.isAxiosError(error)) {
@@ -88,7 +88,7 @@ const RegisterForm: React.FC<RegisterProps> = ({ universities }) => {
             type="password"
             placeholder="Password"
           />
-          <Button type="submit" colorScheme="biru" w="full">
+          <Button type="submit" colorScheme="biru" w="full" onClick={onClick}>
             Daftar
           </Button>
         </VStack>

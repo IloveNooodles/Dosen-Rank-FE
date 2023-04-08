@@ -124,6 +124,8 @@ export interface OverallUnivRating {
  */
 export interface RegisterProps {
   universities: Array<University>;
+  setSuccess: (value: boolean) => void;
+  onClick: () => void;
 }
 
 /*

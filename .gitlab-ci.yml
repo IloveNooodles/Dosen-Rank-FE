@@ -10,6 +10,7 @@ build-deploy-app:       # This job runs in the build stage, which runs first.
     - main
   script:
     - yarn
+    - yarn global add vercel
     - vercel pull --yes --token=$VERCEL_TOKEN
     - vercel --prod --token=$VERCEL_TOKEN
   tags:

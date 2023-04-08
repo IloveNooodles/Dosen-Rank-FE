@@ -12,7 +12,7 @@ import {
     TabPanel,
     TabPanels,
     Tabs,
-    Text,
+    Text, useDisclosure,
     VStack, Wrap
 } from "@chakra-ui/react";
 import {Card} from "@chakra-ui/card";
@@ -24,9 +24,16 @@ import Link from "next/link";
 import {Search2Icon} from "@chakra-ui/icons";
 import {useRouter} from "next/router";
 import dynamic from "next/dynamic";
-import {array} from "yup";
-
-
+import Image from "next/image";
+import {
+    Modal,
+    ModalOverlay,
+    ModalContent,
+    ModalHeader,
+    ModalFooter,
+    ModalBody,
+    ModalCloseButton,
+} from '@chakra-ui/react'
 export async function getServerSideProps(context: { query: { univName: string, name?: string, page?: number, sort?: string, majors?: string, faculty?: string } }) {
     const {univName, name, page, sort, majors, faculty} = context.query;
 
@@ -151,6 +158,8 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
     const [sortBy, setSortBy] = useState<string>(sort ? sort : 'asc');
     const router = useRouter();
     const SelectInput = dynamic(() => import("../../components/SelectInput"), {ssr: false});
+    const { isOpen, onOpen, onClose } = useDisclosure()
+
 
     const facultyOption: Array<SelectOption> = facultiesArray!.map(
         ({id, name}) => ({label: name, value: id.toString()})
@@ -260,31 +269,15 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
         searchParams.set('page', '1')
 
         router.push({
-            pathname:`/search/${univName}`,
+            pathname: `/search/${univName}`,
             search: searchParams.toString(),
         })
     }
 
 
+
     return (
         <Container centerContent h="calc(100vh - 5.5rem - 6.9rem)" w="calc(100vw - 10rem)">
-            {/*<Text>*/}
-            {/*    {url}*/}
-            {/*</Text>*/}
-            {/*{facultiesArray?.map((faculty) => {*/}
-            {/*    return (*/}
-            {/*        <Text>*/}
-            {/*            {faculty.name}*/}
-            {/*        </Text>*/}
-            {/*    )*/}
-            {/*})}*/}
-            {/*{majorsArray?.map((major) => {*/}
-            {/*    return (*/}
-            {/*        <Text>*/}
-            {/*            {major.name}*/}
-            {/*        </Text>*/}
-            {/*    )*/}
-            {/*})}*/}
             <Flex justifyContent="center" w="full">
                 <Box w="19rem" mt="1.6rem">
                     <Show above="md">
@@ -364,13 +357,78 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                         <Show above="md">
                                             <Text></Text>
                                         </Show>
-                                        <HStack>
-                                            <Text fontWeight="bold">Urutkan:</Text>
-                                            <Select value={sortBy} onChange={handleSortChange}
-                                                    placeholder='Select option'>
-                                                <option value='asc'>A - Z</option>
-                                                <option value='desc'>Z - A</option>
-                                            </Select>
+                                        <HStack gap={10}>
+                                            <Box>
+                                                <Show above={"md"}>
+                                                    <Text fontWeight="bold">Urutkan:</Text>
+                                                </Show>
+                                                <Select value={sortBy} onChange={handleSortChange}
+                                                        placeholder='Select option'>
+                                                    <option value='asc'>A - Z</option>
+                                                    <option value='desc'>Z - A</option>
+                                                </Select>
+                                            </Box>
+                                            <Show below="md">
+                                                <Box
+                                                    as="button"
+                                                    bg="transparent"
+                                                    border="none"
+                                                    p={0}
+                                                    m={0}
+                                                    cursor="pointer"
+                                                    _hover={{opacity: 0.8}}
+                                                    _active={{outline: "none"}}
+                                                    onClick={onOpen}
+                                                >
+                                                    <Image src={"/ic-filter.svg"} alt={"filter logo"} width={30}
+                                                           height={30}></Image>
+                                                </Box>
+                                                <Modal isOpen={isOpen} onClose={onClose}>
+                                                    <ModalOverlay />
+                                                    <ModalContent>
+                                                        <ModalHeader textAlign={"center"}>Filter</ModalHeader>
+                                                        <ModalCloseButton />
+                                                        <ModalBody>
+                                                            <VStack>
+                                                                <VStack justifyContent="flex-start">
+                                                                    <Box w={80}>
+                                                                        <Select placeholder="Pilih Fakultas"
+                                                                                value={selectedFaculty}
+                                                                                onChange={(e) => setSelectedFaculty(e.target.value)}
+                                                                        >
+                                                                            {facultiesArray!.map((faculty) => (
+                                                                                <option key={faculty.name} value={faculty.id}>
+                                                                                    {faculty.name}
+                                                                                </option>
+                                                                            ))}
+                                                                        </Select>
+                                                                    </Box>
+                                                                </VStack>
+                                                                <VStack>
+                                                                    <Box w={80}>
+                                                                        <Select placeholder="Pilih Jurusan"
+                                                                                value={selectedMajor}
+                                                                                onChange={(e) => setSelectedMajor(e.target.value)}
+                                                                        >
+                                                                            {majorsArray!.map((major) => (
+                                                                                <option key={major.name} value={major.id}>
+                                                                                    {major.name}
+                                                                                </option>
+                                                                            ))}
+                                                                        </Select>
+                                                                    </Box>
+                                                                </VStack>
+                                                                <Box>
+                                                                    <Button colorScheme="teal" fontSize="sm" size="sm" fontWeight="bold" variant="solid"
+                                                                            borderRadius="1rem" my={5} onClick={handleFilterButton}>
+                                                                        Apply
+                                                                    </Button>
+                                                                </Box>
+                                                            </VStack>
+                                                        </ModalBody>
+                                                    </ModalContent>
+                                                </Modal>
+                                            </Show>
                                         </HStack>
                                     </HStack>
                                 </Box>

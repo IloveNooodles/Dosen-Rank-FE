@@ -12,13 +12,16 @@ import {apiInstance} from "@/utils/apiInstance";
 import axios from "axios";
 import * as Yup from "yup";
 import TextInput from "@/components/TextInput";
+import { useRouter} from "next/router";
 
 
 interface SetNewPasswordFormProps {
     handleNextStep: (step: number) => void;
 }
 const SetNewPasswordForm: React.FC<SetNewPasswordFormProps> = ({handleNextStep}) => {
-
+    const router = useRouter()
+    const {token, email} = router.query
+    console.log(token, email)
     const initialValues = {
             password: "",
             passwordConfirmation: "",
@@ -41,7 +44,7 @@ const SetNewPasswordForm: React.FC<SetNewPasswordFormProps> = ({handleNextStep})
                     confirmed_password: values.passwordConfirmation,
                 });
                 try {
-                    const response = await apiInstance({}).post("/users/forgot-password", data)
+                    const response = await apiInstance({}).post(`/users/reset-password?token=${token}&email=${email}`, data)
                     if (response.status === 200) {
                         toast({
                             title: 'Password berhasil diubah',

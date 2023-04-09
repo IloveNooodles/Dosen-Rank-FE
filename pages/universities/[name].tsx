@@ -49,7 +49,7 @@ const University: React.FC<{}> = () => {
     return <LoadingAnimation/>;
   }
 
-  if (errorReview || errorUniv) {
+  if (errorReview || errorUniv || errorRating) {
     return <ErrorPage/>;
   }
 

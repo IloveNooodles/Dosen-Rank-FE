@@ -39,7 +39,7 @@ const Courses: React.FC<{}> = () => {
     return <LoadingAnimation/>;
   }
 
-  if (errorReview || errorCourse) {
+  if (errorReview || errorCourse || errorRating) {
     return <ErrorPage/>;
   }
 

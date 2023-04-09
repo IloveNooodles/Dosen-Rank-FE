@@ -29,7 +29,7 @@ const Professor: React.FC<{}> = () => {
     return <LoadingAnimation/>;
   }
 
-  if (errorReview || errorProfessor) {
+  if (errorReview || errorProfessor || errorRating) {
     return <ErrorPage/>;
   }
 

@@ -1,5 +1,6 @@
 "use strict";
 
+import LoadingAnimation from "@/components/LoadingAnimation";
 import { ReviewCardProps } from "@/components/ReviewCard";
 import SearchBar from "@/components/SearchBar";
 import SearchCard from "@/components/SearchCard";
@@ -40,7 +41,7 @@ const Search: React.FC<CoursePageProps> = ({ title, summaryRatings }) => {
   const { data, isLoading, error } = useSearch(name as string);
 
   if (isLoading) {
-    return <p>loading</p>;
+    return <LoadingAnimation/>;
   }
 
   if (error) {

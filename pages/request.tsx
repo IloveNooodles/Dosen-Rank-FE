@@ -8,6 +8,7 @@ import useSWR, { Fetcher } from "swr";
 import { Response, SelectOption, University } from "@/interfaces";
 import TextInput from "../components/TextInput";
 import { useRouter } from "next/router";
+import LoadingAnimation from "@/components/LoadingAnimation";
 
 const SelectInput = dynamic(() => import("../components/SelectInput"), { ssr: false });
 
@@ -38,7 +39,7 @@ const Request: React.FC<{}> = () => {
   }
 
   const { universities, isLoading, isError } = useUniversities();
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <LoadingAnimation/>;
 
   const universityOption: Array<SelectOption> | undefined = universities?.map(
     ({ id, name }) => ({ label: name, value: id.toString() })

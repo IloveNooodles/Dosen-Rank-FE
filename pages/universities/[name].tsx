@@ -1,3 +1,4 @@
+import LoadingAnimation from '@/components/LoadingAnimation';
 import MainCard from '@/components/MainCard';
 import ReviewCard from '@/components/ReviewCard';
 import ReviewModal from '@/components/ReviewModal';
@@ -19,6 +20,7 @@ import {
 import { useRouter } from 'next/router';
 import React from 'react';
 import { FiEdit } from 'react-icons/fi';
+import { BeatLoader } from 'react-spinners';
 
 const University: React.FC<{}> = () => {
   const { query } = useRouter();
@@ -41,9 +43,9 @@ const University: React.FC<{}> = () => {
   const { isAuthenticated } = useAuth();
   const { asPath } = useRouter();
 
-  // TODO: style loading and error
+  // TODO: style error
   if (isLoadingReview || isLoadingRating || isLoadingUniv) {
-    return <div>Loading...</div>;
+    return <LoadingAnimation/>;
   }
 
   if (errorReview || errorUniv) {

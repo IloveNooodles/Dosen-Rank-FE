@@ -1,16 +1,21 @@
-import Footer from "@/components/Footer";
-import NavigationBar from "@/components/NavigationBar";
-import Wrapper from "@/components/Wrapper";
-import { AuthProvider } from "@/contexts/AuthContext";
-import "@/styles/globals.scss";
-import theme from "@/styles/theme";
-import { ChakraProvider, Container, createStandaloneToast, Flex } from "@chakra-ui/react";
-import type { AppProps } from "next/app";
-import Head from "next/head";
+import Footer from '@/components/Footer';
+import NavigationBar from '@/components/NavigationBar';
+import Wrapper from '@/components/Wrapper';
+import { AuthProvider } from '@/contexts/AuthContext';
+import '@/styles/globals.scss';
+import theme from '@/styles/theme';
+import {
+  Box,
+  ChakraProvider,
+  Container,
+  createStandaloneToast,
+  Flex,
+} from '@chakra-ui/react';
+import type { AppProps } from 'next/app';
+import Head from 'next/head';
 import 'bootstrap/dist/css/bootstrap.css';
 
-
-const { ToastContainer, toast } = createStandaloneToast()
+const { ToastContainer, toast } = createStandaloneToast();
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -27,12 +32,18 @@ export default function App({ Component, pageProps }: AppProps) {
       <AuthProvider>
         <Container>
           <Wrapper>
-          <ToastContainer />
-            <NavigationBar />
-            <Flex position="relative" direction="column" alignItems="center">
-              <Component {...pageProps} />
+            <ToastContainer />
+            <Flex
+              direction={'column'}
+              minH="100vh"
+              justifyContent={'space-between'}
+            >
+              <Flex direction={'column'} alignItems='center'>
+                <NavigationBar />
+                <Component {...pageProps} />
+              </Flex>
+                <Footer />
             </Flex>
-            <Footer />
           </Wrapper>
         </Container>
       </AuthProvider>

@@ -163,6 +163,8 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                       duration: 3000,
                                       position: 'top',
                                     })
+                                    mutate(`/reviews/professor/slug?slug=${slug}`);
+                                    mutate(`/reviews/professor/overall/${id}`);
                                 }
                             }
                         } catch (error) {

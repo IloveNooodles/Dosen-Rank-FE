@@ -30,11 +30,6 @@ export interface Professor {
   name: string;
 }
 
-export interface Creator {
-  id: number;
-  name: string;
-}
-
 export interface Tag {
   id: number;
   name: string;
@@ -45,6 +40,13 @@ export interface UniversityRating {
   lingkungan: number;
   kemahasiswaan: number;
   fasilitas: number;
+}
+
+export interface ProfessorRating {
+  konten: number,
+  komunikasi: number,
+  transparansi: number,
+  gaya_mengajar: number,  
 }
 
 /**
@@ -110,6 +112,12 @@ export interface UnivReview extends Review {
   rating: UniversityRating;
 }
 
+export interface ProfessorReview extends Review {
+  rating: ProfessorRating;
+  professor: Professor;
+  course: Course;
+}
+
 export interface OverallUnivRating {
   review_count: number;
   overall_rating: number;
@@ -117,6 +125,15 @@ export interface OverallUnivRating {
   overall_lingkungan: number;
   overall_kemahasiswaan: number;
   overall_reputasi_akademik: number;
+}
+
+export interface OverallProfessorRating {
+  review_count: number,
+  overall_rating: number,
+  overall_konten: number,
+  overall_komunikasi: number,
+  overall_transparansi: number,
+  overall_gaya_mengajar: number,
 }
 
 /*

@@ -1,21 +1,21 @@
 import React, {useState} from 'react';
 import {Box, Center, Container, Text, VStack} from "@chakra-ui/react";
-import EnterEmailForm from "@/components/EnterEmailForm";
-import CheckYourEmail from "@/components/CheckYourEmail";
+import SetNewPasswordForm from "@/components/SetNewPasswordForm";
+import PasswordResetted from "@/components/PasswordResetted";
 
-const ResetPassword: React.FC<{}> = () => { // Ubah nama function menjadi ResetPassword dan tambahkan huruf kapital pada awal nama function
+const SetNewPassword: React.FC<{}> = () => { // Ubah nama function menjadi ResetPassword dan tambahkan huruf kapital pada awal nama function
     const [step, setStep] = useState(1);
 
     return (
         <Container centerContent h="calc(100vh - 5.5rem - 6.9rem)" w="calc(100vw - 10rem)">
             <Box pt={"2rem"}>
                 <VStack position="relative" h="full" justify="start" maxW="sm" >
-                    {step === 1 && <EnterEmailForm handleNextStep={setStep} />}
-                    {step === 2 && <CheckYourEmail/>}
+                    {step === 1 && <SetNewPasswordForm handleNextStep={setStep} />}
+                    {step === 2 && <PasswordResetted/>}
                 </VStack>
             </Box>
         </Container>
     );
 };
 
-export default ResetPassword;
+export default SetNewPassword;

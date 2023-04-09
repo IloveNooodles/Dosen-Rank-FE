@@ -31,7 +31,7 @@ export interface ReviewModalProps {
     onOpen: () => void;
     onClose: () => void;
     id: number;
-
+    slug?: string;
     reviewFor: 'university' | 'course' | 'dosen';
     firstFieldRating?: number;
     secondFieldRating?: number;
@@ -44,7 +44,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     onOpen,
     onClose,
     id,
-
+    slug = '',
     reviewFor,
 }) => {
     const { getUser } = useAuth();
@@ -117,8 +117,8 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                       duration: 3000,
                                       position: 'top',
                                     })
-                                    mutate(`/reviews/univ/slug?slug=institut-teknologi-bandung`);
-                                    mutate('/reviews/univ/overall/1');
+                                    mutate(`/reviews/univ/slug?slug=${slug}`);
+                                    mutate(`/reviews/univ/overall/${id}`);
                                 }
                             } else if (reviewFor === "course") {
                                 const data = JSON.stringify({

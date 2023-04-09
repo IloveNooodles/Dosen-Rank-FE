@@ -8,7 +8,7 @@ export const getAllUnivReview = (slug: string) => {
       .get(url)
       .then((res) => res.data);
   const { data, error, isLoading } = useSWR(
-    `/reviews/univ/slug?slug=${slug}`,
+    slug ? `/reviews/univ/slug?slug=${slug}` : null,
     fetcher
   );
 
@@ -25,8 +25,8 @@ export const getOverallUnivRating = (id: number) => {
       .get(url)
       .then((res) => res.data);
   const { data, error, isLoading } = useSWR(
-    `/reviews/univ/overall/${id}`,
-    fetcher
+    id ? `/reviews/univ/overall/${id}` : null,
+    fetcher, { shouldRetryOnError: false }
   );
 
   return {

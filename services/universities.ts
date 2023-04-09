@@ -9,7 +9,7 @@ export const getUnivBySlug = (slug: string) => {
       .then((res) => res.data);
   const { data, error, isLoading } = useSWR(
     slug ? `/univ/slug/${slug}` : null,
-    fetcher
+    fetcher, { shouldRetryOnError: false }
   );
 
   return {

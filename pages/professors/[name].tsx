@@ -9,6 +9,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/router";
 import { getProfessorBySlug } from "@/services/professors";
 import { getAllProfessorReview, getOverallProfessorRating } from "@/services/reviews";
+import ErrorPage from "@/components/ErrorPage";
+import LoadingAnimation from "@/components/LoadingAnimation";
 
 const Professor: React.FC<{}> = () => {
   const { query } = useRouter();
@@ -24,11 +26,11 @@ const Professor: React.FC<{}> = () => {
   const { asPath } = useRouter();
 
   if (isLoadingReview || isLoadingRating || isLoadingProfessor) {
-    return <div>Loading...</div>;
+    return <LoadingAnimation/>;
   }
 
-  if (errorReview || errorProfessor) {
-    return <div>Error</div>;
+  if (errorReview || errorProfessor || errorRating) {
+    return <ErrorPage/>;
   }
 
   return (

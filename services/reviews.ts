@@ -9,7 +9,8 @@ export const getAllUnivReview = (slug: string) => {
       .then((res) => res.data);
   const { data, error, isLoading } = useSWR(
     slug ? `/reviews/univ/slug?slug=${slug}` : null,
-    fetcher
+    fetcher,
+    { shouldRetryOnError: false }
   );
 
   return {
@@ -26,7 +27,8 @@ export const getAllProfessorReview = (slug: string) => {
       .then((res) => res.data);
   const { data, error, isLoading } = useSWR(
     slug ? `/reviews/professor/slug?slug=${slug}` : null,
-    fetcher
+    fetcher,
+    { shouldRetryOnError: false }
   );
 
   return {
@@ -43,7 +45,8 @@ export const getAllCourseReview = (slug: string) => {
       .then((res) => res.data);
   const { data, error, isLoading } = useSWR(
     slug ? `/reviews/course/slug?slug=${slug}` : null,
-    fetcher
+    fetcher,
+    { shouldRetryOnError: false }
   );
 
   return {

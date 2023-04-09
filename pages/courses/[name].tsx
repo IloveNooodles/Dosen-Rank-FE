@@ -1,9 +1,12 @@
+import ErrorPage from "@/components/ErrorPage";
+import LoadingAnimation from "@/components/LoadingAnimation";
 import MainCard from "@/components/MainCard";
 import ReviewCard from "@/components/ReviewCard";
 import ReviewModal from "@/components/ReviewModal";
 import SummaryRating from "@/components/SummaryRating";
 import { useAuth } from "@/contexts/AuthContext";
-import { apiInstance } from "@/utils/apiInstance";
+import { getCourseBySlug } from "@/services/courses";
+import { getAllCourseReview, getOverallCourseRating } from "@/services/reviews";
 import {
   Container,
   Divider,
@@ -15,120 +18,30 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import React from "react";
 import { FiEdit } from "react-icons/fi";
 
-export async function getServerSideProps(context: { query: { name: string } }) {
-  const { name } = context.query;
-  try {
-    const courseRes = await apiInstance({}).get(`/courses/slug/${name}`);
-    const { id: courseId, name: courseName } = await courseRes.data.data;
+const Courses: React.FC<{}> = () => {
+  const { query } = useRouter();
+  const { name } = query;
 
-    const reviewRes = await apiInstance({}).get(
-      `/reviews/course?id=${courseId}`
-    );
-    const reviews = reviewRes.data.data;
+  const { course, isLoading: isLoadingCourse, error: errorCourse } = getCourseBySlug(name as string);
+  const { courseReview, isLoading: isLoadingReview, error: errorReview } = getAllCourseReview(name as string);
+  const { courseRating, isLoading: isLoadingRating, error: errorRating } = getOverallCourseRating(course?.id!!);
 
-    const overallRatingRes = await apiInstance({}).get(
-      `/reviews/course/overall/${courseId}`
-    );
-    const {
-      review_count: reviewCount,
-      overall_rating: overallRating,
-      overall_kesesuaian_sks: overalKesesuaianSKS,
-      overall_kompetensi: overallKompetensi,
-      overall_kesulitan: overallKesulitan,
-      overall_sumber_belajar: overalSumberBelajar,
-    } = await overallRatingRes.data.data;
-
-    return {
-      props: {
-        title: courseName,
-        reviews,
-        reviewCount,
-        overallRating,
-        overalKesesuaianSKS,
-        overallKompetensi,
-        overallKesulitan,
-        overalSumberBelajar,
-        id: courseId,
-      },
-    };
-  } catch (e) {
-    console.error(e);
-    return {
-      redirect: {
-        destination: "/",
-        permanent: false,
-      },
-    };
-  }
-}
-
-export interface CourseRating {
-  kesesuaian_sks: number;
-  kompetensi: number;
-  kesulitan: number;
-  sumber_belajar: number;
-}
-
-export interface Creator {
-  name: string
-}
-
-export interface CourseReview {
-  id: number;
-  creator_id: number;
-  creator_name: string;
-  professor_id: number;
-  professor_name: string;
-  course_id: number;
-  course_name: string;
-  institution_name: string;
-  content: string;
-  upvote: number;
-  downvote: number;
-  created_at: string;
-  updated_at: string;
-  rating: CourseRating;
-  average_rating: number;
-  creator: Creator;
-}
-
-export interface CoursePageProps {
-  title: string;
-  reviews: CourseReview[];
-  overallRating: number;
-  reviewCount: number;
-  overalKesesuaianSKS: number;
-  overallKompetensi: number;
-  overallKesulitan: number;
-  overalSumberBelajar: number;
-  summaryAverageRating: number;
-  id: number;
-}
-
-const Courses: React.FC<CoursePageProps> = ({
-  title,
-  reviews,
-  overallRating,
-  reviewCount,
-  overalKesesuaianSKS,
-  overallKompetensi,
-  overallKesulitan,
-  overalSumberBelajar,
-  summaryAverageRating,
-  id,
-}) => {
-  const ratings = [
-    { name: "Kesesuaian Dengan SKS", value: overalKesesuaianSKS },
-    { name: "Kompetensi yang diperoleh", value: overallKompetensi },
-    { name: "Kesulitan", value: overallKesulitan },
-    { name: "Ketersediaan Sumber Belajar", value: overalSumberBelajar },
-  ];
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { isAuthenticated } = useAuth();
+  const { asPath } = useRouter();
+
+  if (isLoadingReview || isLoadingRating || isLoadingCourse) {
+    return <LoadingAnimation/>;
+  }
+
+  if (errorReview || errorCourse) {
+    return <ErrorPage/>;
+  }
 
   return (
     <Container>
@@ -137,21 +50,39 @@ const Courses: React.FC<CoursePageProps> = ({
         onOpen={onOpen}
         onClose={onClose}
         reviewFor="course"
-        id={id}
+        slug={course?.slug}
+        id={course?.id!!}
       /> : null}
       <MainCard>
         <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
           <SummaryRating
-            title={title}
-            pagePath="courses"
-            overallRating={overallRating}
-            summaryRatings={ratings}
+            title={course?.name!!}
+            pagePath={asPath}
+            overallRating={courseRating?.overall_rating!!}
+            summaryRatings={[
+              {
+                name: 'Kesesuaian dengan SKS',
+                value: courseRating?.overall_kesesuaian_sks || 0,
+              },
+              {
+                name: 'Kompetensi yang Diperoleh',
+                value: courseRating?.overall_kompetensi || 0,
+              },
+              {
+                name: 'Kesulitan',
+                value: courseRating?.overall_kesulitan || 0,
+              },
+              {
+                name: 'Ketersediaan Sumber Belajar',
+                value: courseRating?.overall_sumber_belajar || 0,
+              },
+            ]}
             reportFor="COURSE"
-            reportedId={id}
+            reportedId={course?.id!!}
           />
           <Divider />
           <Flex direction="row">
-            <Text my={6}>{reviews.length} Ulasan</Text>
+            <Text my={6}>{courseRating?.review_count} Ulasan</Text>
             <Spacer />
             {isAuthenticated() ? (
               <HStack>
@@ -174,49 +105,30 @@ const Courses: React.FC<CoursePageProps> = ({
               </HStack>
             ) : null}
           </Flex>
-          {reviews.map((review) => {
-            const {
-              id,
-              creator_id: creatorId,
-              creator,
-              professor_id: professorId,
-              professor_name: professorName,
-              course_id: courseId,
-              course_name: courseName,
-              institution_name: institutionName,
-              content,
-              upvote,
-              downvote,
-              created_at: createdAt,
-              updated_at: updatedAt,
-              rating,
-              average_rating: averageRating,
-            } = review;
-            return (
+          {courseReview?.map((review) => (
               <ReviewCard
-                key={reviews.indexOf(review)}
+                key={courseReview.indexOf(review)}
                 reviewFor={"course"}
-                idReview={id}
+                idReview={review.id}
                 reviewerName={review.creator.name}
-                courseName={courseName}
-                overallRating={averageRating}
-                firstFieldName={"Kesesuaian Dengan SKS"}
-                secondFieldName={"Kompetensi yang diperoleh"}
+                courseName={review.course.name}
+                overallRating={review.average_rating}
+                firstFieldName={"Kesesuaian dengan SKS"}
+                secondFieldName={"Kompetensi yang Diperoleh"}
                 thirdFieldName={"Kesulitan"}
                 fourthFieldName={"Ketersediaan Sumber Belajar"}
-                firstFieldRating={rating["kesesuaian_sks"]}
-                secondFieldRating={rating.kompetensi}
-                thirdFieldRating={rating.kesulitan}
-                fourthFieldRating={rating["sumber_belajar"]}
-                reviewDate={createdAt}
-                reviewContent={content}
-                likeCount={upvote}
-                dislikeCount={downvote}
+                firstFieldRating={review.rating.kesesuaian_sks}
+                secondFieldRating={review.rating.kompetensi}
+                thirdFieldRating={review.rating.kesulitan}
+                fourthFieldRating={review.rating.sumber_belajar}
+                reviewDate={review.created_at}
+                reviewContent={review.content}
+                likeCount={review.upvote}
+                dislikeCount={review.downvote}
                 reportFor="COURSE_REVIEW"
-                reportedId={id}
+                reportedId={review.id}
               />
-            );
-          })}
+          ))}
         </Flex>
       </MainCard>
     </Container>

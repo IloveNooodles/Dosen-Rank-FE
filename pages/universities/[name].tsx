@@ -1,3 +1,4 @@
+import ErrorPage from '@/components/ErrorPage';
 import LoadingAnimation from '@/components/LoadingAnimation';
 import MainCard from '@/components/MainCard';
 import ReviewCard from '@/components/ReviewCard';
@@ -49,7 +50,7 @@ const University: React.FC<{}> = () => {
   }
 
   if (errorReview || errorUniv) {
-    return <div>Error</div>;
+    return <ErrorPage/>;
   }
 
   return (

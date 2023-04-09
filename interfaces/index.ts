@@ -49,6 +49,13 @@ export interface ProfessorRating {
   gaya_mengajar: number,  
 }
 
+export interface CourseRating {
+  kesesuaian_sks: number;
+  kompetensi: number;
+  kesulitan: number;
+  sumber_belajar: number;
+}
+
 /**
  * Response Interfaces
  */
@@ -66,7 +73,7 @@ export interface ProfessorResponse {
 
 export interface CourseResponse {
   id: number;
-  course_id: number;
+  course_id: string;
   name: string;
   institute_id: number;
   institution_name: string;
@@ -112,6 +119,12 @@ export interface UnivReview extends Review {
   rating: UniversityRating;
 }
 
+export interface CourseReview extends Review {
+  rating: CourseRating;
+  professor: Professor;
+  course: Course;
+}
+
 export interface ProfessorReview extends Review {
   rating: ProfessorRating;
   professor: Professor;
@@ -125,6 +138,15 @@ export interface OverallUnivRating {
   overall_lingkungan: number;
   overall_kemahasiswaan: number;
   overall_reputasi_akademik: number;
+}
+
+export interface OverallCourseRating {
+  review_count: number,
+  overall_rating: number,
+  overall_kesesuaian_sks: number,
+  overall_kompetensi: number,
+  overall_kesulitan: number,
+  overall_sumber_belajar: number,
 }
 
 export interface OverallProfessorRating {

@@ -37,6 +37,7 @@ export default function App({ Component, pageProps }: AppProps) {
               direction={'column'}
               minH="100vh"
               justifyContent={'space-between'}
+              position='relative'
             >
               <Flex direction={'column'} alignItems='center'>
                 <NavigationBar />

@@ -5,6 +5,7 @@ import successIcon from "../../public/ic-success.svg";
 import Link from "next/link";
 import { useRouter } from 'next/router';
 import {apiInstance} from "@/utils/apiInstance";
+import axios from "axios";
 
 const Confirmation: React.FC<{}> = () => {
     const router = useRouter();
@@ -18,13 +19,15 @@ const Confirmation: React.FC<{}> = () => {
                     await apiInstance({}).post(`/users/verify-email?token=${token}&email=${email}`);
                 }
             } catch (error) {
-                toast({
-                    title: error.response.data.message,
-                    description: error.response.data.error,
-                    status: 'error',
-                    duration: 3000,
-                    position: 'top',
-                })
+                if (axios.isAxiosError(error)) {
+                    toast({
+                        title: error.response?.data.message,
+                        description: error.response?.data.error,
+                        status: 'error',
+                        duration: 3000,
+                        position: 'top',
+                    })
+                }
             }
         };
         postData();

@@ -27,7 +27,7 @@ const Courses: React.FC<{}> = () => {
   const { name } = query;
 
   const { course, isLoading: isLoadingCourse, error: errorCourse } = getCourseBySlug(name as string);
-  const { courseReview, isLoading: isLoadingReview, error: errorReview } = getAllCourseReview(name as string);
+  const { courseReview, isLoading: isLoadingReview, error: errorReview } = getAllCourseReview(course?.course_id!!);
   const { courseRating, isLoading: isLoadingRating, error: errorRating } = getOverallCourseRating(course?.id!!);
 
   const { isOpen, onOpen, onClose } = useDisclosure();

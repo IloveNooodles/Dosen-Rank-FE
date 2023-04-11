@@ -16,8 +16,8 @@ const SelectInput = dynamic(() => import("../SelectInput"), { ssr: false });
 const fetcher: Fetcher<Response<ProfessorResponse[] | CourseResponse[]>, string> = (url) =>
   apiInstance({isAuthorized: true}).get(url).then((res) => res.data);
 
-function useTags(id: number, reviewFor: string) {
-  const { data, isLoading, error } = useSWR((reviewFor === 'course') ? `/professor/course?id=${id}` : `/courses/professor?id=${id}` , fetcher);
+function useProfTags(id: number, reviewFor: string) {
+  const { data, isLoading, error } = useSWR((reviewFor === 'course' && id) ? `/professor/course?id=${id}` : null , fetcher);
   
   return {
     tags: data?.data,
@@ -25,6 +25,16 @@ function useTags(id: number, reviewFor: string) {
     isError: error
   };
 };
+
+function useCourseTags(id: number, reviewFor: string) {
+    const { data, isLoading, error } = useSWR((reviewFor === 'dosen' && id) ? `/courses/professor?id=${id}` : null , fetcher);
+    
+    return {
+      tags: data?.data,
+      isLoading: isLoading,
+      isError: error
+    };
+  };
 
 export interface ReviewModalProps {
     isOpen: boolean;
@@ -83,9 +93,13 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
         setFourthFieldRating(fourthFieldRating);
     };
 
-    const { tags, isLoading, isError } = useTags(id, reviewFor);
+    const { tags: profTags, isLoading: isLoadingProf, isError: isErrorProf } = useProfTags(id, reviewFor);
+    const { tags: courseTags, isLoading: isLoadingCourse, isError: isErrorCourse } = useCourseTags(id, reviewFor);
     
-    const tagOption: Array<SelectOption> | undefined = tags?.map(
+    const profTagOption: Array<SelectOption> | undefined = profTags?.map(
+        ({ id, name }) => ({ value: id.toString(), label: name })
+    );
+    const courseTagOption: Array<SelectOption> | undefined = courseTags?.map(
         ({ id, name }) => ({ value: id.toString(), label: name })
     );
 
@@ -207,7 +221,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                                 id="tag" 
                                                 name="tag" 
                                                 placeholder="Pilih mata kuliah"
-                                                options={tagOption || []} />
+                                                options={profTagOption || courseTagOption || []} />
                                             <HStack>
                                                 <Text fontSize={"sm"}>Tidak menemukan mata kuliah?</Text>
                                                 <Link href='/request' fontSize={"sm"} fontWeight="bold" color={"biru.700"}>Request mata kuliah</Link>
@@ -228,7 +242,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                                 id="tag" 
                                                 name="tag" 
                                                 placeholder="Pilih dosen"
-                                                options={tagOption || []} />
+                                                options={profTagOption || courseTagOption || []} />
                                             <HStack>
                                                 <Text fontSize={"sm"}>Tidak menemukan dosen?</Text>
                                                 <Link href='/request' fontSize={"sm"} fontWeight="bold" color={"biru.700"}>Request dosen</Link>

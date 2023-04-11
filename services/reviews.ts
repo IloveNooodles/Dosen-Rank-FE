@@ -56,13 +56,13 @@ export const getAllCourseReview = (slug: string) => {
   };
 };
 
-export const getOverallUnivRating = (id: number) => {
+export const getOverallUnivRating = (slug: string) => {
   const fetcher: Fetcher<Response<OverallUnivRating>, string> = (url) =>
     apiInstance({})
       .get(url)
       .then((res) => res.data);
   const { data, error, isLoading } = useSWR(
-    id ? `/reviews/univ/overall/${id}` : null,
+    slug ? `/reviews/univ/overall/slug/${slug}` : null,
     fetcher, { shouldRetryOnError: false }
   );
 

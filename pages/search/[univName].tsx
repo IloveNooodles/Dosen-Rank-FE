@@ -477,7 +477,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
                                                         <MatkulCard
                                                             key={courses.indexOf(course)} matkulName={course.name}
                                                             matkulCode={course.course_id}
-                                                            urlMatkul={course.course_id}></MatkulCard>
+                                                            matkulSlug={course.slug}></MatkulCard>
                                                     )) :
                                                     <Box w="100%" h="100%" pt={{sm: "2rem", md: "2rem"}}>
                                                         <ContentNotFound/>

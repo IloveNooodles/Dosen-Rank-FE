@@ -1,10 +1,35 @@
-import React from 'react';
-import {Box, VStack, Text, Button, HStack, Spacer, Flex, Container, Center, Show} from "@chakra-ui/react";
+import React, {useEffect} from 'react';
+import {Box, VStack, Text, Button, HStack, Spacer, Flex, Container, Center, Show, useToast} from "@chakra-ui/react";
 import Image from "next/image";
 import successIcon from "../../public/ic-success.svg";
 import Link from "next/link";
+import { useRouter } from 'next/router';
+import {apiInstance} from "@/utils/apiInstance";
 
 const Confirmation: React.FC<{}> = () => {
+    const router = useRouter();
+    const { token, email } = router.query;
+    const toast = useToast()
+
+    useEffect(() => {
+        const postData = async () => {
+            try {
+                if (token && email){
+                    await apiInstance({}).post(`/users/verify-email?token=${token}&email=${email}`);
+                }
+            } catch (error) {
+                toast({
+                    title: error.response.data.message,
+                    description: error.response.data.error,
+                    status: 'error',
+                    duration: 3000,
+                    position: 'top',
+                })
+            }
+        };
+        postData();
+    }, [token, email]);
+
     return (
         <Container>
             <Center minH="fit-content" h="calc(100vh - 5.5rem - 6.9rem)">

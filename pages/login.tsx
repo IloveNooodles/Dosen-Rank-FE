@@ -2,6 +2,7 @@ import { Container, VStack, Text } from "@chakra-ui/react";
 import LoginForm from "@/components/LoginForm";
 import Wrapper from "@/components/Wrapper";
 import NavigationBar from "@/components/NavigationBar";
+import Link from "next/link";
 
 const Login: React.FC<{}> = () => (
     <Container centerContent h="calc(100vh - 5.5rem - 6.9rem)">
@@ -10,6 +11,14 @@ const Login: React.FC<{}> = () => (
                     Masuk sebagai mahasiswa
                 </Text>
                 <LoginForm/>
+                <Text align="center" fontSize="sm">
+                    Lupa password?{" "}
+                    <Link href={'/forgot-password'}>
+                        <Text as="span" color="teal.500">
+                            Klik disini
+                        </Text>
+                    </Link>
+                </Text>
             </VStack>
     </Container>
 );

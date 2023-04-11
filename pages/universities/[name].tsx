@@ -37,7 +37,7 @@ const University: React.FC<{}> = () => {
     univRating,
     isLoading: isLoadingRating,
     error: errorRating,
-  } = getOverallUnivRating(university?.id!!);
+  } = getOverallUnivRating(name as string);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 

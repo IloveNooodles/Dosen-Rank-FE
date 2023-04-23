@@ -6,12 +6,12 @@ import Link from "next/link";
 export interface MatkulCardProps {
     matkulName: string;
     matkulCode: string;
-    urlMatkul: string;
+    matkulSlug: string;
 }
 
-const MatkulCard: React.FC<MatkulCardProps> = ({ matkulName, matkulCode ,urlMatkul}) => {
+const MatkulCard: React.FC<MatkulCardProps> = ({ matkulName, matkulCode ,matkulSlug}) => {
     return (
-        <Link href={`/courses/${matkulCode}`}>
+        <Link href={`/courses/${matkulSlug}`}>
             <Card width="17.5rem" height="4rem" justifyContent="center" _hover={{
                 background: "white",
                 color: "teal.500",

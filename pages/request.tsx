@@ -61,7 +61,7 @@ const Request: React.FC<{}> = () => {
                   institution: parseInt(values.institution),
                 },
               });
-              const response = await apiInstance({}).post("/requests/", data);
+              const response = await apiInstance({isAuthorized: true}).post("/requests/", data);
               if (response.status >= 200 && response.status < 300) {
                 toast({
                   title: 'Request berhasil dikirimkan',

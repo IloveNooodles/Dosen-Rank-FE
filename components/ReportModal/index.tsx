@@ -132,7 +132,7 @@ const ReportModal: React.FC<ReportModalProps> = ({isOpen, onOpen, onClose, repor
                                     <Button onClick={onClose} variant="secondary" width="full">
                                         Batal
                                     </Button>
-                                    <Button variant="angry" type="submit" width="full">
+                                    <Button onClick={onClose} variant="angry" type="submit" width="full">
                                         Laporkan
                                     </Button>
                                 </HStack>

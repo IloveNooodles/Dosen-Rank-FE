@@ -92,6 +92,12 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     const handleOnClick4 = (fourthFieldRating: number) => {
         setFourthFieldRating(fourthFieldRating);
     };
+    function resetRating() {
+        setFirstFieldRating(0);
+        setSecondFieldRating(0);
+        setThirdFieldRating(0);
+        setFourthFieldRating(0);
+    }
 
     const { tags: profTags, isLoading: isLoadingProf, isError: isErrorProf } = useProfTags(id, reviewFor);
     const { tags: courseTags, isLoading: isLoadingCourse, isError: isErrorCourse } = useCourseTags(id, reviewFor);
@@ -125,6 +131,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                 });
                                 const response = await apiInstance({isAuthorized: true}).post(`/reviews/univ/`, data);
                                 if (response.status >= 200 && response.status < 300) {
+                                    resetRating();
                                     toast({
                                       title: 'Review berhasil ditambahkan',
                                       status: 'success',
@@ -149,6 +156,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                 });
                                 const response = await apiInstance({isAuthorized: true}).post(`/reviews/course/`, data);
                                 if (response.status >= 200 && response.status < 300) {
+                                    resetRating();
                                     toast({
                                       title: 'Review berhasil ditambahkan',
                                       status: 'success',
@@ -171,6 +179,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                 });
                                 const response = await apiInstance({isAuthorized: true}).post(`/reviews/professor/`, data);
                                 if (response.status >= 200 && response.status < 300) {
+                                    resetRating();
                                     toast({
                                       title: 'Review berhasil ditambahkan',
                                       status: 'success',
@@ -183,6 +192,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                             }
                         } catch (error) {
                             if (axios.isAxiosError(error)) {
+                                resetRating();
                                 toast({
                                   title: 'Review gagal ditambahkan',
                                   status: 'error',

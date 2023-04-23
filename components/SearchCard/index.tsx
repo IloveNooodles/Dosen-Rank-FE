@@ -28,7 +28,7 @@ const SearchCard: React.FC<SearchCardProps> = (props) => {
     return `/professors/${slug}`;
   };
 
-  let realSlug = makeSlug(slug);
+  const realSlug = makeSlug(slug);
 
   return (
     <Link href={realSlug}>

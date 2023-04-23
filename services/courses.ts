@@ -2,7 +2,7 @@ import { Response, CourseResponse } from '@/interfaces';
 import { apiInstance } from '@/utils/apiInstance';
 import useSWR, { Fetcher } from 'swr';
 
-export const getCourseBySlug = (slug: string) => {
+export const useGetCourseBySlug = (slug: string) => {
   const fetcher: Fetcher<Response<CourseResponse>, string> = (url) =>
     apiInstance({})
       .get(url)

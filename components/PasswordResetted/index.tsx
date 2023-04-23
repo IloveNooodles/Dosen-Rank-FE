@@ -9,10 +9,7 @@ import iconSuccess from "@/public/ic-success.svg"
 import Image from "next/image";
 import {auto} from "@popperjs/core";
 
-interface PasswordResettedProps {
-}
-
-const CheckYourEmail: React.FC<PasswordResettedProps> = () => {
+const CheckYourEmail: React.FC<{}> = () => {
     return (
         <Box>
             <VStack>

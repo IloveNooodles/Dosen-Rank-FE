@@ -36,7 +36,7 @@ function useSearch(name?: string) {
 
 const Search: React.FC<CoursePageProps> = ({ title, summaryRatings }) => {
   const router = useRouter();
-  let { name } = router.query;
+  const { name } = router.query;
 
   const { data, isLoading, error } = useSearch(name as string);
 

@@ -32,8 +32,7 @@ const AuthProvider: React.FC<ContextProps> = ({children}) => {
     }, [token])
 
     const initUser = async () => {
-        let userToken;
-        userToken = localStorage.getItem('token');
+        const userToken = localStorage.getItem('token');
         if (userToken) {
             setToken(userToken);
             setUser(getDecodedUser(userToken))

@@ -5,8 +5,11 @@ import ReviewCard from '@/components/ReviewCard';
 import ReviewModal from '@/components/ReviewModal';
 import SummaryRating from '@/components/SummaryRating';
 import { useAuth } from '@/contexts/AuthContext';
-import { getAllUnivReview, getOverallUnivRating } from '@/services/reviews';
-import { getUnivBySlug } from '@/services/universities';
+import {
+  useGetAllUnivReview,
+  useGetOverallUnivRating,
+} from '@/services/reviews';
+import { useGetUnivBySlug } from '@/services/universities';
 import {
   Container,
   Divider,
@@ -27,17 +30,21 @@ const University: React.FC<{}> = () => {
   const { query } = useRouter();
   const { name } = query;
 
-  const { university, isLoading: isLoadingUniv, error: errorUniv } = getUnivBySlug(name as string);
+  const {
+    university,
+    isLoading: isLoadingUniv,
+    error: errorUniv,
+  } = useGetUnivBySlug(name as string);
   const {
     univReview,
     isLoading: isLoadingReview,
     error: errorReview,
-  } = getAllUnivReview(name as string);
+  } = useGetAllUnivReview(name as string);
   const {
     univRating,
     isLoading: isLoadingRating,
     error: errorRating,
-  } = getOverallUnivRating(name as string);
+  } = useGetOverallUnivRating(name as string);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -46,15 +53,15 @@ const University: React.FC<{}> = () => {
 
   // TODO: style error
   if (isLoadingReview || isLoadingRating || isLoadingUniv) {
-    return <LoadingAnimation/>;
+    return <LoadingAnimation />;
   }
 
   if (errorReview || errorUniv || errorRating) {
-    return <ErrorPage/>;
+    return <ErrorPage />;
   }
 
   return (
-    <Container px='0'>
+    <Container px="0">
       {isAuthenticated() ? (
         <ReviewModal
           isOpen={isOpen}
@@ -74,13 +81,15 @@ const University: React.FC<{}> = () => {
             summaryRatings={[
               {
                 name: 'Reputasi Akademik',
-                value: univRating?.overall_reputasi_akademik || 0 ,
+                value: univRating?.overall_reputasi_akademik || 0,
               },
-              { name: 'Lingkungan',
-              value: univRating?.overall_lingkungan || 0 },
+              {
+                name: 'Lingkungan',
+                value: univRating?.overall_lingkungan || 0,
+              },
               {
                 name: 'Kemahasiswaan',
-                value: univRating?.overall_kemahasiswaan || 0 ,
+                value: univRating?.overall_kemahasiswaan || 0,
               },
               { name: 'Fasilitas', value: univRating?.overall_fasilitas || 0 },
             ]}

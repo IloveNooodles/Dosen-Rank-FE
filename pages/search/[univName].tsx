@@ -53,7 +53,9 @@ export async function getServerSideProps(context: { query: { univName: string, n
         }
         console.log(url);
         const response = await apiInstance({}).get(url).catch((e) => console.error(e));
-        const {courses, professors} = await response?.data.data;
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        const {courses, professors} = await response.data.data;
 
         const props: Record<string, unknown> = {
             univName,
@@ -78,7 +80,9 @@ export async function getServerSideProps(context: { query: { univName: string, n
 
         // get faculties and majors
         const filterResponse = await apiInstance({}).get(`/search/faculty-major/${univName}`).catch((e) => console.error(e));
-        const {faculties, majors: majorsResponse} = await filterResponse?.data.data;
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore 
+        const {faculties, majors: majorsResponse} = await filterResponse.data.data;
 
         props.facultiesArray = faculties;
         props.majorsArray = majorsResponse;
@@ -186,7 +190,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
         if (page) {
             searchParams.set('page', String((parseInt(page.toString(), 10) + 1)) as string);
         } else {
-            let tempPage = 1;
+            const tempPage = 1;
             searchParams.set('page', String((parseInt(tempPage.toString(), 10))) as string);
         }
 
@@ -220,7 +224,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
         if (page) {
             searchParams.set('page', String((parseInt(page.toString(), 10) - 1)) as string);
         } else {
-            let tempPage = 1;
+            const tempPage = 1;
             searchParams.set('page', String((parseInt(tempPage.toString(), 10))) as string);
         }
 

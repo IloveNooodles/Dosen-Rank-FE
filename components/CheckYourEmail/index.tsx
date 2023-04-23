@@ -8,10 +8,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-interface CheckYourEmailProps {
-}
-
-const CheckYourEmail: React.FC<CheckYourEmailProps> = () => {
+const CheckYourEmail: React.FC<{}> = () => {
     return (
         <Box>
             <VStack>

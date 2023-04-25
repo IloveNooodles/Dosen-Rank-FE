@@ -111,7 +111,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     );
 
     return (
-        <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} size="3xl" isCentered>
+        <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} size={{base: "full", md: "3xl" }} isCentered>
             <ModalOverlay />
             <ModalContent borderRadius="12rem">
                 <Formik

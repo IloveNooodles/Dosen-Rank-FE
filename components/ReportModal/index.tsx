@@ -26,7 +26,7 @@ const ReportModal: React.FC<ReportModalProps> = ({isOpen, onOpen, onClose, repor
     const toast = useToast();
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <Modal isOpen={isOpen} onClose={onClose} size={{base: "full", md: "lg" }} isCentered>
             <ModalOverlay />
             <ModalContent borderRadius={"12rem"}>
                 <Formik

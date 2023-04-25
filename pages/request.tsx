@@ -1,5 +1,5 @@
 import { apiInstance } from "@/utils/apiInstance";
-import { Center, Container, HStack, Text, VStack, Image, Spacer, Radio, RadioGroup, Input, Textarea, Button, useToast } from "@chakra-ui/react";
+import { Center, Container, HStack, Text, VStack, Image, Spacer, Radio, RadioGroup, Input, Textarea, Button, useToast, Show } from "@chakra-ui/react";
 import axios from "axios";
 import { Form, Formik } from "formik";
 import dynamic from "next/dynamic";
@@ -136,8 +136,10 @@ const Request: React.FC<{}> = () => {
                     </VStack>
                     <Button type="submit" variant={"primary"} w="fit-content">Submit</Button>
                 </VStack>
-                <Spacer w={{base: '0vh', md: "20vh"}} />
-                <Image src="/puzzle.svg" alt="Decoration" w={{base: "0rem", md: "16rem"}} pointerEvents="none" userSelect="none" />
+                <Show above="md">
+                  <Spacer w={{base: '0vh', md: "20vh"}} />
+                  <Image src="/puzzle.svg" alt="Decoration" w={{base: "0rem", md: "16rem"}} pointerEvents="none" userSelect="none" />
+                </Show>
             </HStack>
           </Form>
         </Formik>

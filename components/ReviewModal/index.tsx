@@ -116,23 +116,6 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
             <ModalContent borderRadius="12rem">
                 <Formik
                     initialValues={initialValues}
-                    validationSchema={
-                        reviewFor === "university" ? Yup.object({
-                            firstFieldRating: Yup.number().min(0.5).required("Harus diisi"),
-                            secondFieldRating: Yup.number().min(0.5).required("Harus diisi"),
-                            thirdFieldRating: Yup.number().min(0.5).required("Harus diisi"),
-                            fourthFieldRating: Yup.number().min(0.5).required("Harus diisi"),
-                            details: Yup.string().required("Harus diisi"),
-                        })
-                        : Yup.object({
-                            tag: Yup.string().required("Tag harus diisi"),
-                            firstFieldRating: Yup.number().min(0.5).required("Harus diisi"),
-                            secondFieldRating: Yup.number().min(0.5).required("Harus diisi"),
-                            thirdFieldRating: Yup.number().min(0.5).required("Harus diisi"),
-                            fourthFieldRating: Yup.number().min(0.5).required("Harus diisi"),
-                            details: Yup.string().required("Harus diisi"),
-                        })
-                    }
                     onSubmit={async (values) => {
                         try {
                             if (reviewFor === "university") {
@@ -388,15 +371,10 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                     <Button onClick={()=> { onClose(); resetRating(); }} variant="secondary" width="full">
                                         Batal
                                     </Button>
-                                    <Button type="submit" variant="primary" width="full">
+                                    <Button type="submit" variant="primary" width="full" isDisabled={firstFieldRating == 0 || secondFieldRating == 0 || thirdFieldRating == 0 || fourthFieldRating == 0}>
                                         Publish
                                     </Button>
                                 </HStack>
-                                {errorMessage ? (
-                                    <Text marginX={12} paddingTop={2} fontSize="xs">
-                                        {errorMessage}
-                                    </Text>
-                                ) : null}
                             </VStack>
                         </VStack>
                     </Form>                  

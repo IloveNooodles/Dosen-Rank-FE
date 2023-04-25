@@ -47,7 +47,14 @@ const theme = extendTheme({
           px: "24px",
           _hover: {
             backgroundColor: "biru.900",
-          }
+            _disabled: {
+              backgroundColor: "gray.400",
+            },
+          },
+          _disabled: {
+            backgroundColor: "gray.400",
+            color: "gray.700",
+          },
         },
         angry: {
           color: "white",
@@ -74,7 +81,7 @@ const theme = extendTheme({
         },
         text: {
           px: "24px",
-        }
+        },
       },
     },
   },

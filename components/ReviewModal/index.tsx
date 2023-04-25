@@ -6,9 +6,10 @@ import { ProfessorResponse, SelectOption, Tag, Response, CourseResponse, NewRevi
 import { apiInstance } from "@/utils/apiInstance";
 import dynamic from "next/dynamic";
 import useSWR, { Fetcher, useSWRConfig } from 'swr';
-import { Form, Formik } from "formik";
+import { Form, Formik, useFormik } from "formik";
 import axios from "axios";
 import { useAuth } from "@/contexts/AuthContext";
+import * as Yup from "yup";
 
 
 const SelectInput = dynamic(() => import("../SelectInput"), { ssr: false });
@@ -63,7 +64,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
 
     const toast = useToast();
     const [count, setCount] = React.useState(0);
-    const [details, setDetails] = React.useState("");
+    const [errorMessage, setErrorMessage] = React.useState("");
 
     const { mutate } = useSWRConfig();
 
@@ -92,6 +93,12 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     const handleOnClick4 = (fourthFieldRating: number) => {
         setFourthFieldRating(fourthFieldRating);
     };
+    function resetRating() {
+        setFirstFieldRating(0);
+        setSecondFieldRating(0);
+        setThirdFieldRating(0);
+        setFourthFieldRating(0);
+    }
 
     const { tags: profTags, isLoading: isLoadingProf, isError: isErrorProf } = useProfTags(id, reviewFor);
     const { tags: courseTags, isLoading: isLoadingCourse, isError: isErrorCourse } = useCourseTags(id, reviewFor);
@@ -104,7 +111,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     );
 
     return (
-        <Modal isOpen={isOpen} onClose={onClose} size="3xl" isCentered>
+        <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} size="3xl" isCentered>
             <ModalOverlay />
             <ModalContent borderRadius="12rem">
                 <Formik
@@ -115,7 +122,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                 const data = JSON.stringify({
                                     creator_id: userId,
                                     univ_id: id,
-                                    content: details,
+                                    content: values.details,
                                     rating: {
                                         reputasi_akademik: firstFieldRating,
                                         lingkungan: secondFieldRating,
@@ -125,6 +132,8 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                 });
                                 const response = await apiInstance({isAuthorized: true}).post(`/reviews/univ/`, data);
                                 if (response.status >= 200 && response.status < 300) {
+                                    onClose();
+                                    resetRating();
                                     toast({
                                       title: 'Review berhasil ditambahkan',
                                       status: 'success',
@@ -139,7 +148,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                     creator_id: userId,
                                     professor_id: parseInt(values.tag),
                                     course_id: id,
-                                    content: details,
+                                    content: values.details,
                                     rating: {
                                         kesesuaian_sks: firstFieldRating,
                                         kompetensi: secondFieldRating,
@@ -149,6 +158,8 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                 });
                                 const response = await apiInstance({isAuthorized: true}).post(`/reviews/course/`, data);
                                 if (response.status >= 200 && response.status < 300) {
+                                    onClose();
+                                    resetRating();
                                     toast({
                                       title: 'Review berhasil ditambahkan',
                                       status: 'success',
@@ -161,7 +172,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                     creator_id: userId,
                                     professor_id: id,
                                     course_id: parseInt(values.tag),
-                                    content: details,
+                                    content: values.details,
                                     rating: {
                                         gaya_mengajar: firstFieldRating,
                                         konten: secondFieldRating,
@@ -171,6 +182,8 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                 });
                                 const response = await apiInstance({isAuthorized: true}).post(`/reviews/professor/`, data);
                                 if (response.status >= 200 && response.status < 300) {
+                                    onClose();
+                                    resetRating();
                                     toast({
                                       title: 'Review berhasil ditambahkan',
                                       status: 'success',
@@ -183,6 +196,9 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                             }
                         } catch (error) {
                             if (axios.isAxiosError(error)) {
+                                onClose();
+                                resetRating();
+                                setErrorMessage(error.response?.data.error);
                                 toast({
                                   title: 'Review gagal ditambahkan',
                                   status: 'error',
@@ -341,7 +357,6 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                         height="10rem"
                                         fontSize={{ base: '0.75rem', md: '0.9rem'}}
                                         onChange={e => {
-                                            setDetails(e.target.value)
                                             setCount(e.target.value.length) }}
                                     />
                                     <Text
@@ -353,16 +368,16 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                 </VStack>
                                 <Spacer/>
                                 <HStack width="full">
-                                    <Button onClick={onClose} variant="secondary" width="full">
+                                    <Button onClick={()=> { onClose(); resetRating(); }} variant="secondary" width="full">
                                         Batal
                                     </Button>
-                                    <Button onClick={onClose} type="submit" variant="primary" width="full">
+                                    <Button type="submit" variant="primary" width="full" isDisabled={firstFieldRating == 0 || secondFieldRating == 0 || thirdFieldRating == 0 || fourthFieldRating == 0}>
                                         Publish
                                     </Button>
                                 </HStack>
                             </VStack>
                         </VStack>
-                    </Form>
+                    </Form>                  
                 </Formik>
             </ModalContent>
         </Modal>

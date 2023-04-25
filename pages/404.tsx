@@ -1,4 +1,4 @@
-import { Center, Container, HStack, Text, VStack, Image, Spacer, Radio, RadioGroup, Input, Textarea, Button } from "@chakra-ui/react";
+import { Center, Container, HStack, Text, VStack, Image, Spacer, Radio, RadioGroup, Input, Textarea, Button, Show } from "@chakra-ui/react";
 import router from "next/router";
 
 import React from "react";
@@ -15,8 +15,10 @@ const Custom404: React.FC<{}> = () => {
                 </VStack>
                 <Button variant={"primary"} w="fit-content" onClick={() => router.push('/')}>Kembali</Button>
             </VStack>
-            <Spacer />
-            <Image src="/bird.svg" alt="Decoration" w="16rem" pointerEvents="none" userSelect="none" />
+            <Show above="md">
+              <Spacer />
+              <Image src="/bird.svg" alt="Decoration" w="16rem" pointerEvents="none" userSelect="none" />
+            </Show>
         </HStack>
       </Center>
     </Container>

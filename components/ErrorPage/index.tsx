@@ -1,4 +1,4 @@
-import { Center, HStack, VStack, Text, Spacer, Image, Button } from "@chakra-ui/react";
+import { Center, HStack, VStack, Text, Spacer, Image, Button, Show, Hide } from "@chakra-ui/react";
 import router from "next/router";
 
 const ErrorPage = () => {
@@ -13,8 +13,10 @@ const ErrorPage = () => {
               </VStack>
               <Button variant={"primary"} w="fit-content" onClick={() => router.push('/')}>Kembali</Button>
           </VStack>
-          <Spacer />
-          <Image src="/error.svg" alt="Decoration" w="16rem" pointerEvents="none" userSelect="none" />
+          <Show above="md">
+            <Spacer />
+            <Image src="/error.svg" alt="Decoration" w="16rem" pointerEvents="none" userSelect="none" />
+          </Show>
       </HStack>
     </Center>
   )

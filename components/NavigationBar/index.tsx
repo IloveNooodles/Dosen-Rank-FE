@@ -60,12 +60,6 @@ const NavigationBar: React.FC<{}> = () => {
               _hover={{ color: 'red.700' }}
               onClick={() => {
                 signOut();
-                toast({
-                  title: 'Logout berhasil',
-                  status: 'success',
-                  duration: 3000,
-                  position: 'top',
-                });
               }}
             >
               Keluar

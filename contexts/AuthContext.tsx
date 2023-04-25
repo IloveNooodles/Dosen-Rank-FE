@@ -43,6 +43,7 @@ const AuthProvider: React.FC<ContextProps> = ({children}) => {
         setUser({} as Account);
         setToken('')
         localStorage.removeItem('token')
+        window.location.href = '/login'
     }
 
     const getDecodedUser = (token: string) => {

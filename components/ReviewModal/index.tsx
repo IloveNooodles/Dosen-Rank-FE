@@ -1,4 +1,4 @@
-import { VStack, Text, HStack, Button, Textarea, Flex, Spacer, Modal, ModalOverlay, ModalContent, useToast, Link } from "@chakra-ui/react";
+import { VStack, Text, HStack, Button, Textarea, Flex, Spacer, Modal, ModalOverlay, ModalContent, useToast, Link, Show, Hide } from "@chakra-ui/react";
 import React from "react";
 import StarRating from "react-svg-star-rating";
 import styles from "@/styles/ReviewCard.module.scss";
@@ -111,7 +111,7 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
     );
 
     return (
-        <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} size="3xl" isCentered>
+        <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose} size={{base: "full", md: "3xl" }} isCentered>
             <ModalOverlay />
             <ModalContent borderRadius="12rem">
                 <Formik
@@ -304,38 +304,70 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
                                                 <StarRating unit="half" handleOnClick={handleOnClick2} size={25} containerClassName={styles.star} />
                                                 <Text w="1.5rem">{secondFieldRating}</Text>
                                             </HStack>
+                                            <Show below="sm">
+                                                <HStack>
+                                                    {reviewFor.includes("dosen") ? (
+                                                        <Text>Komunikasi</Text>
+                                                    ): null}
+                                                    {reviewFor.includes("course") ? (
+                                                        <Text>Kesulitan</Text>
+                                                    ): null}
+                                                    {reviewFor.includes("university") ? (
+                                                        <Text>Kemahasiswaan</Text>
+                                                    ): null}
+                                                    <Spacer/>
+                                                    <StarRating unit="half" handleOnClick={handleOnClick3} size={25} containerClassName={styles.star} />
+                                                    <Text w="1.5rem">{thirdFieldRating}</Text>
+                                                </HStack>
+                                                <HStack>
+                                                    {reviewFor.includes("dosen") ? (
+                                                        <Text>Transparansi penilaian</Text>
+                                                    ): null}
+                                                    {reviewFor.includes("course") ? (
+                                                        <Text>Ketersediaan sumber belajar</Text>
+                                                    ): null}
+                                                    {reviewFor.includes("university") ? (
+                                                        <Text>Fasilitas</Text>
+                                                    ): null}
+                                                    <Spacer/>
+                                                    <StarRating unit="half" handleOnClick={handleOnClick4} size={25} containerClassName={styles.star} />
+                                                    <Text w="1.5rem">{fourthFieldRating}</Text>
+                                                </HStack>
+                                            </Show>
                                         </VStack>
-                                        <Spacer/>
-                                        <VStack alignItems={"left"}>
-                                            <HStack>
-                                                {reviewFor.includes("dosen") ? (
-                                                    <Text>Komunikasi</Text>
-                                                ): null}
-                                                {reviewFor.includes("course") ? (
-                                                    <Text>Kesulitan</Text>
-                                                ): null}
-                                                {reviewFor.includes("university") ? (
-                                                    <Text>Kemahasiswaan</Text>
-                                                ): null}
-                                                <Spacer/>
-                                                <StarRating unit="half" handleOnClick={handleOnClick3} size={25} containerClassName={styles.star} />
-                                                <Text w="1.5rem">{thirdFieldRating}</Text>
-                                            </HStack>
-                                            <HStack>
-                                                {reviewFor.includes("dosen") ? (
-                                                    <Text>Transparansi penilaian</Text>
-                                                ): null}
-                                                {reviewFor.includes("course") ? (
-                                                    <Text>Ketersediaan sumber belajar</Text>
-                                                ): null}
-                                                {reviewFor.includes("university") ? (
-                                                    <Text>Fasilitas</Text>
-                                                ): null}
-                                                <Spacer/>
-                                                <StarRating unit="half" handleOnClick={handleOnClick4} size={25} containerClassName={styles.star} />
-                                                <Text w="1.5rem">{fourthFieldRating}</Text>
-                                            </HStack>
-                                        </VStack>
+                                        <Hide below="sm">
+                                            <Spacer/>
+                                            <VStack alignItems={"left"}>
+                                                <HStack>
+                                                    {reviewFor.includes("dosen") ? (
+                                                        <Text>Komunikasi</Text>
+                                                    ): null}
+                                                    {reviewFor.includes("course") ? (
+                                                        <Text>Kesulitan</Text>
+                                                    ): null}
+                                                    {reviewFor.includes("university") ? (
+                                                        <Text>Kemahasiswaan</Text>
+                                                    ): null}
+                                                    <Spacer/>
+                                                    <StarRating unit="half" handleOnClick={handleOnClick3} size={25} containerClassName={styles.star} />
+                                                    <Text w="1.5rem">{thirdFieldRating}</Text>
+                                                </HStack>
+                                                <HStack>
+                                                    {reviewFor.includes("dosen") ? (
+                                                        <Text>Transparansi penilaian</Text>
+                                                    ): null}
+                                                    {reviewFor.includes("course") ? (
+                                                        <Text>Ketersediaan sumber belajar</Text>
+                                                    ): null}
+                                                    {reviewFor.includes("university") ? (
+                                                        <Text>Fasilitas</Text>
+                                                    ): null}
+                                                    <Spacer/>
+                                                    <StarRating unit="half" handleOnClick={handleOnClick4} size={25} containerClassName={styles.star} />
+                                                    <Text w="1.5rem">{fourthFieldRating}</Text>
+                                                </HStack>
+                                            </VStack>
+                                        </Hide>
                                     </HStack>
                                 </VStack>
                                 <Spacer/>

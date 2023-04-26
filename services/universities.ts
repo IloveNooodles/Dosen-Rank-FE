@@ -1,9 +1,4 @@
-import {
-  Response,
-  UnivReview,
-  OverallUnivRating,
-  University,
-} from '@/interfaces';
+import { Response, University } from '@/interfaces';
 import { apiInstance } from '@/utils/apiInstance';
 import useSWR, { Fetcher } from 'swr';
 

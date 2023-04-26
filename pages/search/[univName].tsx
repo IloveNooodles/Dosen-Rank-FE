@@ -38,6 +38,50 @@ import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+
+export interface SearchAndFilterProps {
+  courses: CoursesProps[];
+  professors: ProfessorProps[];
+  univName: string;
+  page?: number;
+  name?: string;
+  sort?: string;
+  majors?: string;
+  faculty?: string;
+  url?: string;
+  facultiesArray?: FacultyProps[];
+  majorsArray?: MajorProps[];
+}
+
+export interface CoursesProps {
+  id: number;
+  course_id: string;
+  name: string;
+  institute_id: number;
+  institution_name: string;
+  slug: string;
+}
+
+export interface ProfessorProps {
+  id: number;
+  name: string;
+  institutionId: number;
+  institutionName: string;
+  slug: string;
+}
+
+export interface FacultyProps {
+  id: number;
+  name: string;
+  code: number;
+}
+
+export interface MajorProps {
+  id: number;
+  name: string;
+  code: number;
+}
+
 export async function getServerSideProps(context: {
   query: {
     univName: string;
@@ -64,7 +108,6 @@ export async function getServerSideProps(context: {
     if (faculty) {
       url += `&faculty=${faculty}`;
     }
-    console.log(url);
     const response = await apiInstance({})
       .get(url)
       .catch((e) => console.error(e));
@@ -116,62 +159,21 @@ export async function getServerSideProps(context: {
   }
 }
 
-export interface SearchAndFilterProps {
-  courses: CoursesProps[];
-  professors: ProfessorProps[];
-  univName: string;
-  page?: number;
-  name?: string;
-  sort?: string;
-  majors?: string;
-  faculty?: string;
-  url?: string;
-  facultiesArray?: FacultyProps[];
-  majorsArray?: MajorProps[];
-}
+const SearchAndFilter: React.FC<SearchAndFilterProps> = (props) => {
+  const {
+    courses,
+    professors,
+    univName,
+    page,
+    name,
+    sort,
+    majors,
+    faculty,
+    url,
+    facultiesArray,
+    majorsArray,
+  } = props;
 
-export interface CoursesProps {
-  id: number;
-  course_id: string;
-  name: string;
-  institute_id: number;
-  institution_name: string;
-  slug: string;
-}
-
-export interface ProfessorProps {
-  id: number;
-  name: string;
-  institutionId: number;
-  institutionName: string;
-  slug: string;
-}
-
-export interface FacultyProps {
-  id: number;
-  name: string;
-  code: number;
-}
-
-export interface MajorProps {
-  id: number;
-  name: string;
-  code: number;
-}
-
-const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
-  courses,
-  professors,
-  univName,
-  page,
-  name,
-  sort,
-  majors,
-  faculty,
-  url,
-  facultiesArray,
-  majorsArray,
-}) => {
   const [nameSearch, setNameSearch] = useState<string>(name ? name : '');
   const [currentPage, setCurrentPage] = useState<number>(page ? page : 1);
   const [selectedFaculty, setSelectedFaculty] = useState('');
@@ -181,8 +183,8 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
   const SelectInput = dynamic(() => import('../../components/SelectInput'), {
     ssr: false,
   });
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const facultyOption: Array<SelectOption> = facultiesArray!.map(
     ({ id, name }) => ({ label: name, value: id.toString() })
   );
@@ -267,7 +269,6 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
   const handleSortChange = (event: { target: { value: any } }) => {
     const newSortBy = event.target.value;
     setSortBy(newSortBy);
-    console.log(newSortBy);
     const { univName, name, page, majors, faculty } = router.query;
     const searchParams = new URLSearchParams();
 

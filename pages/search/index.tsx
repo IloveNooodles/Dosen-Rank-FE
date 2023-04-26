@@ -4,34 +4,15 @@ import LoadingAnimation from '@/components/LoadingAnimation';
 import SearchBar from '@/components/SearchBar';
 import SearchCard from '@/components/SearchCard';
 import { University } from '@/interfaces';
-import { apiInstance } from '@/utils/apiInstance';
+import { useUnivSearch } from '@/services/search';
 import { Container, Flex, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import useSWR from 'swr';
-
-const fetcher = (url: string) =>
-  apiInstance({})
-    .get(url)
-    .then((res) => res.data);
-
-function useSearch(name?: string) {
-  const { data, isLoading, error } = useSWR(
-    name ? `/univ/?name=${name}` : `/univ/`,
-    fetcher
-  );
-
-  return {
-    data,
-    isLoading,
-    error,
-  };
-}
 
 const Search: React.FC = () => {
   const router = useRouter();
   const { name } = router.query;
 
-  const { data, isLoading, error } = useSearch(name as string);
+  const { data, isLoading, error } = useUnivSearch(name as string);
 
   const univData = data?.data as Array<University>;
 
@@ -41,11 +22,11 @@ const Search: React.FC = () => {
     if (!univData)
       return (
         <Text
-          fontSize={{ base: '3xl', sm: '3xl', md: '5xl' }}
+          fontSize={{ base: 'xl', sm: '3xl', md: '5xl' }}
           fontWeight="bold"
           align={{ base: 'center', sm: 'center' }}
           color="biru.800"
-          margin={"auto 0"}
+          margin={'auto 0'}
         >
           Hasil tidak ditemukan
         </Text>

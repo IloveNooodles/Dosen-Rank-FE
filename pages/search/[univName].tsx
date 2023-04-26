@@ -33,7 +33,6 @@ import {
   Text,
   useDisclosure,
   VStack,
-  Wrap,
 } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
@@ -312,315 +311,313 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
     });
   };
 
-  return (
-    <Container
-      centerContent
-      h="calc(100vh - 5.5rem - 6.9rem)"
-      w="calc(100vw - 10rem)"
-    >
-      <Flex justifyContent="center" w="full">
-        <Box w="19rem" mt="1.6rem">
-          <Show above="md">
-            <Text fontSize="1rem" fontWeight="bold" mb="0.3rem">
-              Filter
-            </Text>
-            <Card px={3}>
-              <VStack>
-                <VStack justifyContent="flex-start">
-                  <Text fontSize="0.8rem" fontWeight="bold" mb="0.3rem">
-                    Fakultas:
-                  </Text>
-                  <Select
-                    placeholder="Pilih Fakultas"
-                    value={selectedFaculty}
-                    onChange={(e) => setSelectedFaculty(e.target.value)}
-                  >
-                    {facultiesArray!.map((faculty) => (
-                      <option key={faculty.name} value={faculty.id}>
-                        {faculty.name}
-                      </option>
-                    ))}
-                  </Select>
-                </VStack>
-                <VStack>
-                  <Text fontSize="0.8rem" fontWeight="bold" mb="0.3rem" pt={4}>
-                    Jurusan:
-                  </Text>
-                  <Select
-                    placeholder="Pilih Jurusan"
-                    value={selectedMajor}
-                    onChange={(e) => setSelectedMajor(e.target.value)}
-                  >
-                    {majorsArray!.map((major) => (
-                      <option key={major.name} value={major.id}>
-                        {major.name}
-                      </option>
-                    ))}
-                  </Select>
-                </VStack>
-                <Box>
-                  <Button
-                    colorScheme="teal"
-                    fontSize="sm"
-                    size="sm"
-                    fontWeight="bold"
-                    variant="solid"
-                    borderRadius="1rem"
-                    my={5}
-                    onClick={handleFilterButton}
-                  >
-                    Apply
-                  </Button>
-                </Box>
+  const renderFilterComponent = () => {
+    return (
+      <Show above="1080px">
+        <Flex direction={'column'} maxW={'15rem'}>
+          <Text fontSize="1rem" fontWeight="bold" mb="0.3rem">
+            Filter
+          </Text>
+          <Card>
+            <VStack>
+              <VStack maxW={'85%'}>
+                <Text fontSize="0.8rem" fontWeight="bold" mb="0.3rem">
+                  Fakultas:
+                </Text>
+                <Select
+                  placeholder="Pilih Fakultas"
+                  value={selectedFaculty}
+                  onChange={(e) => setSelectedFaculty(e.target.value)}
+                >
+                  {facultiesArray!.map((faculty) => (
+                    <option key={faculty.name} value={faculty.id}>
+                      {faculty.name}
+                    </option>
+                  ))}
+                </Select>
               </VStack>
-            </Card>
-          </Show>
-        </Box>
-        <Box w="97rem">
-          <VStack>
-            <Tabs pt="1rem">
-              <VStack>
-                <Show above="md">
-                  <Flex justifyContent="start" w="95%" pb="1.5rem">
-                    <TabList>
-                      <Tab>Dosen</Tab>
-                      <Tab>Matkul</Tab>
-                    </TabList>
-                  </Flex>
-                </Show>
-                <Box my={{ sm: '0', md: '8rem' }}>
-                  <InputGroup w={{ base: '20rem', md: '33rem' }}>
-                    <Input
-                      placeholder="Cari mata kuliah, atau dosen..."
-                      _placeholder={{
-                        color: 'netral.400',
-                        fontWeight: 'light',
-                      }}
-                      borderColor="netral.300"
-                      fontSize={{ base: '0.7rem', md: '1rem' }}
-                      focusBorderColor="biru.800"
-                      borderRadius="1.5rem"
-                      backgroundColor={'whiteAlpha.700'}
-                      backgroundBlendMode="overlay"
-                      onKeyUp={(e) =>
-                        setNameSearch((e.target as HTMLInputElement).value)
-                      }
-                    />
-                    <Link
-                      href={`/search/${univName}/?name=${nameSearch}&page=1`}
-                    >
-                      <InputRightElement>
-                        <Search2Icon color="netral.400" />
-                      </InputRightElement>
-                    </Link>
-                  </InputGroup>
-                </Box>
-                <Box pt="1.5rem">
-                  <HStack gap="38rem">
-                    <Show above="md">
-                      <Text></Text>
-                    </Show>
-                    <HStack gap={10}>
-                      <Box>
-                        <Show above={'md'}>
-                          <Text fontWeight="bold">Urutkan:</Text>
-                        </Show>
-                        <Select
-                          value={sortBy}
-                          onChange={handleSortChange}
-                          placeholder="Select option"
-                        >
-                          <option value="asc">A - Z</option>
-                          <option value="desc">Z - A</option>
-                        </Select>
-                      </Box>
-                      <Show below="md">
-                        <Box
-                          as="button"
-                          bg="transparent"
-                          border="none"
-                          p={0}
-                          m={0}
-                          cursor="pointer"
-                          _hover={{ opacity: 0.8 }}
-                          _active={{ outline: 'none' }}
-                          onClick={onOpen}
-                        >
-                          <Image
-                            src={'/ic-filter.svg'}
-                            alt={'filter logo'}
-                            width={30}
-                            height={30}
-                          ></Image>
-                        </Box>
-                        <Modal isOpen={isOpen} onClose={onClose}>
-                          <ModalOverlay />
-                          <ModalContent>
-                            <ModalHeader textAlign={'center'}>
-                              Filter
-                            </ModalHeader>
-                            <ModalCloseButton />
-                            <ModalBody>
-                              <VStack>
-                                <VStack justifyContent="flex-start">
-                                  <Box w={80}>
-                                    <Select
-                                      placeholder="Pilih Fakultas"
-                                      value={selectedFaculty}
-                                      onChange={(e) =>
-                                        setSelectedFaculty(e.target.value)
-                                      }
-                                    >
-                                      {facultiesArray!.map((faculty) => (
-                                        <option
-                                          key={faculty.name}
-                                          value={faculty.id}
-                                        >
-                                          {faculty.name}
-                                        </option>
-                                      ))}
-                                    </Select>
-                                  </Box>
-                                </VStack>
-                                <VStack>
-                                  <Box w={80}>
-                                    <Select
-                                      placeholder="Pilih Jurusan"
-                                      value={selectedMajor}
-                                      onChange={(e) =>
-                                        setSelectedMajor(e.target.value)
-                                      }
-                                    >
-                                      {majorsArray!.map((major) => (
-                                        <option
-                                          key={major.name}
-                                          value={major.id}
-                                        >
-                                          {major.name}
-                                        </option>
-                                      ))}
-                                    </Select>
-                                  </Box>
-                                </VStack>
-                                <Box>
-                                  <Button
-                                    colorScheme="teal"
-                                    fontSize="sm"
-                                    size="sm"
-                                    fontWeight="bold"
-                                    variant="solid"
-                                    borderRadius="1rem"
-                                    my={5}
-                                    onClick={handleFilterButton}
-                                  >
-                                    Apply
-                                  </Button>
-                                </Box>
-                              </VStack>
-                            </ModalBody>
-                          </ModalContent>
-                        </Modal>
-                      </Show>
-                    </HStack>
-                  </HStack>
-                </Box>
-                <Show below="md">
-                  <Flex justify="center" w="18rem">
-                    <TabList>
-                      <Tab>Dosen</Tab>
-                      <Tab>Matkul</Tab>
-                    </TabList>
-                  </Flex>
-                </Show>
-                <TabPanels>
-                  <TabPanel
-                    h="35rem"
-                    w="100%"
-                    justifyContent="center"
-                    alignItems="center"
-                  >
-                    <Card
-                      w={{ base: '22rem', md: '57rem' }}
-                      h={{ base: '27rem', md: '21rem' }}
-                      justify="center"
-                      align="center"
-                    >
-                      {/* eslint-disable-next-line react/jsx-no-undef */}
-                      <Wrap
-                        w={{ sm: '10%', md: '95%' }}
-                        h="95%"
-                        justify="center"
-                        align="center"
-                        overflowY={'scroll'}
-                      >
-                        {professors !== null ? (
-                          professors.map((professor) => (
-                            // eslint-disable-next-line react/jsx-key
-                            <DosenCard
-                              dosenName={professor.name}
-                              urlDosen={professor.slug}
-                            ></DosenCard>
-                          ))
-                        ) : (
-                          <Box w="100%" h="100%" pt={'2rem'}>
-                            <ContentNotFound />
-                          </Box>
-                        )}
-                      </Wrap>
-                    </Card>
-                    <Box pt={4}>
-                      <Pagination>
-                        <Pagination.Prev onClick={handleClickPrev} />
-                        <Pagination.Next onClick={handleClickNext} />
-                      </Pagination>
-                    </Box>
-                  </TabPanel>
-                  <TabPanel h="35rem">
-                    <Card
-                      w={{ base: '22rem', md: '57rem' }}
-                      h={{ base: '27rem', md: '21rem' }}
-                      justify="center"
-                      align="center"
-                    >
-                      <Wrap
-                        w={{ sm: '10%', md: '95%' }}
-                        h="95%"
-                        justify="center"
-                        align="center"
-                        overflowY={'scroll'}
-                      >
-                        {courses !== null ? (
-                          courses.map((course) => (
-                            <MatkulCard
-                              key={courses.indexOf(course)}
-                              matkulName={course.name}
-                              matkulCode={course.course_id}
-                              matkulSlug={course.slug}
-                            ></MatkulCard>
-                          ))
-                        ) : (
-                          <Box
-                            w="100%"
-                            h="100%"
-                            pt={{ sm: '2rem', md: '2rem' }}
+              <VStack maxW={'85%'}>
+                <Text fontSize="0.8rem" fontWeight="bold" mb="0.3rem" pt={4}>
+                  Jurusan:
+                </Text>
+                <Select
+                  placeholder="Pilih Jurusan"
+                  value={selectedMajor}
+                  onChange={(e) => setSelectedMajor(e.target.value)}
+                >
+                  {majorsArray!.map((major) => (
+                    <option key={major.name} value={major.id}>
+                      {major.name}
+                    </option>
+                  ))}
+                </Select>
+              </VStack>
+              <Box>
+                <Button
+                  colorScheme="teal"
+                  fontSize="sm"
+                  size="sm"
+                  fontWeight="bold"
+                  variant="solid"
+                  borderRadius="1rem"
+                  my={5}
+                  onClick={handleFilterButton}
+                >
+                  Apply
+                </Button>
+              </Box>
+            </VStack>
+          </Card>
+        </Flex>
+      </Show>
+    );
+  };
+
+  const searchComponent = () => {
+    return (
+      <Box display={'flex'}>
+        <InputGroup w={{ base: '20rem', md: '33rem' }} marginRight={'1.5rem'}>
+          <Input
+            placeholder="Cari mata kuliah, atau dosen..."
+            _placeholder={{
+              color: 'netral.400',
+              fontWeight: 'light',
+            }}
+            borderColor="netral.300"
+            fontSize={{ base: '0.7rem', md: '1rem' }}
+            focusBorderColor="biru.800"
+            borderRadius="1.5rem"
+            backgroundColor={'whiteAlpha.700'}
+            backgroundBlendMode="overlay"
+            onKeyUp={(e) => setNameSearch((e.target as HTMLInputElement).value)}
+          />
+          <Link href={`/search/${univName}/?name=${nameSearch}&page=1`}>
+            <InputRightElement>
+              <Search2Icon color="netral.400" />
+            </InputRightElement>
+          </Link>
+        </InputGroup>
+        {sortComponent()}
+      </Box>
+    );
+  };
+
+  const sortComponent = () => {
+    return (
+      <Box alignSelf={'flex-start'}>
+        <HStack>
+          <HStack>
+            <Box>
+              <Select
+                value={sortBy}
+                onChange={handleSortChange}
+                placeholder="Select option"
+              >
+                <option value="asc">A - Z</option>
+                <option value="desc">Z - A</option>
+              </Select>
+            </Box>
+            <Show below="1080px">
+              <Box
+                as="button"
+                bg="transparent"
+                border="none"
+                p={0}
+                m={0}
+                cursor="pointer"
+                _hover={{ opacity: 0.8 }}
+                _active={{ outline: 'none' }}
+                onClick={onOpen}
+              >
+                <Image
+                  src={'/ic-filter.svg'}
+                  alt={'filter logo'}
+                  width={30}
+                  height={30}
+                ></Image>
+              </Box>
+              <Modal isOpen={isOpen} onClose={onClose}>
+                <ModalOverlay />
+                <ModalContent>
+                  <ModalHeader textAlign={'center'}>Filter</ModalHeader>
+                  <ModalCloseButton />
+                  <ModalBody>
+                    <VStack>
+                      <VStack justifyContent="flex-start">
+                        <Box w={80}>
+                          <Select
+                            placeholder="Pilih Fakultas"
+                            value={selectedFaculty}
+                            onChange={(e) => setSelectedFaculty(e.target.value)}
                           >
-                            <ContentNotFound />
-                          </Box>
-                        )}
-                      </Wrap>
-                    </Card>
-                    <Box pt={4}>
-                      <Pagination>
-                        <Pagination.Prev onClick={handleClickPrev} />
-                        <Pagination.Next onClick={handleClickNext} />
-                      </Pagination>
-                    </Box>
-                  </TabPanel>
-                </TabPanels>
-              </VStack>
-            </Tabs>
-          </VStack>
+                            {facultiesArray!.map((faculty) => (
+                              <option key={faculty.name} value={faculty.id}>
+                                {faculty.name}
+                              </option>
+                            ))}
+                          </Select>
+                        </Box>
+                      </VStack>
+                      <VStack>
+                        <Box w={80}>
+                          <Select
+                            placeholder="Pilih Jurusan"
+                            value={selectedMajor}
+                            onChange={(e) => setSelectedMajor(e.target.value)}
+                          >
+                            {majorsArray!.map((major) => (
+                              <option key={major.name} value={major.id}>
+                                {major.name}
+                              </option>
+                            ))}
+                          </Select>
+                        </Box>
+                      </VStack>
+                      <Box>
+                        <Button
+                          colorScheme="teal"
+                          fontSize="sm"
+                          size="sm"
+                          fontWeight="bold"
+                          variant="solid"
+                          borderRadius="1rem"
+                          my={5}
+                          onClick={handleFilterButton}
+                        >
+                          Apply
+                        </Button>
+                      </Box>
+                    </VStack>
+                  </ModalBody>
+                </ModalContent>
+              </Modal>
+            </Show>
+          </HStack>
+        </HStack>
+      </Box>
+    );
+  };
+
+  const renderDosen = () => {
+    return (
+      <TabPanel>
+        <Card
+          display={'flex'}
+          flexDir={'column'}
+          flexWrap={'wrap'}
+          overflowY={'hidden'}
+          overflowX={'hidden'}
+          justifyContent={'start'}
+          minH={'25rem'}
+        >
+          {professors !== null ? (
+            professors.map((professor, index) => (
+              <DosenCard
+                dosenName={professor.name}
+                urlDosen={professor.slug}
+                key={index}
+              />
+            ))
+          ) : (
+            <Box padding={'2rem'}>
+              <ContentNotFound />
+            </Box>
+          )}
+        </Card>
+        <Box pt={4}>
+          <Pagination>
+            <Pagination.Prev onClick={handleClickPrev} />
+            <Pagination.Next onClick={handleClickNext} />
+          </Pagination>
         </Box>
+      </TabPanel>
+    );
+  };
+
+  const renderMatkul = () => {
+    return (
+      <TabPanel>
+        <Card
+          display={'flex'}
+          flexDir={'column'}
+          flexWrap={'wrap'}
+          overflowY={'hidden'}
+          overflowX="hidden"
+          justifyContent={'start'}
+          minH={'25rem'}
+        >
+          {courses !== null ? (
+            courses.map((course, index) => (
+              <MatkulCard
+                key={index}
+                matkulName={course.name}
+                matkulCode={course.course_id}
+                matkulSlug={course.slug}
+              />
+            ))
+          ) : (
+            <Box padding={'2rem'}>
+              <ContentNotFound />
+            </Box>
+          )}
+        </Card>
+        <Box pt={4}>
+          <Pagination>
+            <Pagination.Prev onClick={handleClickPrev} />
+            <Pagination.Next onClick={handleClickNext} />
+          </Pagination>
+        </Box>
+      </TabPanel>
+    );
+  };
+
+  const renderSearchResult = () => {
+    return (
+      <TabPanels>
+        {renderDosen()}
+        {renderMatkul()}
+      </TabPanels>
+    );
+  };
+
+  const renderSearchComponent = () => {
+    return (
+      <Box display={'flex'}>
+        <VStack>
+          <Tabs pt="1rem">
+            <VStack>
+              <Show above="md">
+                <Flex justifyContent="start" w="100%" pb="1.5rem" pl="2rem">
+                  <TabList>
+                    <Tab>Dosen</Tab>
+                    <Tab>Matkul</Tab>
+                  </TabList>
+                </Flex>
+              </Show>
+              {searchComponent()}
+              <Show below="md">
+                <Flex justify="center" w="18rem">
+                  <TabList>
+                    <Tab>Dosen</Tab>
+                    <Tab>Matkul</Tab>
+                  </TabList>
+                </Flex>
+              </Show>
+              {renderSearchResult()}
+            </VStack>
+          </Tabs>
+        </VStack>
+      </Box>
+    );
+  };
+
+  return (
+    <Container>
+      <Flex>
+        {renderFilterComponent()}
+        <Flex flexGrow={1} justifyContent={'center'}>
+          {renderSearchComponent()}
+        </Flex>
       </Flex>
     </Container>
   );

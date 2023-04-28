@@ -6,9 +6,11 @@ import React from 'react';
 export interface DosenCardProps {
   dosenName: string;
   urlDosen: string;
+  faculty: string;
+  major: string;
 }
 const DosenCard: React.FC<DosenCardProps> = (props) => {
-  const { dosenName, urlDosen } = props;
+  const { dosenName, urlDosen, faculty, major } = props;
 
   return (
     <Card
@@ -19,11 +21,14 @@ const DosenCard: React.FC<DosenCardProps> = (props) => {
         background: 'natural.100',
         color: 'teal.500',
       }}
+      p={4}
     >
       <Link href={`/professors/${urlDosen}`}>
-        <Text fontSize="1rem" fontWeight="400" textAlign="start" ml={4}>
+        <Text fontSize="1rem" fontWeight="400" textAlign="start" mb={1}>
           {dosenName}
         </Text>
+        <Text fontSize='sm' color='gray.500'>{faculty}</Text>
+        <Text fontSize='sm' color='gray.500'>{major}</Text>
       </Link>
     </Card>
   );

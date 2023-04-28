@@ -68,6 +68,8 @@ export interface ProfessorProps {
   institutionId: number;
   institutionName: string;
   slug: string;
+  major_name: string;
+  faculty_name: string;
 }
 
 export interface FacultyProps {
@@ -516,6 +518,8 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = (props) => {
               <DosenCard
                 dosenName={professor.name}
                 urlDosen={professor.slug}
+                faculty={professor.faculty_name}
+                major={professor.major_name}
                 key={index}
               />
             ))

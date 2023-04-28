@@ -147,17 +147,17 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
               onClick={handleLike}
               borderRadius={"1.5rem"}
               px={"1rem"}
-              colorScheme={`${activeButtonState === "like" ? "cyan" : "gray"}`}
+              backgroundColor={`${activeButtonState === "like" ? "biru.100" : "gray.100"}`}
             >
-              <Text color={"gray.900"}>👍 {likeCountState}</Text>
+              <Text color={`${activeButtonState === "like" ? "biru.900" : "gray.900"}`}>👍 {likeCountState}</Text>
             </Button>
             <Button
               onClick={handleDislike}
               borderRadius={"1.5rem"}
               px={"1rem"}
-              colorScheme={activeButtonState === "dislike" ? "red" : "gray"}
+              backgroundColor={activeButtonState === "dislike" ? "red.100" : "gray.100"}
             >
-              <Text color={"gray.900"}>👎 {dislikeCountState}</Text>
+              <Text color={`${activeButtonState === "dislike" ? "red.900" : "gray.900"}`}>👎 {dislikeCountState}</Text>
             </Button>
           </HStack>
         </HStack>

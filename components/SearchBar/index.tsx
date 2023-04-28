@@ -23,18 +23,10 @@ const SearchBar: React.FC<SearchBarProps> = (props) => {
         backgroundColor={"whiteAlpha.700"}
         backgroundBlendMode="overlay"
         onChange={(e) => setNameSearch(e.target.value)}
-<<<<<<< components/SearchBar/index.tsx
-        onKeyPress={(e) => {
-              if (e.key === 'Enter') {
-                  window.location.href = `/search?name=${nameSearch}`
-              }
-        }}
-=======
         onKeyDown={(e) => {
           if (e.key === "Enter") {
             window.location.href = `/search?name=${nameSearch}`}}
           }
->>>>>>> components/SearchBar/index.tsx
       />
       <Link id={"search-icon"} href={`/search?name=${nameSearch}`}>
         <InputRightElement>

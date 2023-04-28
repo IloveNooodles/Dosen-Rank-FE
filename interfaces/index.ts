@@ -78,6 +78,7 @@ export interface CourseResponse {
   institute_id: number;
   institution_name: string;
   slug: string;
+  sks: number;
 }
 
 export interface NewReview {

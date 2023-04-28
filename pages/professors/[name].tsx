@@ -96,6 +96,7 @@ const Professor: React.FC<{}> = () => {
             ]}
             reportFor="PROFESSOR"
             reportedId={professor?.id!!}
+            sksCourse={0}
           />
           <Divider />
           <Flex direction="row">

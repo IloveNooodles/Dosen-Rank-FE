@@ -23,6 +23,7 @@ const SummaryRating: React.FC<{
       <Flex alignItems="center">
       <ReportModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} reportFor={reportFor} reportedId={reportedId} />
       <Text
+          data-cy={'summary-rating-title'}
         fontSize={{ base: "xl", sm: "2xl", md: "5xl" }}
         fontWeight="bold"
         align={{ base: "center", sm: "left" }}
@@ -84,6 +85,7 @@ const SummaryRating: React.FC<{
           fontSize={{ base: "4xl", md: "5xl" }}
           color="biru.800"
           fontWeight="semibold"
+          data-cy={'summary-rating-overall'}
         >
           {overallRating?.toFixed(1) || 0}
         </Text>

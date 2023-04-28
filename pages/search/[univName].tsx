@@ -381,6 +381,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = (props) => {
       <Box display={'flex'}>
         <InputGroup w={{ base: '20rem', md: '33rem' }} marginRight={'1.5rem'}>
           <Input
+              id={'search-bar'}
             placeholder="Cari mata kuliah, atau dosen..."
             _placeholder={{
               color: 'netral.400',

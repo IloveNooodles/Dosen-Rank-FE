@@ -60,6 +60,7 @@ export interface CoursesProps {
   institute_id: number;
   institution_name: string;
   slug: string;
+  sks: number;
 }
 
 export interface ProfessorProps {
@@ -559,6 +560,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = (props) => {
                 matkulName={course.name}
                 matkulCode={course.course_id}
                 matkulSlug={course.slug}
+                matkulSKS={course.sks}
               />
             ))
           ) : (

@@ -7,10 +7,11 @@ export interface MatkulCardProps {
   matkulName: string;
   matkulCode: string;
   matkulSlug: string;
+  matkulSKS: number;
 }
 
 const MatkulCard: React.FC<MatkulCardProps> = (props) => {
-  const { matkulName, matkulCode, matkulSlug } = props;
+  const { matkulName, matkulCode, matkulSlug, matkulSKS } = props;
   return (
     <Card
       minH="4rem"
@@ -29,7 +30,7 @@ const MatkulCard: React.FC<MatkulCardProps> = (props) => {
           ml={4}
           color="#237495"
         >
-          {matkulCode}
+          {matkulCode} - {matkulSKS} SKS
         </Text>
         <Text fontSize="1rem" fontWeight="400" textAlign="start" ml={4}>
           {matkulName}

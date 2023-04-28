@@ -101,7 +101,7 @@ const Professor: React.FC<{}> = () => {
           <Divider />
           <Flex direction="row">
             <HStack my={5}>
-              <Text fontSize="2xl" paddingLeft={3} fontWeight={'bold'}>{professorRating?.review_count}</Text>
+              <Text fontSize="2xl" paddingLeft={3} fontWeight={'bold'}>{professorRating?.review_count ?? 0}</Text>
               <Text>ulasan</Text>
             </HStack>
             <Spacer />

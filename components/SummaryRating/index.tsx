@@ -2,7 +2,7 @@ import { SummaryRatingProps } from "@/interfaces";
 import { Flex, Spacer, Icon, VStack, SimpleGrid, Text, useDisclosure } from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
-import { AiOutlineWarning } from "react-icons/ai";
+import { FiAlertTriangle } from "react-icons/fi";
 import ReportModal from "../ReportModal";
 import RatingItem from "./RatingItem";
 
@@ -13,7 +13,8 @@ const SummaryRating: React.FC<{
   summaryRatings: SummaryRatingProps[];
   reportFor: string;
   reportedId: number;
-}> = ({ title, pagePath, overallRating, summaryRatings, reportFor, reportedId }) => {
+  sksCourse: number;
+}> = ({ title, pagePath, overallRating, summaryRatings, reportFor, reportedId, sksCourse }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   
   return (
@@ -31,41 +32,33 @@ const SummaryRating: React.FC<{
       >
         {title?.toLocaleUpperCase()}
       </Text>
+      { reportFor == "COURSE" ? (
+        <Text
+          fontSize={{ base: "sm", sm: "md", md: "xl" }}
+          fontWeight="normal"
+          align={{ base: "center", sm: "left" }}
+          color="biru.800"
+          backgroundColor="biru.50"
+          ml={{ base: 4, sm: 6, lg: 8 }}
+          px={4}
+          py={1}
+          borderRadius="3xl"
+        >
+          {sksCourse ? `${sksCourse} SKS` : null}
+        </Text>
+        ) : null
+      }
       <Spacer />
       <Icon
-        as={AiOutlineWarning}
+        as={FiAlertTriangle}
         boxSize={{ base: 3, sm: 4, md: 6 }}
-        color="gray.500"
+        color="gray.200"
         onClick={onOpen}
-        _hover={{ cursor: "pointer", color: "red.600" }}
+        _hover={{ cursor: "pointer", color: "red.500" }}
         aria-label={""}      />
     </Flex>
     {/* action button */}
     <Flex direction="row">
-      {pagePath.includes("professors") ? (
-        <Link href="/">
-          <Text
-            as="u"
-            fontSize={{ base: "sm", sm: "lg" }}
-            mr="4"
-            ml={{ sm: 2, lg: 4 }}
-          >
-            Lihat mata kuliah
-          </Text>
-        </Link>
-      ) : null}
-      {pagePath.includes("courses") ? (
-        <Link href="/">
-          <Text
-            as="u"
-            fontSize={{ base: "sm", sm: "lg" }}
-            mr="4"
-            ml={{ sm: 2, lg: 4 }}
-          >
-            Lihat dosen
-          </Text>
-        </Link>
-      ) : null}
       {pagePath.includes("universities")? (
         <Link href={`/search/${pagePath.split('/')[2]}`}>
           <Text

@@ -64,7 +64,7 @@ const LoginForm: React.FC = () => {
                         type="password"
                         placeholder="Password"
                     />
-                    <Button type="submit" colorScheme="biru" w="full">
+                    <Button data-testid='user-login-btn' type="submit" colorScheme="biru" w="full">
                         Masuk
                     </Button>
                 </VStack>

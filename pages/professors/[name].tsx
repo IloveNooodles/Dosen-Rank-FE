@@ -1,147 +1,151 @@
-import { Container, Divider, Flex, Text } from '@chakra-ui/react';
+import {
+  Container,
+  Divider,
+  Flex,
+  HStack,
+  Icon,
+  Link,
+  Spacer,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
 import React from 'react';
 import MainCard from '@/components/MainCard';
 import SummaryRating from '@/components/SummaryRating';
 import ReviewCard from '@/components/ReviewCard';
-import { apiInstance } from '@/utils/apiInstance';
-import { University, Course, Professor, Creator } from '@/interfaces';
+import ReviewModal from '@/components/ReviewModal';
+import { FiEdit } from 'react-icons/fi';
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/router';
+import { useGetProfessorBySlug } from '@/services/professors';
+import {
+  useGetAllProfessorReview,
+  useGetOverallProfessorRating,
+} from '@/services/reviews';
+import ErrorPage from '@/components/ErrorPage';
+import LoadingAnimation from '@/components/LoadingAnimation';
 
-export async function getServerSideProps(context: { query: { name: string } }) {
-  const { name } = context.query;
+const Professor: React.FC<{}> = () => {
+  const { query } = useRouter();
+  const { name } = query;
 
-  try {
-    const profRes = await apiInstance({}).get(`/professor/slug/${name}`);
-    const { id: profId, name: profName } = await profRes.data.data;
+  const {
+    professor,
+    isLoading: isLoadingProfessor,
+    error: errorProfessor,
+  } = useGetProfessorBySlug(name as string);
+  const {
+    professorReview,
+    isLoading: isLoadingReview,
+    error: errorReview,
+  } = useGetAllProfessorReview(name as string);
+  const {
+    professorRating,
+    isLoading: isLoadingRating,
+    error: errorRating,
+  } = useGetOverallProfessorRating(professor?.id!!);
 
-    const reviewRes = await apiInstance({}).get(
-      `/reviews/professor/?id=${profId}`
-    );
-    const reviews = await reviewRes.data.data;
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const overallRatingRes = await apiInstance({}).get(
-      `/reviews/professor/overall/${profId}`
-    );
-    const ratings = await overallRatingRes.data.data;
+  const { isAuthenticated } = useAuth();
+  const { asPath } = useRouter();
 
-    return {
-      props: {
-        title: profName,
-        reviews,
-        summaryRatings: ratings,
-        summaryAverageRating: ratings.overall_rating,
-      },
-    };
-  } catch (e) {
-    console.error(e);
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
+  if (isLoadingReview || isLoadingRating || isLoadingProfessor) {
+    return <LoadingAnimation />;
   }
-}
 
-export interface OverallProfessorRating {
-  overall_konten: number;
-  overall_komunikasi: number;
-  overall_transparansi: number;
-  overall_gaya_mengajar: number;
-}
-
-export interface ProfessorRating {
-  konten: number;
-  komunikasi: number;
-  transparansi: number;
-  gaya_mengajar: number;
-}
-
-export interface ProfessorReview {
-  id: number;
-  creator: Creator;
-  professor: Professor;
-  course: Course;
-  upvote: number;
-  downvote: number;
-  content: string;
-  created_at: string;
-  updated_at: string;
-  rating: ProfessorRating;
-  average_rating: number;
-}
-
-export interface ProfessorPageProps {
-  title: string;
-  reviews: ProfessorReview[];
-  summaryRatings: OverallProfessorRating;
-  summaryAverageRating: number;
-}
-
-const Professor: React.FC<ProfessorPageProps> = ({
-  title,
-  reviews,
-  summaryRatings,
-  summaryAverageRating,
-}) => {
-  const ratings = [
-    { name: 'Gaya Mengajar', value: summaryRatings.overall_gaya_mengajar },
-    { name: 'Komunikasi', value: summaryRatings.overall_komunikasi },
-    { name: 'Konten Pengajar', value: summaryRatings.overall_konten },
-    {
-      name: 'Transparansi Penilaian',
-      value: summaryRatings.overall_transparansi,
-    },
-  ];
+  if (errorReview || errorProfessor || errorRating) {
+    return <ErrorPage />;
+  }
 
   return (
     <Container>
+      {isAuthenticated() ? (
+        <ReviewModal
+          isOpen={isOpen}
+          onOpen={onOpen}
+          onClose={onClose}
+          reviewFor="dosen"
+          slug={professor?.slug}
+          id={professor?.id!!}
+        />
+      ) : null}
       <MainCard>
         <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
           <SummaryRating
-            title={title}
-            pagePath="professors"
-            overallRating={summaryAverageRating}
-            summaryRatings={ratings}
+            title={professor?.name!!}
+            pagePath={asPath}
+            overallRating={professorRating?.overall_rating!!}
+            summaryRatings={[
+              {
+                name: 'Gaya Mengajar',
+                value: professorRating?.overall_gaya_mengajar || 0,
+              },
+              {
+                name: 'Komunikasi',
+                value: professorRating?.overall_komunikasi || 0,
+              },
+              {
+                name: 'Konten Pengajar',
+                value: professorRating?.overall_konten || 0,
+              },
+              {
+                name: 'Transparansi Penilaian',
+                value: professorRating?.overall_transparansi || 0,
+              },
+            ]}
+            reportFor="PROFESSOR"
+            reportedId={professor?.id!!}
           />
           <Divider />
-          <Text my={6}>{reviews.length} Ulasan</Text>
-          {reviews.map((review) => {
-            const {
-              id,
-              creator,
-              professor,
-              course,
-              upvote,
-              downvote,
-              content,
-              created_at,
-              updated_at,
-              rating,
-              average_rating,
-            } = review;
-            return (
-              <ReviewCard
-                key={reviews.indexOf(review)}
-                reviewFor={'dosen'}
-                idReview={id}
-                reviewerName={creator.name}
-                courseName={course.name}
-                overallRating={average_rating}
-                firstFieldName="Gaya Mengajar"
-                secondFieldName="Komunikasi"
-                thirdFieldName="Konten Pengajar"
-                fourthFieldName="Transparansi Penilaian"
-                firstFieldRating={rating.gaya_mengajar}
-                secondFieldRating={rating.komunikasi}
-                thirdFieldRating={rating.konten}
-                fourthFieldRating={rating.transparansi}
-                reviewDate={created_at}
-                reviewContent={content}
-                likeCount={upvote}
-                dislikeCount={downvote}
-              />
-            );
-          })}
+          <Flex direction="row">
+            <Text my={6}>{professorRating?.review_count} Ulasan</Text>
+            <Spacer />
+            {isAuthenticated() ? (
+              <HStack>
+                <Link
+                  display={'flex'}
+                  gap={'0.5rem'}
+                  alignItems="center"
+                  onClick={onOpen}
+                >
+                  <Icon as={FiEdit} color="biru.700" w="1.2rem" h="1.2rem" />
+                  <Text
+                    fontSize={'1rem'}
+                    fontWeight={'500'}
+                    color={'biru.700'}
+                    pt={0}
+                  >
+                    Tulis ulasan
+                  </Text>
+                </Link>
+              </HStack>
+            ) : null}
+          </Flex>
+          {professorReview?.map((review) => (
+            <ReviewCard
+              key={professorReview.indexOf(review)}
+              reviewFor={'dosen'}
+              idReview={review.id}
+              reviewerName={review.creator.name}
+              courseName={review.course.name}
+              overallRating={review.average_rating}
+              firstFieldName="Gaya Mengajar"
+              secondFieldName="Komunikasi"
+              thirdFieldName="Konten Pengajar"
+              fourthFieldName="Transparansi Penilaian"
+              firstFieldRating={review.rating.gaya_mengajar}
+              secondFieldRating={review.rating.komunikasi}
+              thirdFieldRating={review.rating.konten}
+              fourthFieldRating={review.rating.transparansi}
+              reviewDate={review.created_at}
+              reviewContent={review.content}
+              likeCount={review.upvote}
+              dislikeCount={review.downvote}
+              reportFor="PROFESSOR_REVIEW"
+              reportedId={review.id}
+            />
+          ))}
         </Flex>
       </MainCard>
     </Container>

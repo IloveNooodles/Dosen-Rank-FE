@@ -37,17 +37,19 @@ const NavigationBar: React.FC<{}> = () => {
             <Text fontWeight="regular" fontSize="16px">
               Halo, {user.name}!
             </Text>
-          ) : null}
-          {router.pathname === '/' && !isAuthenticated() ? (
-            <Button variant="secondary" onClick={() => router.push('/login')}>
-              Masuk
-            </Button>
-          ) : null}
-          {router.pathname === '/' && !isAuthenticated() ? (
-            <Button variant="primary" onClick={() => router.push('/register')}>
-              Daftar
-            </Button>
-          ) : null}
+          ) : (
+            <HStack mr='6'>
+              <Button variant="secondary" onClick={() => router.push('/login')}>
+                Masuk
+              </Button>
+              <Button
+                variant="primary"
+                onClick={() => router.push('/register')}
+              >
+                Daftar
+              </Button>
+            </HStack>
+          )}
           {isAuthenticated() ? (
             <Button
               leftIcon={<FiLogOut />}
@@ -58,12 +60,6 @@ const NavigationBar: React.FC<{}> = () => {
               _hover={{ color: 'red.700' }}
               onClick={() => {
                 signOut();
-                toast({
-                  title: 'Logout berhasil',
-                  status: 'success',
-                  duration: 3000,
-                  position: 'top',
-                });
               }}
             >
               Keluar

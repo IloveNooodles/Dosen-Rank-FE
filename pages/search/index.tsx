@@ -1,96 +1,78 @@
-import MainCard from '@/components/MainCard';
-import { ReviewCardProps } from '@/components/ReviewCard';
+'use strict';
+
+import LoadingAnimation from '@/components/LoadingAnimation';
 import SearchBar from '@/components/SearchBar';
 import SearchCard from '@/components/SearchCard';
-import { SummaryRatingProps } from '@/interfaces';
+import { University } from '@/interfaces';
+import { useUnivSearch } from '@/services/search';
 import { Container, Flex, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import React from 'react';
 
-export interface CoursePageProps {
-  title: string;
-  summaryRatings: SummaryRatingProps[];
-  reviews: ReviewCardProps;
-}
-
-const Search: React.FC<CoursePageProps> = ({ title, summaryRatings }) => {
+const Search: React.FC = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const { name } = router.query;
+
+  const { data, isLoading, error } = useUnivSearch(name as string);
+
+  const univData = data?.data as Array<University>;
+
+  function renderSearch() {
+    if (isLoading) return <LoadingAnimation />;
+    if (error) return <p>Error when searching</p>;
+    if (!univData)
+      return (
+        <Text
+          fontSize={{ base: 'xl', sm: '3xl', md: '5xl' }}
+          fontWeight="bold"
+          align={{ base: 'center', sm: 'center' }}
+          color="biru.800"
+          margin={'auto 0'}
+        >
+          Hasil tidak ditemukan
+        </Text>
+      );
+
+    return univData?.map((univ: University) => {
+      return (
+        <SearchCard
+          key={univ.id}
+          searchResult={univ.name}
+          slug={univ.slug}
+          searchFor="university"
+        />
+      );
+    });
+  }
 
   return (
     <Container
       display={'flex'}
       flexDirection={'column'}
-      justifyContent={'center'}
+      // justifyContent={'flex'}
       alignItems={'center'}
+      minH={'calc(92vh - 108px)'}
     >
-      <Text
-        fontSize={{ base: 'xl', sm: '3xl', md: '5xl' }}
-        fontWeight="bold"
-        align={{ base: 'center', sm: 'left' }}
-        color="biru.800"
-        ml={{ base: 0, sm: '4', md: '8' }}
+      <Container
+        display={'flex'}
+        flexDir={'column'}
+        justifyContent={'flex-start'}
+        alignItems={'center'}
       >
-        Hasil Pencarian
-      </Text>
-      <SearchBar />
-      {/* each card section for university, dosen, and mata kulah */}
-      <MainCard>
-        <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
-          <Text
-            color="biru.800"
-            fontSize={{ base: '1.5rem', md: '2rem' }}
-            fontWeight="bold"
-            marginRight={'auto'}
-            marginLeft={'auto'}
-          >
-            Universitas
-          </Text>
-          <SearchCard
-            searchResult={'Institut Teknologi Bandung'}
-            slug="institut-teknologi-bandung"
-            searchFor="university"
-          />
-        </Flex>
-      </MainCard>
-      {/* each card section for university, dosen, and mata kulah */}
-      <MainCard>
-        <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
-          <Text
-            color="biru.800"
-            fontSize={{ base: '1.5rem', md: '2rem' }}
-            fontWeight="bold"
-            marginRight={'auto'}
-            marginLeft={'auto'}
-          >
-            Mata kuliah
-          </Text>
-          <SearchCard
-            searchResult={'IF2120 Matematika Diskrit'}
-            slug="1"
-            searchFor="courses"
-          />
-        </Flex>
-      </MainCard>
-      {/* each card section for university, dosen, and mata kulah */}
-      <MainCard>
-        <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
-          <Text
-            color="biru.800"
-            fontSize={{ base: '1.5rem', md: '2rem' }}
-            fontWeight="bold"
-            marginRight={'auto'}
-            marginLeft={'auto'}
-          >
-            Dosen
-          </Text>
-          <SearchCard
-            searchResult={'Garebalding, S.T., M.T.'}
-            searchFor="professor"
-            slug="bapak-garebalding"
-          />
-        </Flex>
-      </MainCard>
+        <Text
+          fontSize={{ base: 'xl', sm: '3xl', md: '5xl' }}
+          fontWeight="bold"
+          align={{ base: 'center', sm: 'left' }}
+          color="biru.800"
+          ml={{ base: 0, sm: '4', md: '8' }}
+        >
+          Hasil pencarian universitas
+        </Text>
+        <SearchBar />
+      </Container>
+
+      <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
+        {renderSearch()}
+      </Flex>
     </Container>
   );
 };

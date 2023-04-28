@@ -1,153 +1,149 @@
-import { Container, Divider, Flex, Text } from '@chakra-ui/react';
-import React from 'react';
+import ErrorPage from '@/components/ErrorPage';
+import LoadingAnimation from '@/components/LoadingAnimation';
 import MainCard from '@/components/MainCard';
-import SummaryRating from '@/components/SummaryRating';
 import ReviewCard from '@/components/ReviewCard';
-import { apiInstance } from '@/utils/apiInstance';
+import ReviewModal from '@/components/ReviewModal';
+import SummaryRating from '@/components/SummaryRating';
+import { useAuth } from '@/contexts/AuthContext';
+import {
+  useGetAllUnivReview,
+  useGetOverallUnivRating,
+} from '@/services/reviews';
+import { useGetUnivBySlug } from '@/services/universities';
+import {
+  Container,
+  Divider,
+  Flex,
+  HStack,
+  Icon,
+  Link,
+  Spacer,
+  Text,
+  useDisclosure,
+} from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { FiEdit } from 'react-icons/fi';
+import { BeatLoader } from 'react-spinners';
 
-export interface UniversitySummaryResponseData {
-  reviewCount: number;
-  overall_rating: number;
-  overall_fasilitas: number;
-  overall_lingkungan: number;
-  overall_kemahasiswaan: number;
-  overall_reputasi_akademik: number;
-}
+const University: React.FC<{}> = () => {
+  const { query } = useRouter();
+  const { name } = query;
 
-export interface UniversitySummaryResponse {
-  data: UniversitySummaryResponseData;
-}
+  const {
+    university,
+    isLoading: isLoadingUniv,
+    error: errorUniv,
+  } = useGetUnivBySlug(name as string);
+  const {
+    univReview,
+    isLoading: isLoadingReview,
+    error: errorReview,
+  } = useGetAllUnivReview(name as string);
+  const {
+    univRating,
+    isLoading: isLoadingRating,
+    error: errorRating,
+  } = useGetOverallUnivRating(name as string);
 
-export interface UniversityRating {
-  reputasi_akademik: number;
-  lingkungan: number;
-  kemahasiswaan: number;
-  fasilitas: number;
-}
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
-export interface UniversityReview {
-  id: number;
-  creator_id: number;
-  univ_id: number;
-  upvote: number;
-  downvote: number;
-  content: string;
-  name: string;
-  created_at: string;
-  updated_at: string;
-  rating: UniversityRating;
-  average_rating: number;
-}
+  const { isAuthenticated } = useAuth();
+  const { asPath } = useRouter();
 
-export interface UniversityPageProps {
-  title: string;
-  reviews: UniversityReview[];
-  summaryRatings: UniversitySummaryResponseData;
-  summaryAverageRating: number;
-}
-
-export async function getServerSideProps(context: { query: { name: string } }) {
-  const { name } = context.query;
-
-  try {
-    const univRes = await apiInstance({}).get(`/univ/${name}`);
-    const { id: univId, name: univName } = await univRes.data.data;
-
-    const reviewRes = await apiInstance({}).get(`/reviews/univ/?id=${univId}`);
-    const reviews = await reviewRes.data.data;
-
-    const overallRatingRes = await apiInstance({}).get(
-      `/reviews/univ/overall/${univId}`
-    );
-
-    const overallRatingResData: UniversitySummaryResponseData =
-      overallRatingRes.data.data;
-
-    // console.log('overallRatingResData', overallRatingResData.overallRating)
-
-    return {
-      props: {
-        title: univName,
-        reviews,
-        summaryRatings: overallRatingResData,
-        summaryAverageRating: overallRatingResData.overall_rating,
-      },
-    };
-  } catch (e) {
-    console.error(e);
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
+  // TODO: style error
+  if (isLoadingReview || isLoadingRating || isLoadingUniv) {
+    return <LoadingAnimation />;
   }
-}
 
-const University: React.FC<UniversityPageProps> = ({
-  title,
-  reviews,
-  summaryRatings,
-  summaryAverageRating,
-}) => {
-  const ratings = [
-    {
-      name: 'Reputasi Akademik',
-      value: summaryRatings.overall_reputasi_akademik,
-    },
-    { name: 'Lingkungan', value: summaryRatings.overall_lingkungan },
-    { name: 'Kemahasiswaan', value: summaryRatings.overall_kemahasiswaan },
-    { name: 'Fasilitas', value: summaryRatings.overall_fasilitas },
-  ];
+  if (errorReview || errorUniv || errorRating) {
+    return <ErrorPage />;
+  }
 
   return (
-    <Container>
+    <Container px="0">
+      {isAuthenticated() ? (
+        <ReviewModal
+          isOpen={isOpen}
+          onOpen={onOpen}
+          onClose={onClose}
+          reviewFor="university"
+          id={university?.id!!}
+          slug={university?.slug!!}
+        />
+      ) : null}
       <MainCard>
-        <Flex direction="column" padding={{ base: 4, sm: 8 }} w="full">
+        <Flex direction="column" padding={{ base: 4, sm: 4, md: 8 }} w="full">
           <SummaryRating
-            title={title}
-            pagePath="universities"
-            overallRating={summaryAverageRating}
-            summaryRatings={ratings}
+            title={university?.name!!}
+            pagePath={asPath}
+            overallRating={univRating?.overall_rating!!}
+            summaryRatings={[
+              {
+                name: 'Reputasi Akademik',
+                value: univRating?.overall_reputasi_akademik || 0,
+              },
+              {
+                name: 'Lingkungan',
+                value: univRating?.overall_lingkungan || 0,
+              },
+              {
+                name: 'Kemahasiswaan',
+                value: univRating?.overall_kemahasiswaan || 0,
+              },
+              { name: 'Fasilitas', value: univRating?.overall_fasilitas || 0 },
+            ]}
+            reportFor="UNIVERSITY"
+            reportedId={university?.id!!}
           />
           <Divider />
-          <Text my={6}>{reviews.length} Ulasan</Text>
-          {reviews.map((review) => {
-            const {
-              id,
-              creator_id,
-              univ_id,
-              upvote,
-              downvote,
-              content,
-              name,
-              created_at,
-              updated_at,
-              rating,
-              average_rating,
-            } = review;
-            return (
-              <ReviewCard
-                key={reviews.indexOf(review)}
-                reviewFor={'university'}
-                idReview={id}
-                reviewerName={name}
-                overallRating={average_rating}
-                firstFieldName="Reputasi Akademik"
-                secondFieldName="Lingkungan"
-                thirdFieldName="Kemahasiswaan"
-                fourthFieldName="Fasilitas"
-                firstFieldRating={rating.reputasi_akademik}
-                secondFieldRating={rating.lingkungan}
-                thirdFieldRating={rating.kemahasiswaan}
-                fourthFieldRating={rating.fasilitas}
-                reviewDate={created_at}
-                reviewContent={content}
-                likeCount={upvote}
-                dislikeCount={downvote}
-              />
-            );
-          })}
+          <Flex direction="row">
+            <Text my={6}>{univReview?.length} Ulasan</Text>
+            <Spacer />
+            {isAuthenticated() ? (
+              <HStack>
+                <Link
+                  display={'flex'}
+                  gap={'0.5rem'}
+                  alignItems="center"
+                  onClick={onOpen}
+                >
+                  <Icon as={FiEdit} color="biru.700" w="1.2rem" h="1.2rem" />
+                  <Text
+                    fontSize={'1rem'}
+                    fontWeight={'500'}
+                    color={'biru.700'}
+                    pt={0}
+                  >
+                    Tulis ulasan
+                  </Text>
+                </Link>
+              </HStack>
+            ) : null}
+          </Flex>
+          {univReview?.map((review) => (
+            <ReviewCard
+              key={univReview.indexOf(review)}
+              reviewFor={'university'}
+              idReview={review.id}
+              reviewerName={review.creator.name}
+              overallRating={review.average_rating}
+              firstFieldName="Reputasi Akademik"
+              secondFieldName="Lingkungan"
+              thirdFieldName="Kemahasiswaan"
+              fourthFieldName="Fasilitas"
+              firstFieldRating={review.rating.reputasi_akademik}
+              secondFieldRating={review.rating.lingkungan}
+              thirdFieldRating={review.rating.kemahasiswaan}
+              fourthFieldRating={review.rating.fasilitas}
+              reviewDate={review.created_at}
+              reviewContent={review.content}
+              likeCount={review.upvote}
+              dislikeCount={review.downvote}
+              reportFor="UNIVERSITY_REVIEW"
+              reportedId={review.id}
+            />
+          ))}
         </Flex>
       </MainCard>
     </Container>

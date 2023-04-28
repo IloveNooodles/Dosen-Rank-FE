@@ -1,11 +1,11 @@
-import { OptionBase } from 'chakra-react-select';
-import { Props as ReactSelectProps } from 'chakra-react-select';
-import { InputProps as ChakraInputProps } from '@chakra-ui/react';
+import { InputProps as ChakraInputProps } from "@chakra-ui/react";
+import { OptionBase, Props as ReactSelectProps } from "chakra-react-select";
 
 /*
  * Object Interfaces
  */
 export interface Account {
+  id?: number;
   name?: string;
   email: string;
   password?: string;
@@ -17,6 +17,7 @@ export interface Account {
 export interface University {
   id: number;
   name: string;
+  slug: string;
 }
 
 export interface Course {
@@ -29,9 +30,132 @@ export interface Professor {
   name: string;
 }
 
-export interface Creator {
+export interface Tag {
   id: number;
   name: string;
+}
+
+export interface UniversityRating {
+  reputasi_akademik: number;
+  lingkungan: number;
+  kemahasiswaan: number;
+  fasilitas: number;
+}
+
+export interface ProfessorRating {
+  konten: number,
+  komunikasi: number,
+  transparansi: number,
+  gaya_mengajar: number,  
+}
+
+export interface CourseRating {
+  kesesuaian_sks: number;
+  kompetensi: number;
+  kesulitan: number;
+  sumber_belajar: number;
+}
+
+/**
+ * Response Interfaces
+ */
+export interface Response<T> {
+  data: T;
+}
+
+export interface ProfessorResponse {
+  id: number;
+  name: string;
+  institutionId: number;
+  institutionName: string;
+  slug: string;
+}
+
+export interface CourseResponse {
+  id: number;
+  course_id: string;
+  name: string;
+  institute_id: number;
+  institution_name: string;
+  slug: string;
+}
+
+export interface NewReview {
+  tag: string;
+  firstFieldRating: number;
+  secondFieldRating: number;
+  thirdFieldRating: number;
+  fourthFieldRating: number;
+  details: string;
+}
+
+export interface Report {
+  reportType: string;
+  reportedId: number;
+  content?: string;
+  tag: number;
+}
+
+export interface Review {
+  id: number;
+  creator: {
+    id: number;
+    name: string;
+  };
+  institution: {
+    id: number;
+    name: string;
+  };
+  upvote: number;
+  downvote: number;
+  tags: [];
+  content: string;
+  created_at: string;
+  updated_at: string;
+  average_rating: number;
+}
+
+export interface UnivReview extends Review {
+  rating: UniversityRating;
+}
+
+export interface CourseReview extends Review {
+  rating: CourseRating;
+  professor: Professor;
+  course: Course;
+}
+
+export interface ProfessorReview extends Review {
+  rating: ProfessorRating;
+  professor: Professor;
+  course: Course;
+}
+
+export interface OverallUnivRating {
+  review_count: number;
+  overall_rating: number;
+  overall_fasilitas: number;
+  overall_lingkungan: number;
+  overall_kemahasiswaan: number;
+  overall_reputasi_akademik: number;
+}
+
+export interface OverallCourseRating {
+  review_count: number,
+  overall_rating: number,
+  overall_kesesuaian_sks: number,
+  overall_kompetensi: number,
+  overall_kesulitan: number,
+  overall_sumber_belajar: number,
+}
+
+export interface OverallProfessorRating {
+  review_count: number,
+  overall_rating: number,
+  overall_konten: number,
+  overall_komunikasi: number,
+  overall_transparansi: number,
+  overall_gaya_mengajar: number,
 }
 
 /*
@@ -39,6 +163,8 @@ export interface Creator {
  */
 export interface RegisterProps {
   universities: Array<University>;
+  setSuccess: (value: boolean) => void;
+  onClick: () => void;
 }
 
 /*

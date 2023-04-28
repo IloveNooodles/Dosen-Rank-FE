@@ -1,4 +1,3 @@
-import { dm_sans } from "@/fonts";
 import { useRouter } from 'next/router';
 import { FiGithub, FiGitlab } from 'react-icons/fi';
 import { Box, Container, Text, Flex, Button, HStack, Spacer, Icon, VStack, } from "@chakra-ui/react";

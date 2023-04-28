@@ -95,10 +95,14 @@ const University: React.FC<{}> = () => {
             ]}
             reportFor="UNIVERSITY"
             reportedId={university?.id!!}
+            sksCourse={0}
           />
           <Divider />
           <Flex direction="row">
-            <Text my={6}>{univReview?.length ?? 0} Ulasan</Text>
+            <HStack my={5}>
+              <Text fontSize="2xl" paddingLeft={3} fontWeight={'bold'}>{univReview?.length ?? 0}</Text>
+              <Text>ulasan</Text>
+            </HStack>
             <Spacer />
             {isAuthenticated() ? (
               <HStack>

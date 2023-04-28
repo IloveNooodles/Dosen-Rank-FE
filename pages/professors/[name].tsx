@@ -96,10 +96,14 @@ const Professor: React.FC<{}> = () => {
             ]}
             reportFor="PROFESSOR"
             reportedId={professor?.id!!}
+            sksCourse={0}
           />
           <Divider />
           <Flex direction="row">
-            <Text my={6}>{professorRating?.review_count ?? 0} Ulasan</Text>
+            <HStack my={5}>
+              <Text fontSize="2xl" paddingLeft={3} fontWeight={'bold'}>{professorRating?.review_count ?? 0}</Text>
+              <Text>ulasan</Text>
+            </HStack>
             <Spacer />
             {isAuthenticated() ? (
               <HStack>

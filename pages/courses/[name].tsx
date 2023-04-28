@@ -99,7 +99,7 @@ const Courses: React.FC<{}> = () => {
           />
           <Divider />
           <Flex direction="row">
-            <Text my={6}>{courseRating?.review_count} Ulasan</Text>
+            <Text my={6}>{courseRating?.review_count ?? 0} Ulasan</Text>
             <Spacer />
             {isAuthenticated() ? (
               <HStack>

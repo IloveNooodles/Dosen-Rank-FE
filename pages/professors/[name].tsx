@@ -100,7 +100,10 @@ const Professor: React.FC<{}> = () => {
           />
           <Divider />
           <Flex direction="row">
-            <Text my={6}>{professorRating?.review_count} Ulasan</Text>
+            <HStack my={5}>
+              <Text fontSize="2xl" paddingLeft={3} fontWeight={'bold'}>{professorRating?.review_count}</Text>
+              <Text>ulasan</Text>
+            </HStack>
             <Spacer />
             {isAuthenticated() ? (
               <HStack>

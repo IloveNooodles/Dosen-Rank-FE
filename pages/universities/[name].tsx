@@ -99,7 +99,10 @@ const University: React.FC<{}> = () => {
           />
           <Divider />
           <Flex direction="row">
-            <Text my={6}>{univReview?.length} Ulasan</Text>
+            <HStack my={5}>
+              <Text fontSize="2xl" paddingLeft={3} fontWeight={'bold'}>{univReview?.length}</Text>
+              <Text>ulasan</Text>
+            </HStack>
             <Spacer />
             {isAuthenticated() ? (
               <HStack>

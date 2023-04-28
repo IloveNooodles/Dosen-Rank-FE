@@ -6,13 +6,13 @@ describe('Login page', () => {
   
     it('Successfully login', () => {
       cy.get('#password').type('abc5dasar');
-      cy.contains('button', 'Masuk').click();
+      cy.get(`[data-testid="user-login-btn"]`).click();
       cy.contains('Login berhasil');
     });
   
     it('Failed login, wrong credentials', () => {
       cy.get('#password').type('password');
-      cy.contains('button', 'Masuk').click();
+      cy.get(`[data-testid="user-login-btn"]`).click();
       cy.contains('email atau password salah');
     });
   });

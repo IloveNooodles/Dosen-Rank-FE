@@ -83,6 +83,7 @@ export interface MajorProps {
   id: number;
   name: string;
   code: number;
+  faculty_id: number;
 }
 
 export async function getServerSideProps(context: {
@@ -349,11 +350,16 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = (props) => {
                   value={selectedMajor}
                   onChange={(e) => setSelectedMajor(e.target.value)}
                 >
-                  {majorsArray!.map((major) => (
-                    <option key={major.name} value={major.id}>
-                      {major.name}
-                    </option>
-                  ))}
+                  {majorsArray!
+                    .filter((major) => {
+                      if (selectedFaculty == '') return true;
+                      return major.faculty_id == parseInt(selectedFaculty, 10);
+                    })
+                    .map((major) => (
+                      <option key={major.name} value={major.id}>
+                        {major.name}
+                      </option>
+                    ))}
                 </Select>
               </VStack>
               <Box>
@@ -382,7 +388,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = (props) => {
       <Box display={'flex'}>
         <InputGroup w={{ base: '10rem', md: '33rem' }} marginRight={'1.5rem'}>
           <Input
-              id={'search-bar'}
+            id={'search-bar'}
             placeholder="Cari mata kuliah, atau dosen..."
             _placeholder={{
               color: 'netral.400',
@@ -482,21 +488,21 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = (props) => {
           </HStack>
           <Show below="1080px">
             <Box
-                as="button"
-                bg="transparent"
-                border="none"
-                p={0}
-                mx={0}
-                cursor="pointer"
-                _hover={{ opacity: 0.8 }}
-                _active={{ outline: 'none' }}
-                onClick={onOpen}
+              as="button"
+              bg="transparent"
+              border="none"
+              p={0}
+              mx={0}
+              cursor="pointer"
+              _hover={{ opacity: 0.8 }}
+              _active={{ outline: 'none' }}
+              onClick={onOpen}
             >
               <Image
-                  src={'/ic-filter.svg'}
-                  alt={'filter logo'}
-                  width={30}
-                  height={30}
+                src={'/ic-filter.svg'}
+                alt={'filter logo'}
+                width={30}
+                height={30}
               ></Image>
             </Box>
           </Show>

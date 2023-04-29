@@ -10,7 +10,7 @@ const ResetPassword: React.FC<{}> = () => { // Ubah nama function menjadi ResetP
     return (
         <Container centerContent h="calc(100vh - 5.5rem - 6.9rem)" w="calc(100vw - 10rem)">
             <Head>
-                <title>Reset Password</title>
+                <title>Lupa Password</title>
                 <meta
                     name="description"
                     content="Cari Dosen is application that can helps you rate universities, professor, and courses"

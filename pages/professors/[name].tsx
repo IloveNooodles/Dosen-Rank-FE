@@ -62,7 +62,7 @@ const Professor: React.FC<{}> = () => {
   return (
     <Container>
         <Head>
-            <title>Reset Password</title>
+            <title>{professor?.name}</title>
             <meta
                 name="description"
                 content="Cari Dosen is application that can helps you rate universities, professor, and courses"

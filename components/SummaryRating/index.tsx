@@ -35,7 +35,7 @@ const SummaryRating: React.FC<{
             fontSize={{ base: "0.6rem", sm: "0.8rem", md: "1.1rem" }}
             ml={{ base: 0, sm: 2, lg: 4 }}
           >
-            {institutionName.toLocaleUpperCase()}
+            {institutionName?.toLocaleUpperCase() || "Institut"}
           </Text>
         </>
         ) : null}

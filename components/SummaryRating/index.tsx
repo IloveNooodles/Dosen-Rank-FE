@@ -23,6 +23,7 @@ const SummaryRating: React.FC<{
       <Flex alignItems="center">
       <ReportModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} reportFor={reportFor} reportedId={reportedId} />
       <Text
+          data-cy={'summary-rating-title'}
         fontSize={{ base: "xl", sm: "2xl", md: "5xl" }}
         fontWeight="bold"
         align={{ base: "center", sm: "left" }}
@@ -58,30 +59,6 @@ const SummaryRating: React.FC<{
     </Flex>
     {/* action button */}
     <Flex direction="row">
-      {pagePath.includes("professors") ? (
-        <Link href="/">
-          <Text
-            as="u"
-            fontSize={{ base: "sm", sm: "lg" }}
-            mr="4"
-            ml={{ sm: 2, lg: 4 }}
-          >
-            Lihat mata kuliah
-          </Text>
-        </Link>
-      ) : null}
-      {pagePath.includes("courses") ? (
-        <Link href="/">
-          <Text
-            as="u"
-            fontSize={{ base: "sm", sm: "lg" }}
-            mr="4"
-            ml={{ sm: 2, lg: 4 }}
-          >
-            Lihat dosen
-          </Text>
-        </Link>
-      ) : null}
       {pagePath.includes("universities")? (
         <Link href={`/search/${pagePath.split('/')[2]}`}>
           <Text
@@ -108,6 +85,7 @@ const SummaryRating: React.FC<{
           fontSize={{ base: "4xl", md: "5xl" }}
           color="biru.800"
           fontWeight="semibold"
+          data-cy={'summary-rating-overall'}
         >
           {overallRating?.toFixed(1) || 0}
         </Text>

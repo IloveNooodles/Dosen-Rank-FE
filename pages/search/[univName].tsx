@@ -60,6 +60,7 @@ export interface CoursesProps {
   institute_id: number;
   institution_name: string;
   slug: string;
+  sks: number;
 }
 
 export interface ProfessorProps {
@@ -68,6 +69,8 @@ export interface ProfessorProps {
   institutionId: number;
   institutionName: string;
   slug: string;
+  major_name: string;
+  faculty_name: string;
 }
 
 export interface FacultyProps {
@@ -379,6 +382,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = (props) => {
       <Box display={'flex'}>
         <InputGroup w={{ base: '20rem', md: '33rem' }} marginRight={'1.5rem'}>
           <Input
+              id={'search-bar'}
             placeholder="Cari mata kuliah, atau dosen..."
             _placeholder={{
               color: 'netral.400',
@@ -516,6 +520,8 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = (props) => {
               <DosenCard
                 dosenName={professor.name}
                 urlDosen={professor.slug}
+                faculty={professor.faculty_name}
+                major={professor.major_name}
                 key={index}
               />
             ))
@@ -554,6 +560,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = (props) => {
                 matkulName={course.name}
                 matkulCode={course.course_id}
                 matkulSlug={course.slug}
+                matkulSKS={course.sks}
               />
             ))
           ) : (

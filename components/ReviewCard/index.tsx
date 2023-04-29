@@ -113,7 +113,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   }
 
   return (
-    <Card my={{ base: 2 }} maxW="70rem" h="auto">
+    <Card my={{ base: 2 }} maxW="70rem" h="auto" data-cy={'review-card'}>
       <ReportModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} reportFor={reportFor} reportedId={reportedId} />
       <CardHeader pb={{ base: "0rem", md: "1rem" }}>
         <HStack justifyContent={"space-between"}>

@@ -13,6 +13,7 @@ const SearchBar: React.FC<SearchBarProps> = (props) => {
   return (
     <InputGroup w={{ base: "20rem", md: "33rem" }}>
       <Input
+          id={"search-bar"}
         placeholder="Cari universitas, mata kuliah, atau dosen..."
         _placeholder={{ color: "netral.400", fontWeight: "light" }}
         borderColor="netral.300"
@@ -27,7 +28,7 @@ const SearchBar: React.FC<SearchBarProps> = (props) => {
             window.location.href = `/search?name=${nameSearch}`}}
           }
       />
-      <Link href={`/search?name=${nameSearch}`}>
+      <Link id={"search-icon"} href={`/search?name=${nameSearch}`}>
         <InputRightElement>
           <Search2Icon color="netral.400" />
         </InputRightElement>

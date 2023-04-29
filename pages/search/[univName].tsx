@@ -300,6 +300,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = (props) => {
   };
 
   const handleFilterButton = () => {
+    onClose();
     const { name } = router.query;
     const searchParams = new URLSearchParams();
     searchParams.set('faculty', selectedFaculty);

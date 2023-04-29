@@ -1,10 +1,7 @@
-import { SelectOption } from '@/interfaces';
-import React, { useState } from 'react';
-import Pagination from 'react-bootstrap/Pagination';
-import Head from 'next/head';
 import ContentNotFound from '@/components/ContentNotFound';
 import DosenCard from '@/components/DosenCard';
 import MatkulCard from '@/components/MatkulCard';
+import { SelectOption } from '@/interfaces';
 import { apiInstance } from '@/utils/apiInstance';
 import { Card } from '@chakra-ui/card';
 import { Search2Icon } from '@chakra-ui/icons';
@@ -35,9 +32,12 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import Pagination from 'react-bootstrap/Pagination';
 
 export interface SearchAndFilterProps {
   courses: CoursesProps[];
@@ -319,13 +319,12 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = (props) => {
 
   const renderFilterComponent = () => {
     return (
-
       <Show above="1080px">
         <Head>
           <title>Search | {univName}</title>
           <meta
-              name="description"
-              content="Cari Dosen is application that can helps you rate universities, professor, and courses"
+            name="description"
+            content="Cari Dosen is application that can helps you rate universities, professor, and courses"
           />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
         </Head>
@@ -468,11 +467,19 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = (props) => {
                             value={selectedMajor}
                             onChange={(e) => setSelectedMajor(e.target.value)}
                           >
-                            {majorsArray!.map((major) => (
-                              <option key={major.name} value={major.id}>
-                                {major.name}
-                              </option>
-                            ))}
+                            {majorsArray!
+                              .filter((major) => {
+                                if (selectedFaculty == '') return true;
+                                return (
+                                  major.faculty_id ==
+                                  parseInt(selectedFaculty, 10)
+                                );
+                              })
+                              .map((major) => (
+                                <option key={major.name} value={major.id}>
+                                  {major.name}
+                                </option>
+                              ))}
                           </Select>
                         </Box>
                       </VStack>

@@ -1,5 +1,7 @@
+import { dm_sans } from "@/fonts";
 import { SummaryRatingProps } from "@/interfaces";
-import { Flex, Spacer, Icon, VStack, SimpleGrid, Text, useDisclosure } from "@chakra-ui/react";
+import { Flex, Spacer, Icon, VStack, SimpleGrid, Text, useDisclosure, HStack, Show } from "@chakra-ui/react";
+import { DM_Sans } from "@next/font/google";
 import Link from "next/link";
 import React from "react";
 import { FiAlertTriangle } from "react-icons/fi";
@@ -14,42 +16,62 @@ const SummaryRating: React.FC<{
   reportFor: string;
   reportedId: number;
   sksCourse: number;
-}> = ({ title, pagePath, overallRating, summaryRatings, reportFor, reportedId, sksCourse }) => {
+  institutionName: string;
+  facultyName: string;
+  majorName: string;
+}> = ({ title, pagePath, overallRating, summaryRatings, reportFor, reportedId, sksCourse, institutionName, facultyName, majorName }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   
   return (
     <>
     {/* title */}
-      <Flex alignItems="center">
+      <Flex>
       <ReportModal isOpen={isOpen} onOpen={onOpen} onClose={onClose} reportFor={reportFor} reportedId={reportedId} />
-      <Text
-          data-cy={'summary-rating-title'}
-        fontSize={{ base: "xl", sm: "2xl", md: "5xl" }}
-        fontWeight="bold"
-        align={{ base: "center", sm: "left" }}
-        color="biru.800"
-        ml={{ base: 0, sm: 2, lg: 4 }}
-      >
-        {title?.toLocaleUpperCase()}
-      </Text>
-      { reportFor == "COURSE" ? (
-        <Text
-          fontSize={{ base: "sm", sm: "md", md: "xl" }}
-          fontWeight="normal"
-          align={{ base: "center", sm: "left" }}
-          color="biru.800"
-          backgroundColor="biru.50"
-          ml={{ base: 4, sm: 6, lg: 8 }}
-          px={4}
-          py={1}
-          borderRadius="3xl"
-        >
-          {sksCourse ? `${sksCourse} SKS` : null}
-        </Text>
-        ) : null
-      }
+      <VStack align={"left"}>
+        { reportFor == "COURSE" || reportFor == "PROFESSOR" ? (
+        <>
+          <Text
+            fontWeight={"bold"}
+            fontSize={{ base: "0.6rem", sm: "0.8rem", md: "1.1rem" }}
+            ml={{ base: 0, sm: 2, lg: 4 }}
+          >
+            {institutionName?.toLocaleUpperCase() || "Institut"}
+          </Text>
+        </>
+        ) : null}
+        <HStack alignContent={"center"} gap={3}>
+          <Text
+            data-cy={'summary-rating-title'}
+            textAlign={"left"}
+            fontSize={{ base: "xl", sm: "2xl", md: "5xl" }}
+            fontWeight="bold"
+            align={{ base: "center", sm: "left" }}
+            color="biru.800"
+            ml={{ base: 0, sm: 2, lg: 4 }}
+          >
+            {title?.toLocaleUpperCase()}
+          </Text>
+          { reportFor == "COURSE" ? (
+            <Text
+              fontSize={{ base: "sm", sm: "md", md: "xl" }}
+              fontWeight="normal"
+              align={{ base: "center", sm: "left" }}
+              color="biru.800"
+              backgroundColor="biru.50"
+              ml={{ base: 4, sm: 6, lg: 8 }}
+              px={4}
+              py={1}
+              borderRadius="3xl"
+            >
+              {sksCourse ? `${sksCourse} SKS` : null}
+            </Text>
+            ) : null
+          }
+        </HStack>
+      </VStack>
       <Spacer />
       <Icon
+        marginTop={{ base: 0, sm: 2, lg: 4 }}
         as={FiAlertTriangle}
         boxSize={{ base: 3, sm: 4, md: 6 }}
         color="gray.200"
@@ -57,6 +79,17 @@ const SummaryRating: React.FC<{
         _hover={{ cursor: "pointer", color: "red.500" }}
         aria-label={""}      />
     </Flex>
+    { reportFor == "COURSE" || reportFor == "PROFESSOR" ? (
+      <Show above="md">
+        <HStack
+          alignItems="left"
+          color={"gray.400"}
+          ml={{ base: 0, sm: 2, lg: 4 }}>
+          <Text fontWeight={"medium"} fontSize={{ base: "0.6rem", sm: "0.8rem", md: "1.1rem" }}>{facultyName}</Text>
+          <Text fontWeight={"thin"} fontSize={{ base: "0.6rem", sm: "0.8rem", md: "1.1rem" }}>{majorName}</Text>
+        </HStack>
+      </Show>
+      ) : null}
     {/* action button */}
     <Flex direction="row">
       {pagePath.includes("universities")? (

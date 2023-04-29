@@ -106,6 +106,9 @@ const Courses: React.FC<{}> = () => {
             reportFor="COURSE"
             reportedId={course?.id!!}
             sksCourse={course?.sks!!}
+            institutionName={course?.institution_name!!}
+            facultyName={course?.faculty_name!!}
+            majorName={course?.major_name!!}
           />
           <Divider />
           <Flex direction="row">

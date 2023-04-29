@@ -20,6 +20,23 @@ export interface University {
   slug: string;
 }
 
+export interface FacultyMajor {
+  faculties: Faculty[];
+  majors: Major[];
+}
+
+export interface Faculty {
+  id: number;
+  name: string;
+  code: number;
+}
+
+export interface Major {
+  id: number;
+  name: string;
+  code: number;
+}
+
 export interface Course {
   id: number;
   name: string;
@@ -66,8 +83,12 @@ export interface Response<T> {
 export interface ProfessorResponse {
   id: number;
   name: string;
-  institutionId: number;
-  institutionName: string;
+  institution_id: number;
+  institution_name: string;
+  faculty_id: number;
+  faculty_name: string;
+  major_id: number;
+  major_name: string;
   slug: string;
 }
 
@@ -77,6 +98,10 @@ export interface CourseResponse {
   name: string;
   institute_id: number;
   institution_name: string;
+  faculty_id: number;
+  faculty_name: string;
+  major_id: number;
+  major_name: string;
   slug: string;
   sks: number;
 }

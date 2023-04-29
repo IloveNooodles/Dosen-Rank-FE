@@ -24,6 +24,7 @@ import {
 } from '@/services/reviews';
 import ErrorPage from '@/components/ErrorPage';
 import LoadingAnimation from '@/components/LoadingAnimation';
+import Head from 'next/head';
 
 const Professor: React.FC<{}> = () => {
   const { query } = useRouter();
@@ -60,6 +61,14 @@ const Professor: React.FC<{}> = () => {
 
   return (
     <Container>
+        <Head>
+            <title>{professor?.name}</title>
+            <meta
+                name="description"
+                content="Cari Dosen is application that can helps you rate universities, professor, and courses"
+            />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+        </Head>
       {isAuthenticated() ? (
         <ReviewModal
           isOpen={isOpen}

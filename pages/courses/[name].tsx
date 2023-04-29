@@ -24,6 +24,7 @@ import {
 import { useRouter } from 'next/router';
 import React from 'react';
 import { FiEdit } from 'react-icons/fi';
+import Head from 'next/head';
 
 const Courses: React.FC<{}> = () => {
   const { query } = useRouter();
@@ -60,6 +61,14 @@ const Courses: React.FC<{}> = () => {
 
   return (
     <Container>
+      <Head>
+        <title>{course?.name}</title>
+        <meta
+            name="description"
+            content="Cari Dosen is application that can helps you rate universities, professor, and courses"
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
       {isAuthenticated() ? (
         <ReviewModal
           isOpen={isOpen}

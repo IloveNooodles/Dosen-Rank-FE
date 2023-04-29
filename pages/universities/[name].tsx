@@ -25,6 +25,8 @@ import { useRouter } from 'next/router';
 import React from 'react';
 import { FiEdit } from 'react-icons/fi';
 import { BeatLoader } from 'react-spinners';
+import Head from 'next/head';
+
 
 const University: React.FC<{}> = () => {
   const { query } = useRouter();
@@ -62,6 +64,14 @@ const University: React.FC<{}> = () => {
 
   return (
     <Container px="0">
+      <Head>
+        <title>{university?.name}</title>
+        <meta
+            name="description"
+            content="Cari Dosen is application that can helps you rate universities, professor, and courses"
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
       {isAuthenticated() ? (
         <ReviewModal
           isOpen={isOpen}

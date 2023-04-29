@@ -20,6 +20,23 @@ export interface University {
   slug: string;
 }
 
+export interface FacultyMajor {
+  faculties: Faculty[];
+  majors: Major[];
+}
+
+export interface Faculty {
+  id: number;
+  name: string;
+  code: number;
+}
+
+export interface Major {
+  id: number;
+  name: string;
+  code: number;
+}
+
 export interface Course {
   id: number;
   name: string;

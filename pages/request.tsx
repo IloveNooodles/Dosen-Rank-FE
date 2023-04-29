@@ -1,45 +1,61 @@
 import { apiInstance } from "@/utils/apiInstance";
-import { Center, Container, HStack, Text, VStack, Image, Spacer, Radio, RadioGroup, Input, Textarea, Button, useToast, Show } from "@chakra-ui/react";
+import { Center, Container, HStack, Text, VStack, Image, Spacer, Radio, RadioGroup, Input, Textarea, Button, useToast, Show, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper} from "@chakra-ui/react";
 import axios from "axios";
-import { Form, Formik } from "formik";
+import { Field, Form, Formik } from "formik";
 import dynamic from "next/dynamic";
 import React from "react";
 import useSWR, { Fetcher } from "swr";
-import { Response, SelectOption, University } from "@/interfaces";
+import { Response, SelectOption, University, FacultyMajor, Major } from "@/interfaces";
 import TextInput from "../components/TextInput";
 import { useRouter } from "next/router";
 import LoadingAnimation from "@/components/LoadingAnimation";
 
 const SelectInput = dynamic(() => import("../components/SelectInput"), { ssr: false });
 
-const fetcher: Fetcher<Response<University[]>, string> = (url) =>
+const fetcherUniversity: Fetcher<Response<University[]>, string> = (url) =>
+  apiInstance({}).get(url).then((res) => res.data);
+
+const fetcherFacultyMajor: Fetcher<Response<FacultyMajor[]>, string> = (url) =>
   apiInstance({}).get(url).then((res) => res.data);
 
 function useUniversities() {
-  const { data, isLoading, error } = useSWR(`/univ/`, fetcher);
+  const { data, isLoading, error } = useSWR(`/univ/`, fetcherUniversity);
 
   return {
     universities: data?.data,
-    isLoading: isLoading,
-    isError: error,
+    isLoadingUniversity: isLoading,
+    isErrorUniversity: error,
   };
 };
+
+function useMajor(univName: string) {
+  const { data, isLoading, error } = useSWR(`/search/faculty-major/${univName}`, fetcherFacultyMajor);
+
+  return {
+    majors: data?.data.map((facultyMajor) => facultyMajor.majors),
+    isLoadingMajor: isLoading,
+    isErrorMajor: error,
+  };
+}
 
 const Request: React.FC<{}> = () => {
   const toast = useToast();
   const router = useRouter();
 
   const [value, setValue] = React.useState('');
+  const [sks, setSks] = React.useState(1);
   const [description, setDescription] = React.useState('');
   const initialValues = {
     requestType: "",
     title: "",
     code: "",
     institution: "",
+    sks: 1,
+    major: 0,
   }
 
-  const { universities, isLoading, isError } = useUniversities();
-  if (isLoading) return <LoadingAnimation/>;
+  const { universities, isLoadingUniversity, isErrorUniversity } = useUniversities();
+  if (isLoadingUniversity) return <LoadingAnimation/>;
 
   const universityOption: Array<SelectOption> | undefined = universities?.map(
     ({ id, name }) => ({ label: name, value: id.toString() })
@@ -59,6 +75,8 @@ const Request: React.FC<{}> = () => {
                   description: description,
                   code: values.code,
                   institution: parseInt(values.institution),
+                  sks: sks,
+                  major: 0,
                 },
               });
               const response = await apiInstance({isAuthorized: true}).post("/requests/", data);
@@ -108,10 +126,22 @@ const Request: React.FC<{}> = () => {
                       </VStack>
                     ) : null}
                     {value === 'COURSE' ? (
-                      <VStack align={"left"}>
-                        <Text fontWeight={"bold"}>Kode Mata Kuliah</Text>
-                        <TextInput id="code" name="code" placeholder="Kode konten" fontSize={{ base: '0.75rem', md: '0.9rem' }} backgroundColor={"white"} />
-                      </VStack>
+                      <>
+                        <VStack align={"left"}>
+                          <Text fontWeight={"bold"}>Kode Mata Kuliah</Text>
+                          <TextInput id="code" name="code" placeholder="Kode konten" fontSize={{ base: '0.75rem', md: '0.9rem' }} backgroundColor={"white"} />
+                        </VStack>
+                        <VStack align={"left"}>
+                          <Text fontWeight={"bold"}>Jumlah SKS</Text>
+                          <NumberInput defaultValue={1} min={1} max={20} value={sks} onChange={(sks) => setSks(parseInt(sks))}>
+                            <NumberInputField placeholder="Jumlah SKS" fontSize={{ base: '0.75rem', md: '0.9rem' }} backgroundColor={"white"} />
+                            <NumberInputStepper>
+                              <NumberIncrementStepper/>
+                              <NumberDecrementStepper/>
+                            </NumberInputStepper>
+                          </NumberInput>
+                        </VStack>
+                      </>
                     ) : null}
                     <VStack align={"left"}>
                         <Text fontWeight={"bold"}>Nama</Text>

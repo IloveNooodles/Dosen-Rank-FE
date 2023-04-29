@@ -9,6 +9,8 @@ import { Response, SelectOption, University } from "@/interfaces";
 import TextInput from "../components/TextInput";
 import { useRouter } from "next/router";
 import LoadingAnimation from "@/components/LoadingAnimation";
+import Head from 'next/head';
+
 
 const SelectInput = dynamic(() => import("../components/SelectInput"), { ssr: false });
 
@@ -47,6 +49,14 @@ const Request: React.FC<{}> = () => {
 
   return (
     <Container>
+        <Head>
+            <title>Request</title>
+            <meta
+                name="description"
+                content="Cari Dosen is application that can helps you rate universities, professor, and courses"
+            />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
+        </Head>
       <Center minH="calc(100vh - 5.5rem - 6.9rem)">
         <Formik
           initialValues={initialValues}

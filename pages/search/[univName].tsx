@@ -1,7 +1,7 @@
 import { SelectOption } from '@/interfaces';
 import React, { useState } from 'react';
 import Pagination from 'react-bootstrap/Pagination';
-
+import Head from 'next/head';
 import ContentNotFound from '@/components/ContentNotFound';
 import DosenCard from '@/components/DosenCard';
 import MatkulCard from '@/components/MatkulCard';
@@ -319,7 +319,16 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = (props) => {
 
   const renderFilterComponent = () => {
     return (
+
       <Show above="1080px">
+        <Head>
+          <title>Search | {univName}</title>
+          <meta
+              name="description"
+              content="Cari Dosen is application that can helps you rate universities, professor, and courses"
+          />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+        </Head>
         <Flex direction={'column'} maxW={'15rem'}>
           <Text fontSize="1rem" fontWeight="bold" mb="0.3rem">
             Filter

@@ -4,6 +4,8 @@ import {apiInstance} from "@/utils/apiInstance";
 import {Container, Text, VStack, useDisclosure} from "@chakra-ui/react";
 import ConfirmRegisterModal from "@/components/ConfirmRegisterModal";
 import {useState} from "react";
+import Head from 'next/head';
+
 
 export async function getStaticProps() {
     const response = await apiInstance({})
@@ -23,6 +25,14 @@ const Register: React.FC<RegisterProps> = ({universities}) => {
     const [isSuccess, setIsSuccess] = useState(false);
     return (
         <>
+            <Head>
+                <title>Daftar</title>
+                <meta
+                    name="description"
+                    content="Cari Dosen is application that can helps you rate universities, professor, and courses"
+                />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+            </Head>
             <ConfirmRegisterModal isOpen={isOpen && isSuccess} onClose={onClose}/>
             <Container centerContent h="calc(100vh - 5.5rem - 6.9rem)">
                 <VStack position="relative" h="full" justify="center" maxW="sm">

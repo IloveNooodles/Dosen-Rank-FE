@@ -7,6 +7,8 @@ import { University } from '@/interfaces';
 import { useUnivSearch } from '@/services/search';
 import { Container, Flex, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
+import Head from 'next/head';
+
 
 const Search: React.FC = () => {
   const router = useRouter();
@@ -52,6 +54,14 @@ const Search: React.FC = () => {
       alignItems={'center'}
       minH={'calc(92vh - 108px)'}
     >
+      <Head>
+        <title>Hasil Pencarian</title>
+        <meta
+            name="description"
+            content="Cari Dosen is application that can helps you rate universities, professor, and courses"
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
       <Container
         display={'flex'}
         flexDir={'column'}

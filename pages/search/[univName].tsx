@@ -380,7 +380,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = (props) => {
   const searchComponent = () => {
     return (
       <Box display={'flex'}>
-        <InputGroup w={{ base: '20rem', md: '33rem' }} marginRight={'1.5rem'}>
+        <InputGroup w={{ base: '10rem', md: '33rem' }} marginRight={'1.5rem'}>
           <Input
               id={'search-bar'}
             placeholder="Cari mata kuliah, atau dosen..."
@@ -423,24 +423,6 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = (props) => {
               </Select>
             </Box>
             <Show below="1080px">
-              <Box
-                as="button"
-                bg="transparent"
-                border="none"
-                p={0}
-                m={0}
-                cursor="pointer"
-                _hover={{ opacity: 0.8 }}
-                _active={{ outline: 'none' }}
-                onClick={onOpen}
-              >
-                <Image
-                  src={'/ic-filter.svg'}
-                  alt={'filter logo'}
-                  width={30}
-                  height={30}
-                ></Image>
-              </Box>
               <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
@@ -498,6 +480,26 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = (props) => {
               </Modal>
             </Show>
           </HStack>
+          <Show below="1080px">
+            <Box
+                as="button"
+                bg="transparent"
+                border="none"
+                p={0}
+                mx={0}
+                cursor="pointer"
+                _hover={{ opacity: 0.8 }}
+                _active={{ outline: 'none' }}
+                onClick={onOpen}
+            >
+              <Image
+                  src={'/ic-filter.svg'}
+                  alt={'filter logo'}
+                  width={30}
+                  height={30}
+              ></Image>
+            </Box>
+          </Show>
         </HStack>
       </Box>
     );

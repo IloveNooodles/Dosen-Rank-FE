@@ -30,15 +30,13 @@ const SummaryRating: React.FC<{
       <VStack align={"left"}>
         { reportFor == "COURSE" || reportFor == "PROFESSOR" ? (
         <>
-          <Link href={`universities`}>
-            <Text
-              fontWeight={"bold"}
-              fontSize={{ base: "0.6rem", sm: "0.8rem", md: "1.1rem" }}
-              ml={{ base: 0, sm: 2, lg: 4 }}
-            >
-              {institutionName.toLocaleUpperCase()}
-            </Text>
-          </Link>
+          <Text
+            fontWeight={"bold"}
+            fontSize={{ base: "0.6rem", sm: "0.8rem", md: "1.1rem" }}
+            ml={{ base: 0, sm: 2, lg: 4 }}
+          >
+            {institutionName?.toLocaleUpperCase() || "Institut"}
+          </Text>
         </>
         ) : null}
         <HStack alignContent={"center"} gap={3}>
